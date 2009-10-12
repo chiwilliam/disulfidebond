@@ -72,10 +72,10 @@
                                     </td>
                                     <td>
                                         <select id="missingcleavages" name="missingcleavages">
-                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
-                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
-                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "1"){echo "selected";} ?> value="1">1</option>
-                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "2"){echo "selected";} ?> value="2">2</option>
+                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
+                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
+                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "1"){echo "selected";} ?> value="1">1</option>
+                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "2"){echo "selected";} ?> value="2">2</option>
                                         </select>
                                     </td>
                                 </tr>
