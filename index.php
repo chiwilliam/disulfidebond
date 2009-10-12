@@ -50,7 +50,7 @@
                                         <label>Enter FASTA protein sequence:</label>
                                     </td>
                                     <td>
-                                        <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="50"><?php echo $fastaProtein;?></textarea>
+                                        <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="50"><?php if(isset($fastaProtein)){echo $fastaProtein;}?></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -59,10 +59,10 @@
                                     </td>
                                     <td>
                                         <select id="protease" name="protease">
-                                            <option <?php if($protease == "T"){echo "selected";} ?> value="T">Trypsin</option>
-                                            <option <?php if($protease == "C"){echo "selected";} ?> value="C">Chymotrypsin</option>
-                                            <option <?php if($protease == "TC"){echo "selected";} ?> value="TC">Trypsin + Chymotrypsin</option>
-                                            <option <?php if($protease == "G"){echo "selected";} ?> value="G">Glu-C</option>
+                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "T"){echo "selected";} ?> value="T">Trypsin</option>
+                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "C"){echo "selected";} ?> value="C">Chymotrypsin</option>
+                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "TC"){echo "selected";} ?> value="TC">Trypsin + Chymotrypsin</option>
+                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "G"){echo "selected";} ?> value="G">Glu-C</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -72,10 +72,10 @@
                                     </td>
                                     <td>
                                         <select id="missingcleavages" name="missingcleavages">
-                                            <option <?php if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
-                                            <option <?php if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
-                                            <option <?php if($missingcleavages == "1"){echo "selected";} ?> value="1">1</option>
-                                            <option <?php if($missingcleavages == "2"){echo "selected";} ?> value="2">2</option>
+                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
+                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
+                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "1"){echo "selected";} ?> value="1">1</option>
+                                            <option <?php if(!isset($missingcleavages)){$protease = "-1";} if($missingcleavages == "2"){echo "selected";} ?> value="2">2</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -96,58 +96,60 @@
                                 </tr>
                                 <tr>
                                     <td align="center" colspan="3">
-                                        <font color="blue"><?php echo $message;?></font>
+                                        <font color="blue"><?php if(isset($message)){echo $message;}?></font>
                                     </td>
                                 </tr>
                             </table>
                             <table align="center" id="bonds" width="800">
                                 <font face="Courier New">
                                 <?php
-                                    if(count($bonds) == -1){
-                                        $rows = (((int)(strlen($fastaProtein)/60)+1)*2);
-                                        $cols = 6;
-                                        for($i=0;$i<$rows;$i++){
-                                            echo '<tr width="720px">';
-                                            for($j=0;$j<$cols;$j++){
-                                                if($i%2 == 0){
-                                                    echo '<td align="right" width="120px">';
-                                                    echo ((($i/2)*60)+(($j+1)*10))/10;
-                                                    echo "<u>0</u>";
-                                                }
-                                                else{
-                                                    if($i == $rows-1 && $j == $cols-1)
-                                                        echo '<td align="center" width="120px">';
-                                                    else
+                                    if(isset($bonds)){
+                                        if(count($bonds) == -1){
+                                            $rows = (((int)(strlen($fastaProtein)/60)+1)*2);
+                                            $cols = 6;
+                                            for($i=0;$i<$rows;$i++){
+                                                echo '<tr width="720px">';
+                                                for($j=0;$j<$cols;$j++){
+                                                    if($i%2 == 0){
                                                         echo '<td align="right" width="120px">';
-                                                    $output = substr($fastaProtein,((($i-1)/2)*60)+($j*10),10);
-                                                    for($k=0;$k<count($bonds);$k++){
-                                                        $c1 = substr($bonds[$k],0,strpos($bonds[$k],"-"));
-                                                        $c2 = substr($bonds[$k],strpos($bonds[$k],"-")+1);
-                                                        if($c1 >= ((($i-1)/2)*60)+($j*10) && $c1 <= (((($i-1)/2)*60)+($j*10)+10)){
-                                                            $start = (((($i-1)/2)*60)+($j*10))+1;
-                                                            $output = substr($output,0,($c1-$start)).'<font color="red"><u><b>'.
-                                                                      substr($output,($c1-$start),1).'</b></u></font>'.
-                                                                      substr($output,($c1-$start+1));
-                                                        }
-                                                        if($c2 >= ((($i-1)/2)*60)+($j*10) && $c2 <= (((($i-1)/2)*60)+($j*10)+10)){
-                                                            $start = (((($i-1)/2)*60)+($j*10))+1;
-                                                            $output = substr($output,0,($c2-$start)).'<font color="red"><u><b>'.
-                                                                      substr($output,($c2-$start),1).'</b></u></font>'.
-                                                                      substr($output,($c2-$start+1));
-                                                        }
+                                                        echo ((($i/2)*60)+(($j+1)*10))/10;
+                                                        echo "<u>0</u>";
                                                     }
-                                                    echo $output;
+                                                    else{
+                                                        if($i == $rows-1 && $j == $cols-1)
+                                                            echo '<td align="center" width="120px">';
+                                                        else
+                                                            echo '<td align="right" width="120px">';
+                                                        $output = substr($fastaProtein,((($i-1)/2)*60)+($j*10),10);
+                                                        for($k=0;$k<count($bonds);$k++){
+                                                            $c1 = substr($bonds[$k],0,strpos($bonds[$k],"-"));
+                                                            $c2 = substr($bonds[$k],strpos($bonds[$k],"-")+1);
+                                                            if($c1 >= ((($i-1)/2)*60)+($j*10) && $c1 <= (((($i-1)/2)*60)+($j*10)+10)){
+                                                                $start = (((($i-1)/2)*60)+($j*10))+1;
+                                                                $output = substr($output,0,($c1-$start)).'<font color="red"><u><b>'.
+                                                                          substr($output,($c1-$start),1).'</b></u></font>'.
+                                                                          substr($output,($c1-$start+1));
+                                                            }
+                                                            if($c2 >= ((($i-1)/2)*60)+($j*10) && $c2 <= (((($i-1)/2)*60)+($j*10)+10)){
+                                                                $start = (((($i-1)/2)*60)+($j*10))+1;
+                                                                $output = substr($output,0,($c2-$start)).'<font color="red"><u><b>'.
+                                                                          substr($output,($c2-$start),1).'</b></u></font>'.
+                                                                          substr($output,($c2-$start+1));
+                                                            }
+                                                        }
+                                                        echo $output;
+                                                    }
+                                                    echo '</td>';
                                                 }
-                                                echo '</td>';
+                                                echo '</tr>';
                                             }
-                                            echo '</tr>';
                                         }
                                     }
                                 ?>
                                 </font>
                             </table>
                 <?php
-                    echo $debug;
+                    if(isset($debug)){echo $debug;}
                 ?>
                         </form>
 			<!-- #EndEditable -->

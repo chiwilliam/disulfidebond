@@ -447,18 +447,22 @@
             }
 
             if(count($bonds) == 0){
+                unset($debug);
                 $message .= "Disulfide Bonds not found!";
             }
-
-            $debug .= "</table>";
+            else{
+                $debug .= "</table>";
+            }
 
         }
         else{
             $message = "No disulfide bonded structures found during Initial Match.";
+            unset($debug);
         }
     }
     else{
         $message = "Please fill out requested information!";
+        unset($debug);
     }
 
     include $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/index.php";
