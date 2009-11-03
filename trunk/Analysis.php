@@ -20,8 +20,8 @@
     
     //expected amino acid mass
     $me = 111.17;
-    //InitialMatch threshold +-1.5
-    $IMthreshold = 2.0;
+    //InitialMatch threshold +-1.0
+    $IMthreshold = 1.0;
     
     $zipFile = $_FILES["zipFile"];
     $fastaProtein = (string)$_POST["fastaProtein"];
@@ -90,6 +90,8 @@
                 if(zip_entry_open($zip, $zip_entry)){
                     $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
 
+                    $filename = zip_entry_name($zip_entry);
+
                     //subtract one due to DTA format for precursor ions mass Mr
                     //index is number of AA - number of charges - calculated mass
                     $index = (string)((int)((substr($data,0,strpos($data," "))-1.0) / $me))."-".
@@ -102,6 +104,7 @@
                     if(strlen($data) > 0){
 
                         $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
+                        $PMLNames[$index] = $filename;
 
                         //store data in a local file
                         $path = "DTA/".$zipFile["name"]."/".$index.".txt";
@@ -117,6 +120,7 @@
         for($i=0;$i<count($pmlkeys);$i++){
             if(!is_string($PML[$pmlkeys[$i]])){
                 unset($PML[$pmlkeys[$i]]);
+                unset($PMLNames[$pmlkeys[$i]]);
             }
         }
 
@@ -135,8 +139,8 @@
         //$DMS = $IMClass->subsetSum($disulfideBondedPeptides, $minPrecursor, $maxPrecursor);
         //$DMS = $IMClass->formDisulfideBondedStructures($disulfideBondedPeptides);
         
-        //$numPeptides = count($disulfideBondedPeptides);
-        //$numPML = count($PML);
+        $numPeptides = count($disulfideBondedPeptides);
+        $numPML = count($PML);
         //$numDMS = count($DMS);
 
         $result = $IMClass->polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor);
@@ -228,7 +232,7 @@
                 $debug .= '</span></td>';
                 $debug .= '<td width="50px;"></td>';
                 $debug .= '<td><span style = "color:red;">';
-                $debug .= 'DTA File: '.$IM[$i]["PML"];
+                $debug .= 'DTA File: '.$PMLNames[$IM[$i]["PML"]].'   ['.$IM[$i]["PML"].']';
                 $debug .= '</span></td>';
                 $debug .= '</tr>';
                 //end of outputting code
@@ -260,23 +264,6 @@
                 //unset original dataset
                 unset($newvalues);
 
-                //construct FMS
-                $FMS = array();
-
-                //read disulfide bond structure
-                $peptides = $DMS[$IM[$i]["DMS"]]["peptides"];
-                $cysteines = $DMS[$IM[$i]["DMS"]]["cysteines"];
-                
-                $FMS = $CMClass->formFMS($peptides, $cysteines);
-
-                //debugging
-                //$test = count($FMS);
-
-                //sort FMS by mass
-                ksort(&$FMS);
-                //sort TML by mass
-                //sort(&$TML);
-
                 //define threshold to either save fragment or discard it based on
                 //the precursor ion mass
                 //$fragmentmass <= ($precursormass + $threshold)
@@ -284,8 +271,22 @@
 
                 $TML = $CMClass->expandTMLByCharges($TML, $precursor, $TMLthreshold);
 
+                //construct FMS
+                $FMS = array();
+
+                //read disulfide bond structure
+                $peptides = $DMS[$IM[$i]["DMS"]]["peptides"];
+                $cysteines = $DMS[$IM[$i]["DMS"]]["cysteines"];
+
+                $FMS = $CMClass->formFMS($peptides, $cysteines);
+
+                //sort FMS by mass
+                ksort(&$FMS);
+
                 //Confirmed Match threshold +-1
                 $CMthreshold = 1;
+
+                //$FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold);
 
                 $CM = $CMClass->Cmatch($FMS, $TML, $precursor, $CMthreshold);
 
