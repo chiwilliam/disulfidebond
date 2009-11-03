@@ -503,6 +503,128 @@ class ConfirmedMatchclass {
 
     }
 
+    public function FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold){
+
+        $result = array();
+
+
+
+
+        //PolynomialSubsetSum
+        /*
+        $counter=0;
+
+        $DMS = array();
+        $IM = array();
+
+        $AAs = new AAclass();
+
+        //change index organization
+        //index will be peptides mass, swapping . for - as indexes do not accept double values
+        $disulfideBondedPeptides = $this->reIndexSubsetSum($AAs, $disulfideBondedPeptides, $maxPrecursor);
+
+        //get value used to trim lists
+        $delta = $AAs->getDelta($disulfideBondedPeptides);
+
+        $PMLkeys = array_keys($PML);
+        for($k=0;$k<count($PMLkeys);$k++){
+
+            $precursor = $PML[$PMLkeys[$k]];
+            $precursorMass = substr($precursor,0,strpos($precursor, ' '));
+
+            $keys = array_keys($disulfideBondedPeptides);
+            $total = count($keys);
+            $list1 = array();
+            $list1['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
+            $list2 = array();
+
+            for($w=0;$w<$total;$w++){
+
+                //peptide key
+                $key = $keys[$w];
+                //peptide sequence
+                $peptide = $disulfideBondedPeptides[$key]['sequence'];
+                //position of located cysteines
+                $cysteines = $disulfideBondedPeptides[$key]['cysteines'];
+                //peptide mass
+                $premass = substr($key,0,(strlen($key)-4));
+                $mass = (double)str_replace('-', '.', $premass);
+
+                unset($list2);
+                $list1keys = array_keys($list1);
+                for($z=0;$z<count($list1keys);$z++){
+
+                    $list1peptides = $list1[$list1keys[$z]]['peptides'];
+                    $list1peptides[] = $peptide;
+
+                    $list1cysteines = $list1[$list1keys[$z]]['cysteines'];
+                    $list1cysteines[] = $cysteines;
+
+                    $list1premass = substr($list1keys[$z],0,(strlen($list1keys[$z])-4));
+                    $list1mass = (double)str_replace('-', '.', $list1premass);
+                    $list1mass += $mass;
+
+                    $counter++;
+
+                    if(count($list1peptides) > 1){
+                        //discount 2 H lost per S-S bond
+                        $list1mass -= (2*count($list1peptides) -2);
+                    }
+
+                    if($list1mass <= ((double)($precursorMass-1.0) + (double)($IMthreshold))){
+
+                        //generate index
+                        $tmp = explode('.', ((string)$list1mass));
+                        //ensure sorting works by adjusting index XXXX-XXXXX digits
+                        while(strlen($tmp[0]) < 4)
+                            $tmp[0] = '0'.$tmp[0];
+                        while(strlen($tmp[1]) < 5)
+                            $tmp[1] = $tmp[1].'0';
+                        $index = $tmp[0].'-'.$tmp[1].'-'.round(rand(101,999));
+                        //populate array
+                        $list2[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
+
+                        if($list1mass >= ((double)($precursorMass-1.0) - (double)($IMthreshold))){
+                            unset($pepMatch);
+                            unset($pepDMS);
+                            $pepMatch['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
+                            $pepMatch[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
+                            $pepDMS = $this->convertIndextoAAs($pepMatch);
+
+                            if(count($pepDMS) > 0){
+
+                                $IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+
+                                $DMS = array_merge($DMS,$pepDMS);
+
+                            }
+                        }
+                    }
+                }
+                if(isset($list2)){
+                    $list1 = array_merge($list1, $list2);
+                    ksort(&$list1);
+
+                    $list1 = $AAs->trimListBigger($list1,$delta);
+                    //$list1 = $AAs->trimListSmaller($list1,$delta);
+                    //$list1alpha = $AAs->trimListSmaller($list1,$delta);
+                    //$list1beta = $AAs->trimListBigger($list1,$delta);
+                    //$list1 = array_merge($list1alpha, $list1beta);
+                }
+            }
+        }
+
+        unset($list1);
+        unset($list2);
+
+        $result['DMS'] = $DMS;
+        $result['IM'] = $IM;
+
+        return $result;
+        */
+
+    }
+
     public function expandTMLByCharges($data, $precursor, $TMLthreshold){
 
         $TML = array();
