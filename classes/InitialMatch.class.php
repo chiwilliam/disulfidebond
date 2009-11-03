@@ -284,7 +284,7 @@ class InitialMatchclass {
         $disulfideBondedPeptides = $this->reIndexSubsetSum($AAs, $disulfideBondedPeptides, $maxPrecursor);
 
         //get value used to trim lists
-        $delta = $this->getDelta($disulfideBondedPeptides);
+        $delta = $AAs->getDelta($disulfideBondedPeptides);
         
         $PMLkeys = array_keys($PML);
         for($k=0;$k<count($PMLkeys);$k++){
@@ -314,49 +314,72 @@ class InitialMatchclass {
                 $list1keys = array_keys($list1);
                 for($z=0;$z<count($list1keys);$z++){
 
-                    $list1peptides = $list1[$list1keys[$z]]['peptides'];
-                    $list1peptides[] = $peptide;
-
-                    $list1cysteines = $list1[$list1keys[$z]]['cysteines'];
-                    $list1cysteines[] = $cysteines;
-
-                    $list1premass = substr($list1keys[$z],0,(strlen($list1keys[$z])-4));
-                    $list1mass = (double)str_replace('-', '.', $list1premass);
-                    $list1mass += $mass;
-
-                    $counter++;
-
-                    if(count($list1peptides) > 1){
-                        //discount 2 H lost per S-S bond
-                        $list1mass -= (2*count($list1peptides) -2);
+                    //if #cysteines = #peptides and #peptides>1, structure CANNOT form another S-S bond
+                    //represented by 000 at the end
+                    $SSpossible = substr($list1keys[$z],11);
+                    if($SSpossible == "000" && $z>0)
+                    {
+                        //skip structure
                     }
+                    else
+                    {
+                        $list1peptides = $list1[$list1keys[$z]]['peptides'];
+                        $list1peptides[] = $peptide;
 
-                    if($list1mass <= ((double)($precursorMass-1.0) + (double)($IMthreshold))){
+                        $list1cysteines = $list1[$list1keys[$z]]['cysteines'];
+                        $list1cysteines[] = $cysteines;
 
-                        //generate index
-                        $tmp = explode('.', ((string)$list1mass));
-                        //ensure sorting works by adjusting index XXXX-XXXXX digits
-                        while(strlen($tmp[0]) < 4)
-                            $tmp[0] = '0'.$tmp[0];
-                        while(strlen($tmp[1]) < 5)
-                            $tmp[1] = $tmp[1].'0';
-                        $index = $tmp[0].'-'.$tmp[1].'-'.round(rand(101,999));
-                        //populate array
-                        $list2[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
+                        $list1premass = substr($list1keys[$z],0,(strlen($list1keys[$z])-4));
+                        $list1mass = (double)str_replace('-', '.', $list1premass);
+                        $list1mass += $mass;
 
-                        if($list1mass >= ((double)($precursorMass-1.0) - (double)($IMthreshold))){
-                            unset($pepMatch);
-                            unset($pepDMS);
-                            $pepMatch['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
-                            $pepMatch[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
-                            $pepDMS = $this->convertIndextoAAs($pepMatch);
+                        $counter++;
 
-                            if(count($pepDMS) > 0){
+                        //if(count($list1peptides) > 1 || (count($list1peptides) == 1 && count($list1cysteines) >= 2))
+                        if(count($list1peptides) > 1)
+                        {
+                            //discount 2 H lost per S-S bond
+                            $list1mass -= 2.01564;
+                        }
 
-                                $IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+                        if($list1mass <= ((double)($precursorMass) + (double)($IMthreshold))){
 
-                                $DMS = array_merge($DMS,$pepDMS);
+                            //generate index
+                            $tmp = explode('.', ((string)$list1mass));
+                            //ensure sorting works by adjusting index XXXX-XXXXX digits
+                            while(strlen($tmp[0]) < 4)
+                                $tmp[0] = '0'.$tmp[0];
+                            while(strlen($tmp[1]) < 5)
+                                $tmp[1] = $tmp[1].'0';
 
+                            //if #cysteines = #peptides and #peptides>1, structure CANNOT form another S-S bond
+                            //represented by 000 at the end
+                            if(count($list1peptides) > 1 && (count($list1peptides) == count($list1cysteines)))
+                            {
+                                $index = $tmp[0].'-'.$tmp[1].'-000';
+                            }
+                            else
+                            {
+                                $index = $tmp[0].'-'.$tmp[1].'-'.round(rand(101,999));
+                            }
+
+                            //populate array
+                            $list2[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
+
+                            if($list1mass >= ((double)($precursorMass) - (double)($IMthreshold))){
+                                unset($pepMatch);
+                                unset($pepDMS);
+                                $pepMatch['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
+                                $pepMatch[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
+                                $pepDMS = $this->convertIndextoAAs($pepMatch);
+
+                                if(count($pepDMS) > 0){
+
+                                    $IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+
+                                    $DMS = array_merge($DMS,$pepDMS);
+
+                                }
                             }
                         }
                     }
@@ -365,10 +388,10 @@ class InitialMatchclass {
                     $list1 = array_merge($list1, $list2);
                     ksort(&$list1);
 
-                    $list1 = $this->trimListBigger($list1,$delta);
-                    //$list1 = $this->trimListSmaller($list1,$delta);
-                    //$list1alpha = $this->trimListSmaller($list1,$delta);
-                    //$list1beta = $this->trimListBigger($list1,$delta);
+                    $list1 = $AAs->trimListBigger($list1,$delta);
+                    //$list1 = $AAs->trimListSmaller($list1,$delta);
+                    //$list1alpha = $AAs->trimListSmaller($list1,$delta);
+                    //$list1beta = $AAs->trimListBigger($list1,$delta);
                     //$list1 = array_merge($list1alpha, $list1beta);
                 }
             }
@@ -381,79 +404,6 @@ class InitialMatchclass {
         $result['IM'] = $IM;
 
         return $result;
-    }
-
-    public function getDelta($peptides){
-        
-        $total = count($peptides);
-        $keys = array_keys($peptides);
-        $sum = 0;
-        for($i=0;$i<$total;$i++){
-            $sum += (int)substr($keys[$i],0,4);
-        }
-        $average = $sum/$total;
-
-        $first = (int)substr($keys[0],0,4);
-        $last = (int)substr($keys[$total-1],0,4);
-
-        $delta = (double)($last-$first)/$average;
-        $delta = (double)$delta/(2*count($peptides));
-
-        return $delta;
-    }
-
-    public function trimListBigger($list,$delta){
-
-        $trimmed = array();
-
-        $keys = array_keys($list);
-
-        $index = count($keys)-1;
-
-        $trimmed[$keys[$index]] = $list[$keys[$index]];
-
-        $last = (int)(substr($keys[$index], 0, 4));
-
-        for($i=($index-1); $i>=0;$i--){
-            $current = (int)(substr($keys[$i],0,4));
-            if($last > ((1+$delta)*$current)){
-                $trimmed[$keys[$i]] = $list[$keys[$i]];
-                $last = $current;
-            }
-        }
-
-        $totalList = count($keys);
-        $totalTrimmed = count($trimmed);
-
-        ksort(&$trimmed);
-
-        return $trimmed;
-    }
-
-    public function trimListSmaller($list,$delta){
-
-        $trimmed = array();
-
-        $keys = array_keys($list);
-
-        $index = 0;
-
-        $trimmed[$keys[$index]] = $list[$keys[$index]];
-
-        $last = (int)(substr($keys[$index], 0, 4));
-
-        for($i=1; $i<count($keys);$i++){
-            $current = (int)(substr($keys[$i],0,4));
-            if($last < ((1-$delta)*$current)){
-                $trimmed[$keys[$i]] = $list[$keys[$i]];
-                $last = $current;
-            }
-        }
-
-        $totalList = count($keys);
-        $totalTrimmed = count($trimmed);
-
-        return $trimmed;
     }
 
     public function digestProtein($fastaProtein, $protease){

@@ -94,14 +94,98 @@ class AAclass {
             for($j=0;$j<count($DMS[$keys[$i]]["peptides"]);$j++){
                 $mass += $this->calculatePeptideMass($DMS[$keys[$i]]["peptides"][$j],"IM");
             }
+
+            if($j>1)
+            {
                 //subtract H lost with disulfide bond
-                $mass -= (2*count($DMS[$keys[$i]]["peptides"])-2);
+                //interchain
+                $mass -= (2.01564*count($DMS[$keys[$i]]["peptides"])-2.01564);
+            }
+            else
+            {
+                //subtract H lost with disulfide bond
+                //intrachain
+                $mass -= 2.01564;
+            }
                 
-                $DMS[$keys[$i]]["mass"] = $mass;
+            $DMS[$keys[$i]]["mass"] = $mass;
         }
 
         return $DMS;
 
+    }
+
+    public function getDelta($peptides){
+
+        $total = count($peptides);
+        $keys = array_keys($peptides);
+        $sum = 0;
+        for($i=0;$i<$total;$i++){
+            $sum += (int)substr($keys[$i],0,4);
+        }
+        $average = $sum/$total;
+
+        $first = (int)substr($keys[0],0,4);
+        $last = (int)substr($keys[$total-1],0,4);
+
+        $delta = (double)($last-$first)/$average;
+        $delta = (double)$delta/(2*count($peptides));
+
+        return $delta;
+    }
+
+    public function trimListBigger($list,$delta){
+
+        $trimmed = array();
+
+        $keys = array_keys($list);
+
+        $index = count($keys)-1;
+
+        $trimmed[$keys[$index]] = $list[$keys[$index]];
+
+        $last = (int)(substr($keys[$index], 0, 4));
+
+        for($i=($index-1); $i>=0;$i--){
+            $current = (int)(substr($keys[$i],0,4));
+            if($last > ((1+$delta)*$current)){
+                $trimmed[$keys[$i]] = $list[$keys[$i]];
+                $last = $current;
+            }
+        }
+
+        $totalList = count($keys);
+        $totalTrimmed = count($trimmed);
+
+        ksort(&$trimmed);
+
+        return $trimmed;
+    }
+
+    public function trimListSmaller($list,$delta){
+
+        $trimmed = array();
+
+        $keys = array_keys($list);
+
+        $index = 0;
+
+        $trimmed[$keys[$index]] = $list[$keys[$index]];
+
+        $last = (int)(substr($keys[$index], 0, 4));
+
+        for($i=1; $i<count($keys);$i++){
+            $current = (int)(substr($keys[$i],0,4));
+            if($last < ((1-$delta)*$current)){
+                $trimmed[$keys[$i]] = $list[$keys[$i]];
+                $last = $current;
+            }
+        }
+
+        $totalList = count($keys);
+        $totalTrimmed = count($trimmed);
+
+        return $trimmed;
     }
 }
 ?>
