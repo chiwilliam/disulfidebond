@@ -431,7 +431,7 @@
 
                 //output for debugging
                 $debug .= '<tr>';
-                $debug .= '<td align="left" colspan="3"><b>NUMBER OF S-S BONDS: ';
+                $debug .= '<td align="left" colspan="3"><b>PARTIAL NUMBER OF MATCHES: ';
                 $debug .= count($CM).'</b></td>';
                 $debug .= '</tr>';
                 //end of outputting code
