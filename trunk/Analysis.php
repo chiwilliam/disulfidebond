@@ -217,7 +217,12 @@
                 $debug .= '</span></td>';
                 $debug .= '<td width="50px;"></td>';
                 $debug .= '<td><span style="color:red;">';
+                $massdifference = round(((double)$DMS[$IM[$i]["DMS"]]["mass"] - (double)substr($PML[$IM[$i]["PML"]],0,(strlen($PML[$IM[$i]["PML"]])-2))),2);
+                if($massdifference <0){
+                    $massdifference *= -1;
+                }
                 $debug .= 'Precursor Ion M+H = '.$PML[$IM[$i]["PML"]];
+                $debug .= ' [Mass difference: '.$massdifference.']';
                 $debug .= '</span></td>';
                 $debug .= '</tr>';
                 $debug .= '<tr>';
@@ -395,18 +400,24 @@
                     $debug .= '<tr>';
                     $debug .= '<td>';
                     $debug .= ((string)($i+1)).'.'.((string)($k+1)).'. ';
-                    $debug .= 'Fragments Total Mass = '.$CM[$k]["mass"];
+                    $debug .= 'Fragments Mass = '.$CM[$k]["mass"];
                     $debug .= '</td>';
                     $debug .= '<td width="50px;"></td>';
                     $debug .= '<td>';
-                    $debug .= 'DTA Fragment Mass = ';
+                    $debug .= 'DTA Mass = ';
                     $debug .= $CM[$k]["matches"]["TML"];
                     $debug .= ', Intensity = ';
                     $debug .= $TML[$CM[$k]["debug"]["TML"]]["intensity"];
                     $debug .= ', M/Z = ';
                     $debug .= ($TML[$CM[$k]["debug"]["TML"]]["mass"]/$TML[$CM[$k]["debug"]["TML"]]["charge"]);
-                    $debug .= ', Charge = ';
+                    $debug .= ', Z = ';
                     $debug .= $TML[$CM[$k]["debug"]["TML"]]["charge"];
+                    $massdifference = round(((double)$CM[$k]["mass"] - (double)$CM[$k]["matches"]["TML"]),2);
+                    if($massdifference <0){
+                        $massdifference *= -1;
+                    }
+                    $debug .= ', Delta = ';
+                    $debug .= $massdifference;
                     $debug .= '</td>';
                     $debug .= '</tr>';
                     $debug .= '<tr>';
