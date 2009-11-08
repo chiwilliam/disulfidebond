@@ -178,26 +178,19 @@ class ConfirmedMatchclass {
 
         //check if only intrabond case
         $pepNumber = count($peptides);
-        switch($pepNumber){
+
+        if($pepNumber == 1){
             //intrabond only
-            case ($pepNumber == 1):
-                $this->retrieveIntraBondFMSElements(&$FMS, $peptides[0], $cysteines[0]);
-                break;
-            case ($pepNumber == 2):
-                //check there is any possible intrabond in the first peptide
-                //If the structure contains 2 peptides linked by a disulfide bond
-                //a peptide must have 3 or cysteines in order to support both
-                //intrabond and interbond
-                //If that is the case, treat intrabond separated
-                if(count($cysteines[0]) >= 3){
-                    $this->retrieveIntraBondFMSElements(&$FMS, $peptides[0], $cysteines[0]);
-                }
-                if(count($cysteines[1]) >= 3){
-                    $this->retrieveIntraBondFMSElements(&$FMS, $peptides[1], $cysteines[1]);
-                }
-                //treat interbonds
-                $this->retrieveInterBondFMSElements(&$FMS, $peptides, $cysteines);
-                break;
+            $this->retrieveIntraBondFMSElements(&$FMS, $peptides[0], $cysteines[0]);
+        }
+        else{
+            for($i=0;$i<count($pepNumber);$i++){
+                //intrabond only or fragments
+                $this->retrieveIntraBondFMSElements(&$FMS, $peptides[$i], $cysteines[$i]);
+            }
+
+            //treat interbonds
+            $this->retrieveInterBondFMSElements(&$FMS, $peptides, $cysteines);
         }
 
         return $FMS;
@@ -207,77 +200,39 @@ class ConfirmedMatchclass {
 
         $AAs = new AAclass();
 
-        switch(count($cysteines)){
-            case 2:
-                for($i=0;$i<=$cysteines[0];$i++){
-                    $fragment = substr($peptide,$i);
-                    $peplength = strlen($peptide);
-                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
-                    //subtract 2Da due to disulfide bond
-                    $mass -= 2.01564;
-                    //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
-                    //because of an extra H in the amino group NH3+
-                    $mass += 19.01838;
-                    $FMS[(int)(round($mass))] = array("mass" => $mass,
-                        "fragment" => $fragment, "peptide" => $peptide,
-                        "ion" => ('Y'.($peplength-$i)));
-                }
-                for($i=strlen($peptide);$i>$cysteines[1];$i--){
-                    $fragment = substr($peptide,0,$i);
-                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
-                    //subtract 2Da due to disulfide bond
-                    $mass -= 2.01564;
-                    //H on N-terminus mass
-                    $mass += 1.00782;
-                    $FMS[(int)(round($mass))] = array("mass" => $mass,
-                        "fragment" => $fragment, "peptide" => $peptide,
-                        "ion" => ('B'.($i)));
-                }
-                break;
-            case 3:
-                for($i=0;$i<=$cysteines[1];$i++){
-                    $fragment = substr($peptide,$i);
-                    $peplength = strlen($peptide);
-                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
-                    //subtract 2Da due to disulfide bond
-                    $mass -= 2.01564;
-                    //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
-                    //because of an extra H in the amino group NH3+
-                    $mass += 19.01838;
-                    $FMS[(int)(round($mass))] = array("mass" => $mass,
-                        "fragment" => $fragment, "peptide" => $peptide,
-                        "ion" => ('Y'.($peplength-$i)));
-                }
-                for($i=strlen($peptide);$i>$cysteines[1];$i--){
-                    $fragment = substr($peptide,0,$i);
-                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
-                    //subtract 2Da due to disulfide bond
-                    $mass -= 2.01564;
-                    //H on N-terminus mass
-                    $mass += 1.00782;
-                    $FMS[(int)(round($mass))] = array("mass" => $mass,
-                        "fragment" => $fragment, "peptide" => $peptide);
-                }
-                break;
-        }
-        
-        //define possible combinations
-        //search for all possible disulfide bonds
-        for($i=0;$i<(count($cysteines)-1);$i++){
-            for($j=($i+1);$j<count($cysteines);$j++){
-                $fragment = substr($peptide, $cysteines[$i], ($cysteines[$j]-$cysteines[$i]+1));
-                $peplength = strlen($peptide);
-                $mass = $AAs->calculatePeptideMass($fragment,"CM");
+        //Y-ions
+        for($i=0;$i<strlen($peptide);$i++){
+            $fragment = substr($peptide,$i);
+            $peplength = strlen($peptide);
+            $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+            if($i<= $cysteines[(count($cysteines)-2)]){
                 //subtract 2Da due to disulfide bond
                 $mass -= 2.01564;
-                //OH on C-terminus and H on N-terminus mass
-                $mass += 19.01838;
-
-                if(substr($fragment,0,1) == 'C' || strpos($fragment,'C') > 0){
-                    $FMS[(int)(round($mass))] = array("mass" => $mass,
-                        "fragment" => $fragment, "peptide" => $peptide);
-                }
             }
+            
+            //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
+            //because of an extra H in the amino group NH3+
+            $mass += 19.01838;
+            $FMS[(int)(round($mass))] = array("mass" => $mass,
+                "fragment" => $fragment, "peptide" => $peptide,
+                "ion" => ('Y'.($peplength-$i)));
+        }
+        //B-ions
+        for($i=strlen($peptide);$i>0;$i--){
+            $fragment = substr($peptide,0,$i);
+            $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+            if($i>$cysteines[count($cysteines)-1]){
+                //subtract 2Da due to disulfide bond
+                $mass -= 2.01564;
+            }
+
+            //H on N-terminus mass
+            $mass += 1.00782;
+            $FMS[(int)(round($mass))] = array("mass" => $mass,
+                "fragment" => $fragment, "peptide" => $peptide,
+                "ion" => ('B'.($i)));
         }
     }
 
