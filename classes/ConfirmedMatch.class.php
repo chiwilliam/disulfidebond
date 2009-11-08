@@ -186,7 +186,7 @@ class ConfirmedMatchclass {
         else{
             for($i=0;$i<count($pepNumber);$i++){
                 //intrabond only or fragments
-                $this->retrieveIntraBondFMSElements(&$FMS, $peptides[$i], $cysteines[$i]);
+                $this->retrieveIntraBondFMSElements(&$FMS, $peptides[$i], $cysteines[$i], $i);
             }
 
             //treat interbonds
@@ -196,11 +196,17 @@ class ConfirmedMatchclass {
         return $FMS;
     }
 
-    public function retrieveIntraBondFMSElements(&$FMS, $peptide, $cysteines){
+    public function retrieveIntraBondFMSElements(&$FMS, $peptide, $cysteines, $fragtype = -1){
 
         $AAs = new AAclass();
 
         //Y-ions
+        if($i < 0 || $i%2 == 0){
+            $fragtype = 'Y';
+        }
+        else{
+            $fragtype = 'y';
+        }
         for($i=0;$i<strlen($peptide);$i++){
             $fragment = substr($peptide,$i);
             $peplength = strlen($peptide);
@@ -216,9 +222,15 @@ class ConfirmedMatchclass {
             $mass += 19.01838;
             $FMS[(int)(round($mass))] = array("mass" => $mass,
                 "fragment" => $fragment, "peptide" => $peptide,
-                "ion" => ('Y'.($peplength-$i)));
+                "ion" => ($fragtype.($peplength-$i)));
         }
         //B-ions
+        if($i < 0 || $i%2 == 0){
+            $fragtype = 'B';
+        }
+        else{
+            $fragtype = 'b';
+        }
         for($i=strlen($peptide);$i>0;$i--){
             $fragment = substr($peptide,0,$i);
             $mass = $AAs->calculatePeptideMass($fragment,"CM");
@@ -232,7 +244,7 @@ class ConfirmedMatchclass {
             $mass += 1.00782;
             $FMS[(int)(round($mass))] = array("mass" => $mass,
                 "fragment" => $fragment, "peptide" => $peptide,
-                "ion" => ('B'.($i)));
+                "ion" => ($fragtype.($i)));
         }
     }
 
