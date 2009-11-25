@@ -67,7 +67,7 @@ class AAclass {
         return $this->AAs[$name];
     }
 
-    public function calculatePeptideMass($peptide, $matchtype){
+    public function calculatePeptideMass($peptide, $matchtype = ""){
         $mass = (float)0.0;
 
         $AAs = str_split($peptide, 1);
@@ -186,6 +186,59 @@ class AAclass {
         $totalTrimmed = count($trimmed);
 
         return $trimmed;
+    }
+
+    public function getDeltaCM($peptides){
+
+        //In this function I'm not considering if it is a B or Y ion.
+        //Im also not considering that it loses 2Da per S-S bond
+        //REASON: Low influence in final delta result
+
+        $total = count($peptides);
+        //biggest mass: W - 186.2132Da
+        $min = 186.2132;
+        for($i=0;$i<$total;$i++){
+            $average[$i] = 0;
+        }
+        //smallest mass: G - 57.0519Da
+        $max = 57.0519;
+
+        for($i=0;$i<$total;$i++){
+
+            $sum = 0;
+            $AAs = str_split($peptides[$i]);
+            $countAAs = count($AAs);
+            for($j=0;$j<$countAAs;$j++){
+                $mass = $this->calculatePeptideMass($AAs[$j]);
+                if($mass < $min){
+                    $min = $mass;
+                }
+                if($mass > $max){
+                    $max = $mass;
+                }
+                $sum += $mass;
+            }
+            $average[$i] = $sum/$countAAs;
+            $AAs[$i] = $countAAs;
+
+        }
+
+        $overallaverage = 1;
+        $overallAAs = 1;
+        //Didn't use 0 to avoid divison by 0 in case an error happens
+
+        for($i=0;$i<$total;$i++){
+            $overallaverage += $average[$i];
+            $overallAAs += $AAs[$i];
+        }
+        $overallaverage = $overallaverage/$total;
+        $overallAAs = $overallAAs/$total;
+
+        $delta = (double)($max-$min)/$overallaverage;
+        $delta = (double)$delta/(2*$overallAAs);
+
+        return $delta;
+
     }
 }
 ?>
