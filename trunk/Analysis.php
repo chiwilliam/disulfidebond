@@ -250,12 +250,16 @@
                 unset($data[0]);
 
                 //transform array: keys will be the intensity and values will be the m/z
-                $numberfragments = count($data);
+                /*
                 $newvalues = array();
                 for($j=1;$j<$numberfragments;$j++){
-                    $newvalues[(int)substr($data[$j],strpos($data[$j], " ")+1)] = (float)substr($data[$j],0,strpos($data[$j], " "));
+                    $index = (int)substr($data[$j],strpos($data[$j], " ")+1);
+                    $value = (float)substr($data[$j],0,strpos($data[$j], " "));
+                    $newvalues[$index] = $value;
                 }
                 unset($data);
+                 *
+                 */
                 
                 //Try Screening 5%. If it doesnt work, program decreases automatically
                 //until it finds 50 records with higher intensity than limit
@@ -263,16 +267,17 @@
 
                 //function to screen fragments from a DTA file. The goal is to find all fragments
                 //Do 3% screening and consider only the highest intensity picks as matches,
-                //according to threshold
-                $TML = $CMClass->screenDataHighPicks($newvalues,0.03,2.0);
 
-                //unset original dataset
-                unset($newvalues);
+                //test conversion
+                $numberfragments = count($data);
+                
+                //according to threshold
+                $TML = $CMClass->screenDataHighPicks($data,0.03,2.0);
 
                 //define threshold to either save fragment or discard it based on
                 //the precursor ion mass
                 //$fragmentmass <= ($precursormass + $threshold)
-                $TMLthreshold = 2;
+                $TMLthreshold = 2.0;
 
                 $TML = $CMClass->expandTMLByCharges($TML, $precursor, $TMLthreshold);
 
@@ -283,17 +288,25 @@
                 $peptides = $DMS[$IM[$i]["DMS"]]["peptides"];
                 $cysteines = $DMS[$IM[$i]["DMS"]]["cysteines"];
 
-                $FMS = $CMClass->formFMS($peptides, $cysteines);
+                //$FMS = $CMClass->formFMS($peptides, $cysteines);
 
                 //sort FMS by mass
-                ksort(&$FMS);
+                //ksort(&$FMS);
 
                 //Confirmed Match threshold +-1
-                $CMthreshold = 1;
+                $CMthreshold = 1.0;
 
-                //$FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold);
+                $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold);
 
-                $CM = $CMClass->Cmatch($FMS, $TML, $precursor, $CMthreshold);
+                //$CM = $CMClass->Cmatch($FMS, $TML, $precursor, $CMthreshold);
+
+                if($i==1){
+                    $FMStest = $FMSpolynomial['FMS'];
+                    $CMtest = $FMSpolynomial['CM'];
+                    $a=1;
+                }
+                $FMS = $FMSpolynomial['FMS'];
+                $CM = $FMSpolynomial['CM'];
 
                 //debugging
                 //$test2 = count($CM);

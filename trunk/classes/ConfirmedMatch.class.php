@@ -17,101 +17,87 @@ class ConfirmedMatchclass {
     public function screenDataHighPicks($data, $intensityLimit, $threshold){
 
         //get maximum intensity
-        $keys = array_keys($data);
-        $count = count($keys);
-        $maxIntensity = $keys[0];
-        for($i=1;$i<$count;$i++){
-            if($keys[$i] > $maxIntensity){
-                $maxIntensity = $keys[$i];
+        $count = count($data);
+        $maxIntensity = 0;
+        for($i=0;$i<$count;$i++){
+            $intensity = (int)substr($data[$i],strpos($data[$i], " ")+1);
+            //$value = (float)substr($data[$i],0,strpos($data[$i], " "));
+            if($intensity > $maxIntensity){
+                $maxIntensity = $intensity;
             }
         }
+
         //$intensity limit * maximum intensity = screening parameter
         $intensityScreen = (int)(round($maxIntensity*$intensityLimit));
 
-        //screen fragments whose intensity is lower that intensityScreen
+        //screen fragments whose intensity is higher that intensityScreen
         $values = array();
         for($i=0;$i<$count;$i++){
-            if($keys[$i] >= $intensityScreen){
-                $values[$keys[$i]] = $data[$keys[$i]];
+            $intensity = (int)substr($data[$i],strpos($data[$i], " ")+1);
+            if($intensity >= $intensityScreen){
+                $values[] = $data[$i];
             }
         }
-        unset($keys);
         unset($data);
 
         //use median values
-        $keys = array_keys($values);
-        $count = count($keys);
+        $count = count($values);
         $newvalues = array();
 
         for($i=0;$i<$count;$i++){
             
             //get all values starting from minumum to search for the highest pick
+            $intensity = (int)substr($values[$i],strpos($values[$i], " ")+1);
+            $value = (float)substr($values[$i],0,strpos($values[$i], " "));
             if(isset($tmp))
                 unset($tmp);
             $tmp = array();
-            $tmp[$keys[$i]] = $values[$keys[$i]];
+            $tmp[$intensity] = $value;
             for($j=$i+1;$j<$count;$j++){
+                //next pick information
+                $intensityNP = (int)substr($values[$j],strpos($values[$j], " ")+1);
+                $valueNP = (float)substr($values[$j],0,strpos($values[$j], " "));
                 // +threshold due to +-threshold
-                if($values[$keys[$j]] <= ($values[$keys[$i]] + $threshold)){
-                    $tmp[$keys[$j]] = $values[$keys[$j]];
+                if($valueNP <= ($value + $threshold)){
+                    $tmp[$intensityNP] = $valueNP;
                 }
                 else{
                     break;
                 }
             }
 
-            //get provisory highest pick
-            krsort(&$tmp,SORT_NUMERIC);
-            reset(&$tmp);
-            $pickmax = key(&$tmp);
-            $keyentry = array_search($pickmax, $keys);
+            if(count($tmp) > 1){
 
-            //get all values starting from highest pick to search for the highest pick
-            if(isset($tmp))
-                unset($tmp);
-            $tmp = array();
-            $tmp[$keys[$keyentry]] = $values[$keys[$keyentry]];
-            for($k=$keyentry;$k<$count;$k++){
-                // +threshold due to +-threshold
-                if($values[$keys[$k+1]] <= ($values[$keys[$k]] + $threshold)){
-                    $tmp[$keys[$k+1]] = $values[$keys[$k+1]];
+                $keys = array_keys($tmp);
+                $total = count($keys);
+
+                if($total%2 == 0){
+                    //get two middle values
+                    $intensity1 = $keys[(int)($total/2)-1];
+                    $intensity2 = $keys[(int)($total/2)];
+                    if($intensity1 >= $intensity2){
+                        $newvalues[$intensity1] = $tmp[$intensity1];
+                    }
+                    else{
+                        $newvalues[$intensity2] = $tmp[$intensity2];
+                    }
+                    
                 }
                 else{
-                    break;
+                    $intensity = $keys[(int)($total/2)];
+                    $value = $tmp[$intensity];
+                    $newvalues[$intensity] = $value;
                 }
+
+                //avoid repetition. starts search by next value (not analyzed yet)
+                $i = $i+$total-1;
             }
-
-            //get highest pick
-            krsort(&$tmp,SORT_NUMERIC);
-            reset(&$tmp);
-            $newvalues[key(&$tmp)] = $values[key(&$tmp)];
-
-            //avoid repetition. starts search by next value (not analyzed yet)
-            $i = $k;
+            else{
+                $newvalues[key(&$tmp)] = $tmp[key(&$tmp)];
+            }
             
         }
-
-        /*
-        for($i=0;$i<$count;$i++){
-            $sum = $values[$i];
-            $countsum = 1.0;
-            $average = 0.0;
-            for($j=$i+1;$j<$count;$j++){
-                if($values[$j] < $values[$i]+$threshold){
-                    $sum += $values[$j];
-                    $countsum++;
-                }
-                else{
-                    $average = $sum/$countsum;
-                    $average = round($average,1);
-                    $newvalues[] = $average;
-                    $i = $j;
-                    break;
-                }
-            }
-        }
-        */
-        
+       
         unset($values);
 
         return $newvalues;
@@ -201,7 +187,7 @@ class ConfirmedMatchclass {
         $AAs = new AAclass();
 
         //Y-ions
-        if($i < 0 || $i%2 == 0){
+        if($fragtype < 0 || $fragtype%2 == 0){
             $fragtype = 'Y';
         }
         else{
@@ -225,7 +211,7 @@ class ConfirmedMatchclass {
                 "ion" => ($fragtype.($peplength-$i)));
         }
         //B-ions
-        if($i < 0 || $i%2 == 0){
+        if($fragtype < 0 || $fragtype%2 == 0){
             $fragtype = 'B';
         }
         else{
@@ -474,121 +460,196 @@ class ConfirmedMatchclass {
 
         $result = array();
 
-
-
-
         //PolynomialSubsetSum
-        /*
         $counter=0;
-
-        $DMS = array();
-        $IM = array();
+        
+        $FMS = array();
+        $CM = array();
 
         $AAs = new AAclass();
 
-        //change index organization
-        //index will be peptides mass, swapping . for - as indexes do not accept double values
-        $disulfideBondedPeptides = $this->reIndexSubsetSum($AAs, $disulfideBondedPeptides, $maxPrecursor);
-
         //get value used to trim lists
-        $delta = $AAs->getDelta($disulfideBondedPeptides);
+        $delta = $AAs->getDeltaCM($peptides);
 
-        $PMLkeys = array_keys($PML);
-        for($k=0;$k<count($PMLkeys);$k++){
+        $countTML = count($TML);
+        for($k=0;$k<$countTML;$k++){
 
-            $precursor = $PML[$PMLkeys[$k]];
-            $precursorMass = substr($precursor,0,strpos($precursor, ' '));
+            //debugging purposes
+            if($k == 153){
+                $stophere = true;
+            }
 
-            $keys = array_keys($disulfideBondedPeptides);
-            $total = count($keys);
+            $precursorMass = $TML[$k]['mass'];
+            $precursorCharge = $TML[$k]['charge'];
+
+            $total = count($peptides);
             $list1 = array();
-            $list1['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
+            $list1['0000-000'] = array('mass' => 0, 'fragment' => "", 'peptide' => "", 
+                                       'ion' => "", 'cysteines' => 0);
             $list2 = array();
 
             for($w=0;$w<$total;$w++){
 
-                //peptide key
-                $key = $keys[$w];
                 //peptide sequence
-                $peptide = $disulfideBondedPeptides[$key]['sequence'];
-                //position of located cysteines
-                $cysteines = $disulfideBondedPeptides[$key]['cysteines'];
-                //peptide mass
-                $premass = substr($key,0,(strlen($key)-4));
-                $mass = (double)str_replace('-', '.', $premass);
+                $peptide = $peptides[$w];
+                
+                unset($fragments);
+                //Y-ions
+                if($w%2 == 0){
+                    $fragtype = 'Y';
+                }
+                else{
+                    $fragtype = 'y';
+                }
+                for($i=0;$i<strlen($peptide);$i++){
+                    $fragment = substr($peptide,$i);
+                    $peplength = strlen($peptide);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
+                    //because of an extra H in the amino group NH3+
+                    $mass += 19.01838;
+                    $fragments[] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
+                }
+                //B-ions
+                if($w%2 == 0){
+                    $fragtype = 'B';
+                }
+                else{
+                    $fragtype = 'b';
+                }
+                for($i=strlen($peptide);$i>0;$i--){
+                    $fragment = substr($peptide,0,$i);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //H on N-terminus mass
+                    $mass += 1.00782;
+                    $fragments[] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
+                }
 
                 unset($list2);
                 $list1keys = array_keys($list1);
                 for($z=0;$z<count($list1keys);$z++){
 
-                    $list1peptides = $list1[$list1keys[$z]]['peptides'];
-                    $list1peptides[] = $peptide;
+                    $list1fragments = $list1[$list1keys[$z]];
 
-                    $list1cysteines = $list1[$list1keys[$z]]['cysteines'];
-                    $list1cysteines[] = $cysteines;
+                    for($i=0;$i<count($fragments);$i++){
+                        
+                        //calculate mass
+                        $SSbond = false;
+                        $list1mass = $list1fragments["mass"]+$fragments[$i]["mass"];
 
-                    $list1premass = substr($list1keys[$z],0,(strlen($list1keys[$z])-4));
-                    $list1mass = (double)str_replace('-', '.', $list1premass);
-                    $list1mass += $mass;
+                        //calculate # of free cysteines and # of S-S bonds
+                        $existingcysteines = $list1fragments["cysteines"]+$fragments[$i]["cysteines"];
+                        $existingSSbond = substr_count($list1fragments["ion"], "<=>");
 
-                    $counter++;
+                        //check if a new disulfide bond is possible
+                        if($existingcysteines >= 2 &&
+                            $existingcysteines > ((2*$existingSSbond)-1)+2){
+                                $list1mass -= 2.01564;
+                                $SSbond = true;
+                        }
 
-                    if(count($list1peptides) > 1){
-                        //discount 2 H lost per S-S bond
-                        $list1mass -= (2*count($list1peptides) -2);
-                    }
+                        if(($SSbond == true || $list1fragments["mass"] == 0) &
+                            ($list1mass <= ($precursorMass + ($CMthreshold+($precursorCharge-1)/2)))){
 
-                    if($list1mass <= ((double)($precursorMass-1.0) + (double)($IMthreshold))){
+                                //generate index
+                                $list1mass = round($list1mass, 3);
+                                $tmp = explode('.', ((string)$list1mass));
+                                //ensure sorting works by adjusting index XXXX-XXX digits
+                                while(strlen($tmp[0]) < 4)
+                                    $tmp[0] = '0'.$tmp[0];
+                                while(strlen($tmp[1]) < 3)
+                                    $tmp[1] = $tmp[1].'0';
+                                $index = $tmp[0].'-'.$tmp[1];
 
-                        //generate index
-                        $tmp = explode('.', ((string)$list1mass));
-                        //ensure sorting works by adjusting index XXXX-XXXXX digits
-                        while(strlen($tmp[0]) < 4)
-                            $tmp[0] = '0'.$tmp[0];
-                        while(strlen($tmp[1]) < 5)
-                            $tmp[1] = $tmp[1].'0';
-                        $index = $tmp[0].'-'.$tmp[1].'-'.round(rand(101,999));
-                        //populate array
-                        $list2[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
+                                //populate array
+                                if($list1fragments["mass"] == 0){
+                                    $list2[$index] = array('mass' => $list1mass,
+                                        'fragment' => $fragments[$i]["fragment"],
+                                        'peptide' => $fragments[$i]["peptide"],
+                                        'ion' => $fragments[$i]["ion"],
+                                        'cysteines' => $fragments[$i]["cysteines"]);
+                                }
+                                else{
+                                    $list2[$index] = array('mass' => $list1mass,
+                                        'fragment' => $list1fragments["fragment"]."<=>".$fragments[$i]["fragment"],
+                                        'peptide' => $list1fragments["peptide"]."<=>".$fragments[$i]["peptide"],
+                                        'ion' => $list1fragments["ion"]."<=>".$fragments[$i]["ion"],
+                                        'cysteines' => ($list1fragments["fragment"]+$fragments[$i]["cysteines"]));
+                                }
 
-                        if($list1mass >= ((double)($precursorMass-1.0) - (double)($IMthreshold))){
-                            unset($pepMatch);
-                            unset($pepDMS);
-                            $pepMatch['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
-                            $pepMatch[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
-                            $pepDMS = $this->convertIndextoAAs($pepMatch);
+                                if($list1mass >= ($precursorMass - ($CMthreshold+($precursorCharge-1)/2))){
 
-                            if(count($pepDMS) > 0){
+                                    unset($match);
+                                    $match = array();
 
-                                $IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+                                    $match["mass"] = $list2[$index]["mass"];
+                                    $match["fragment"] = $list2[$index]["fragment"];
+                                    $match["peptide"] = $list2[$index]["peptide"];
+                                    $match["ion"] = $list2[$index]["ion"];
+                                    $match["cysteines"] = $list2[$index]["cysteines"];
 
-                                $DMS = array_merge($DMS,$pepDMS);
+                                    //tries to identify good CMs
+                                    //check mass from all the structures, including the variance, depending on the charge state
+                                    $match["matches"] = array("FMS" => $list1mass, "TML" => $precursorMass);
 
-                            }
+                                    if(($list1mass - $precursorMass) > 0){
+                                        $match["deviation"] = ($list1mass - $precursorMass);
+                                    }
+                                    else{
+                                        $match["deviation"] = ($precursorMass - $list1mass);
+                                    }
+
+                                    //for debugging
+                                    $match["debug"] = array("FMS" => $index, "TML" => $k);
+                                    //end debugging
+
+                                    $CM[] = $match;
+                                }
                         }
                     }
                 }
+
+                //merge and trim list
                 if(isset($list2)){
                     $list1 = array_merge($list1, $list2);
                     ksort(&$list1);
 
                     $list1 = $AAs->trimListBigger($list1,$delta);
+                    
                     //$list1 = $AAs->trimListSmaller($list1,$delta);
                     //$list1alpha = $AAs->trimListSmaller($list1,$delta);
                     //$list1beta = $AAs->trimListBigger($list1,$delta);
                     //$list1 = array_merge($list1alpha, $list1beta);
                 }
+
+                $FMS = array_merge($list1, $FMS);
             }
         }
 
         unset($list1);
         unset($list2);
 
-        $result['DMS'] = $DMS;
-        $result['IM'] = $IM;
+        ksort(&$FMS);
+
+        unset($result);
+        $result = array();
+
+        $result['FMS'] = $FMS;
+        $result['CM'] = $CM;
 
         return $result;
-        */
 
     }
 
