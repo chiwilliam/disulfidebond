@@ -1,0 +1,54 @@
+root { 
+    display: block;
+}
+
+div.graph{
+    position:relative;
+    width:100%;
+    padding:0px 0px 0px 0px;
+    margin:0px 0px 0px 180px;
+}
+
+div.listofbonds{
+    padding: 0px 0px 0px 0px;
+}
+
+table.graphtable{
+    border:solid;
+    border-color:black;
+    border-width:1px;
+    border-collapse:collapse;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+tr.graphtr{
+    font-size:16px;
+    font-weight:bold;
+    height:10px;
+    border-collapse:collapse;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+td.graphtd{
+    width:20px;
+    height:20px;
+    background-color:white;
+    font-size:16px;
+    font-weight:bold;
+    border-collapse:collapse;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+td.graphselectedtd{
+    width:20px;
+    height:20px;
+    background-color:yellow;
+    font-size:16px;
+    font-weight:bold;
+    padding: 0px 0px 0px 0px;
+}
+
+
