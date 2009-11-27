@@ -9,6 +9,8 @@
 <title>Home</title>
 <!-- #EndEditable -->
 <link href="styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
+<link href="styles/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/wz_jsgraphics.js"></script>
 </head>
 
 <body>
@@ -36,72 +38,79 @@
 		<div id="column_l">
 			<!-- #BeginEditable "content" -->
                         <form action="Analysis.php" name="submitForm" enctype="multipart/form-data" method="post">
-                            <table align="center">
-                                <tr>
-                                    <td>
-                                        <label>Upload ZIP with DTA files:</label>
-                                    </td>
-                                    <td>
-                                        <input type="file" id="zipFile" name="zipFile" size="50"></input>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Enter FASTA protein sequence:</label>
-                                    </td>
-                                    <td>
-                                        <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="50"><?php if(isset($fastaProtein)){echo $fastaProtein;}?></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Choose protease used in digestion:</label>
-                                    </td>
-                                    <td>
-                                        <select id="protease" name="protease">
-                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "T"){echo "selected";} ?> value="T">Trypsin</option>
-                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "C"){echo "selected";} ?> value="C">Chymotrypsin</option>
-                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "TC"){echo "selected";} ?> value="TC">Trypsin + Chymotrypsin</option>
-                                            <option <?php if(!isset($protease)){$protease = "T";} if($protease == "G"){echo "selected";} ?> value="G">Glu-C</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Missing cleavages:</label>
-                                    </td>
-                                    <td>
-                                        <select id="missingcleavages" name="missingcleavages">
-                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
-                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
-                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "1"){echo "selected";} ?> value="1">1</option>
-                                            <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "2"){echo "selected";} ?> value="2">2</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <br/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" colspan="3">
-                                        <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"></input>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <br/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" colspan="3">
-                                        <font color="blue"><?php if(isset($message)){echo $message;}?></font>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div>
+                                <table align="center">
+                                    <tr>
+                                        <td>
+                                            <label>Upload ZIP with DTA files:</label>
+                                        </td>
+                                        <td>
+                                            <input type="file" id="zipFile" name="zipFile" size="50"></input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Enter FASTA protein sequence:</label>
+                                        </td>
+                                        <td>
+                                            <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="50"><?php if(isset($fastaProtein)){echo $fastaProtein;}?></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Choose protease used in digestion:</label>
+                                        </td>
+                                        <td>
+                                            <select id="protease" name="protease">
+                                                <option <?php if(!isset($protease)){$protease = "T";} if($protease == "T"){echo "selected";} ?> value="T">Trypsin</option>
+                                                <option <?php if(!isset($protease)){$protease = "T";} if($protease == "C"){echo "selected";} ?> value="C">Chymotrypsin</option>
+                                                <option <?php if(!isset($protease)){$protease = "T";} if($protease == "TC"){echo "selected";} ?> value="TC">Trypsin + Chymotrypsin</option>
+                                                <option <?php if(!isset($protease)){$protease = "T";} if($protease == "G"){echo "selected";} ?> value="G">Glu-C</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Missing cleavages:</label>
+                                        </td>
+                                        <td>
+                                            <select id="missingcleavages" name="missingcleavages">
+                                                <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
+                                                <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
+                                                <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "1"){echo "selected";} ?> value="1">1</option>
+                                                <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "2"){echo "selected";} ?> value="2">2</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="3">
+                                            <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"></input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="3">
+                                            <font color="blue"><?php if(isset($message)){echo $message;}?></font>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </form>
+                        <div id="graphdiv" class="graph">
+                            <?php include 'graph.php'; ?>
+                        </div>
+                        <div id="listofbondsdiv" class="listofbonds">
                             <table align="center" id="bonds" width="800">
-                                <font face="Courier New">
+                                <tr><td></td></tr>
                                 <?php
                                     if(isset($bonds)){
                                         if(count($bonds) == -1){
@@ -146,13 +155,11 @@
                                         }
                                     }
                                 ?>
-                                </font>
                             </table>
-                <?php
-                    if(isset($debug)){echo $debug;}
-                ?>
-                        </form>
-			<!-- #EndEditable -->
+                            <?php
+                                if(isset($debug)){echo $debug;}
+                            ?>
+                      </div>
                 </div>
 		<!-- End Left Column -->
 	<!-- End Page Content -->
@@ -162,7 +169,7 @@
 		<p>Copyright © 2009 William Murad. All Rights Reserved.</p>
 	</div>
 	<!-- End Footer --></div>
-<!-- End Container -->
+</div><!-- End Container -->
 
 </body>
 
