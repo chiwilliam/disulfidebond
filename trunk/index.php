@@ -106,7 +106,9 @@
                             </div>
                         </form>
                         <div id="graphdiv" class="graph">
-                            <?php include 'graph.php'; ?>
+                            <script type="text/javascript" src="js/graph.js"></script>
+                            <?php echo $SSgraph; ?>
+                            <?php echo $SSgraphJS; ?>
                         </div>
                         <div id="listofbondsdiv" class="listofbonds">
                             <table align="center" id="bonds" width="800">

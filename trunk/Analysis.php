@@ -477,6 +477,68 @@
             }
             else{
                 $debug .= "</table>";
+
+                //populate disulfide bonds graph
+                $AAsarray = str_split($fastaProtein,1);
+                $totalAAs = count($AAsarray);
+                $totalbonds = count($bonds);
+                $allbonds = array();
+
+                //define AAs to have colored background
+                for($i=0;$i<$totalbonds;$i++){
+                    $cys = explode('-', $bonds[$i]);
+                    $allbonds[] = $cys[0];
+                    $allbonds[] = $cys[1];
+                }
+
+                //start table
+                $SSgraph = '<table class="graphtable">';
+                
+                for($i=0;$i<$totalAAs;$i++){
+                    //start row
+                    if($i%30 == 0){
+                        if($i == 0){
+                            $SSgraph .= '<tr align="center">';
+                        }
+                        else{
+                            $SSgraph .= '</tr><tr align="center">';
+                        }                        
+                    }
+
+                    //fill columns
+                    //check if columns participates in any disulfide bond
+                    $isBonded = false;
+                    for($j=0;$j<count($allbonds);$j++){
+                        if($allbonds[$j] == ($i+1)){
+                            $isBonded = true;
+                            break;
+                        }
+                    }
+                    //if it does, color background
+                    if($isBonded){
+                        $SSgraph .= '<td class="graphselectedtd">'.$AAsarray[$i].'</td>';
+                    }
+                    else{
+                        $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
+                    }
+
+                    //end row
+                    if($i == ($totalAAs-1)){
+                        $SSgraph .= '</tr>';
+                    }                    
+                }
+
+                //Javascript to draw S-S bonds
+                $SSgraphJS = '<script type="text/javascript">';
+                for($j=0;$j<$totalbonds;$j++){
+                    $cysteines = explode('-', $bonds[$j]);
+                    $SSgraphJS .= "myDrawFunction(".($cysteines[0]-1).",".($cysteines[1]-1).",20,20,30,'yellow',3);";
+                }
+                $SSgraphJS .= '</script>';
+
+                //close table
+                $SSgraph .= "</table>";
+                
             }
 
         }
