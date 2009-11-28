@@ -23,7 +23,7 @@ table.graphtable{
 }
 
 tr.graphtr{
-    font-size:16px;
+    font-size:12px;
     font-weight:bold;
     height:10px;
     border-collapse:collapse;
@@ -35,7 +35,7 @@ td.graphtd{
     width:20px;
     height:20px;
     background-color:white;
-    font-size:16px;
+    font-size:14px;
     font-weight:bold;
     border-collapse:collapse;
     padding: 0px 0px 0px 0px;
@@ -46,7 +46,7 @@ td.graphselectedtd{
     width:20px;
     height:20px;
     background-color:yellow;
-    font-size:16px;
+    font-size:14px;
     font-weight:bold;
     padding: 0px 0px 0px 0px;
 }
