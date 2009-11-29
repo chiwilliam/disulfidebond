@@ -97,11 +97,19 @@
                                             <br/>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td align="center" colspan="3">
-                                            <font color="blue"><?php if(isset($message)){echo $message;}?></font>
-                                        </td>
-                                    </tr>
+                                    <?php
+                                        if(strtoupper(substr($message, 0, 5)) == "ERROR"){
+                                            echo '<tr><td align="left" colspan="3"><font color="red">';
+                                        }
+                                        else{
+                                            echo '<tr><td align="center" colspan="3"><font color="blue">';
+                                        }
+
+                                        if(isset($message)){
+                                            echo $message;
+                                        }
+                                        echo '</font></td></tr>';
+                                    ?>
                                 </table>
                             </div>
                         </form>
