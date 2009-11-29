@@ -586,7 +586,7 @@ class ConfirmedMatchclass {
                                         'fragment' => $list1fragments["fragment"]."<=>".$fragments[$i]["fragment"],
                                         'peptide' => $list1fragments["peptide"]."<=>".$fragments[$i]["peptide"],
                                         'ion' => $list1fragments["ion"]."<=>".$fragments[$i]["ion"],
-                                        'cysteines' => ($list1fragments["fragment"]+$fragments[$i]["cysteines"]));
+                                        'cysteines' => ($list1fragments["cysteines"]+$fragments[$i]["cysteines"]));
                                 }
 
                                 if($list1mass >= ($precursorMass - ($CMthreshold+($precursorCharge-1)/2))){

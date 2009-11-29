@@ -240,5 +240,49 @@ class AAclass {
         return $delta;
 
     }
+
+    public function formatFASTAsequence($fastaProtein){
+
+        $tmp = explode("\r\n", $fastaProtein);
+        for($i=0;$i<count($tmp);$i++){
+            if(substr($tmp[$i], 0, 1) == '>'){
+                unset($tmp[$i]);
+            }
+        }
+        $fastaProtein = implode("", $tmp);
+
+        $fastaProtein = strtoupper($fastaProtein);
+
+        $fastaProtein = str_replace("-", "", $fastaProtein);
+        $fastaProtein = str_replace("*", "", $fastaProtein);
+
+        $AAs = str_split($fastaProtein, 1);
+        $length = count($AAs);
+
+        for($i=0;$i<$length;$i++){
+            $isValid = $this->isAAValid($AAs[$i]);
+            if($isValid == false){
+                $fastaProtein = false;
+                break;
+            }
+        }
+
+        return $fastaProtein;
+    }
+
+    public function isAAValid($AA){
+        $result = false;
+
+        if($AA == "A" || $AA == "R" || $AA == "N" || $AA == "D" || $AA == "C" ||
+           $AA == "E" || $AA == "Q" || $AA == "G" || $AA == "H" || $AA == "I" ||
+           $AA == "L" || $AA == "K" || $AA == "M" || $AA == "O" || $AA == "F" ||
+           $AA == "P" || $AA == "S" || $AA == "T" || $AA == "W" || $AA == "Y" ||
+           $AA == "V" ){
+
+            $result = true;
+        }
+        
+        return $result;
+    }
 }
 ?>
