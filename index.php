@@ -26,7 +26,7 @@
 	</div>
 	<!-- End Masthead -->
 	<!-- Begin Navigation -->
-	<div id="navigation">
+	<div id="navigation" class="horizontalmenu">
 		<ul>
 			<li><a href="index.php">Home</a></li>
                         <li><a href="index.php">Standard User</a></li>
