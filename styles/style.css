@@ -51,4 +51,67 @@ td.graphselectedtd{
     padding: 0px 0px 0px 0px;
 }
 
+div.standardusers{
+    visibility:hidden;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
 
+div.advancedusers{
+    visibility:visible;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+table.advancedusers{
+    width:100%;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+tr.advancedusers{
+    width:100%;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+td.advancedusersleft{
+    float:left;
+    width:240px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+td.advancedusersright{
+    float:left;
+    width:460px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    color:red;
+    font-size:10px;
+}
+
+table.input{
+    margin-left:150px;
+    padding: 0px 0px 0px 0px;
+}
+
+tr.input{
+    width:100%;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+td.inputleft{
+    float:left;
+    width:240px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 4px;
+}
+
+td.inputright{
+    float:left;
+    width:460px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}

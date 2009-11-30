@@ -29,6 +29,8 @@
 	<div id="navigation">
 		<ul>
 			<li><a href="index.php">Home</a></li>
+                        <li><a href="index.php">Standard User</a></li>
+                        <li><a href="analysis.php?mode=advanced">Advanced User</a></li>
 		</ul>
 	</div>
 	<!-- End Navigation -->
@@ -39,28 +41,28 @@
 			<!-- #BeginEditable "content" -->
                         <form action="Analysis.php" name="submitForm" enctype="multipart/form-data" method="post">
                             <div>
-                                <table align="center">
-                                    <tr>
-                                        <td>
+                                <table class="input">
+                                    <tr class="input">
+                                        <td class="inputleft">
                                             <label>Upload ZIP with DTA files:</label>
                                         </td>
-                                        <td>
+                                        <td class="inputright">
                                             <input type="file" id="zipFile" name="zipFile" size="50"></input>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
+                                    <tr class="input">
+                                        <td class="inputleft">
                                             <label>Enter FASTA protein sequence:</label>
                                         </td>
-                                        <td>
+                                        <td class="inputright">
                                             <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="50"><?php if(isset($fastaProtein)){echo $fastaProtein;}?></textarea>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
+                                    <tr class="input">
+                                        <td class="inputleft">
                                             <label>Choose protease used in digestion:</label>
                                         </td>
-                                        <td>
+                                        <td class="inputright">
                                             <select id="protease" name="protease">
                                                 <option <?php if(!isset($protease)){$protease = "T";} if($protease == "T"){echo "selected";} ?> value="T">Trypsin</option>
                                                 <option <?php if(!isset($protease)){$protease = "T";} if($protease == "C"){echo "selected";} ?> value="C">Chymotrypsin</option>
@@ -69,11 +71,11 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
+                                    <tr class="input">
+                                        <td class="inputleft">
                                             <label>Missing cleavages:</label>
                                         </td>
-                                        <td>
+                                        <td class="inputright">
                                             <select id="missingcleavages" name="missingcleavages">
                                                 <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
                                                 <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
@@ -82,27 +84,41 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <br/>
+                                    <tr class="input">
+                                        <td colspan="2">
+                                            <p></p>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td align="center" colspan="3">
+                                    <tr class="input">
+                                        <td colspan="2">
+                                            <?php
+                                                if(isset($advancedusers)){
+                                                    echo '<div id="advanceddiv" class="advancedusers">';
+                                                    echo $advancedusers;
+                                                }
+                                                else{
+                                                    echo '<div id="advanceddiv" class="standardusers">';
+                                                }
+                                                echo '</div>';
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr class="input">
+                                        <td align="center" colspan="2">
                                             <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"></input>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
+                                    <tr class="input">
+                                        <td colspan="2">
                                             <br/>
                                         </td>
                                     </tr>
                                     <?php
                                         if(strtoupper(substr($message, 0, 5)) == "ERROR"){
-                                            echo '<tr><td align="left" colspan="3"><font color="red">';
+                                            echo '<tr class="input"><td align="left" colspan="2"><font color="red">';
                                         }
                                         else{
-                                            echo '<tr><td align="center" colspan="3"><font color="blue">';
+                                            echo '<tr class="input"><td align="center" colspan="2"><font color="blue">';
                                         }
 
                                         if(isset($message)){
