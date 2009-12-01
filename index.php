@@ -104,7 +104,10 @@
                                         </td>
                                     </tr>
                                     <tr class="input">
-                                        <td align="center" colspan="2">
+                                        <td class="inputleft">
+                                            <label style="visibility:hidden">Click Search Disulfide Bonds to process your request</label>
+                                        </td>
+                                        <td class="inputright">
                                             <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"></input>
                                         </td>
                                     </tr>
