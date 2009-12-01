@@ -104,7 +104,8 @@
         }
 
         if(strlen($_FILES["zipFile"]["name"]) > 0 && $_FILES["zipFile"][size] > 0 &&
-           $_FILES["zipFile"]["type"] == "application/zip" && $fastaProtein != false &&
+           ($_FILES["zipFile"]["type"] == "application/zip" || $_FILES["zipFile"]["type"] == "application/x-zip-compressed") &&
+           $fastaProtein != false &&
            strlen($_POST["fastaProtein"]) > 0 && strlen($_POST["protease"]) > 0){
 
             //output all results in a string to be debugged;
@@ -575,12 +576,14 @@
                                 $allbonds[] = $cys[1];
                             }
 
+                            //DISULFIDE BOND VISUALIZATION GRAPH
                             //start table
+                            $numColumns = 30;
                             $SSgraph = '<table class="graphtable">';
 
                             for($i=0;$i<$totalAAs;$i++){
                                 //start row
-                                if($i%30 == 0){
+                                if($i%$numColumns == 0){
                                     if($i == 0){
                                         $SSgraph .= '<tr align="center">';
                                     }
@@ -608,6 +611,12 @@
 
                                 //end row
                                 if($i == ($totalAAs-1)){
+
+                                    $missingcolumns = $numColumns-($totalAAs%$numColumns);
+                                    for($j=0;$j<$missingcolumns;$j++){
+                                        $SSgraph .= '<td class="graphtd"></td>';
+                                    }
+
                                     $SSgraph .= '</tr>';
                                 }
                             }

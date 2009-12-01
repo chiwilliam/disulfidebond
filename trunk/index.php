@@ -116,19 +116,26 @@
                                             <br/>
                                         </td>
                                     </tr>
-                                    <?php
-                                        if(strtoupper(substr($message, 0, 5)) == "ERROR"){
-                                            echo '<tr class="input"><td align="left" colspan="2"><font color="red">';
-                                        }
-                                        else{
-                                            echo '<tr class="input"><td align="center" colspan="2"><font color="blue">';
-                                        }
+                                    <tr>
+                                        <td class="inputleft">
+                                            <label style="visibility:hidden">Disulfide Bonds</label>
+                                        </td>
+                                        <td class="inputright">
+                                            <?php
+                                                if(strtoupper(substr($message, 0, 5)) == "ERROR"){
+                                                    echo '<font color="red">';
+                                                }
+                                                else{
+                                                    echo '<font color="blue">';
+                                                }
 
-                                        if(isset($message)){
-                                            echo $message;
-                                        }
-                                        echo '</font></td></tr>';
-                                    ?>
+                                                if(isset($message)){
+                                                    echo $message;
+                                                }
+                                                echo '</font>';
+                                            ?>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </form>
