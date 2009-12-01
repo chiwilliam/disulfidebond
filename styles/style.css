@@ -6,7 +6,7 @@ div.graph{
     position:relative;
     width:100%;
     padding:0px 0px 0px 0px;
-    margin:0px 0px 0px 180px;
+    margin:0px 0px 0px 10px;
 }
 
 div.listofbonds{
@@ -26,7 +26,6 @@ tr.graphtr{
     font-size:12px;
     font-weight:bold;
     height:10px;
-    border-collapse:collapse;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
@@ -37,7 +36,6 @@ td.graphtd{
     background-color:white;
     font-size:14px;
     font-weight:bold;
-    border-collapse:collapse;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
@@ -64,7 +62,7 @@ div.advancedusers{
 }
 
 table.advancedusers{
-    width:100%;
+    width:900px;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
@@ -77,14 +75,14 @@ tr.advancedusers{
 
 td.advancedusersleft{
     float:left;
-    width:240px;
+    width:250px;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
 
 td.advancedusersright{
     float:left;
-    width:460px;
+    width:600px;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
     color:red;
@@ -92,9 +90,9 @@ td.advancedusersright{
 }
 
 table.input{
-    margin-left:150px;
+    margin-left:5px;
     padding: 0px 0px 0px 0px;
-    width:100%;
+    width:900px;
 }
 
 tr.input{
@@ -105,14 +103,14 @@ tr.input{
 
 td.inputleft{
     float:left;
-    width:240px;
+    width:250px;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 4px;
 }
 
 td.inputright{
     float:left;
-    width:460px;
+    width:600px;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
