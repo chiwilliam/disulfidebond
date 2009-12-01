@@ -21,28 +21,28 @@ class Usersclass {
                     </td>
                 </tr>
                 <tr class="advancedusers">
-                    <td class="advancedusersleft">TML Formation Threshold:</td>
+                    <td class="advancedusersleft">MS/MS Formation Threshold:</td>
                     <td class="advancedusersright">
                         <input type="text" id="TMLthreshold" name="TMLthreshold" size="5" value="'.$TMLthreshold.'"></input>
                         * expand m/z values according to precursor charge state (default: 2.0)
                     </td>
                 </tr>
                 <tr class="advancedusers">
-                    <td class="advancedusersleft">m/z Screening Threshold:</td>
+                    <td class="advancedusersleft">MS/MS Screening Threshold:</td>
                     <td class="advancedusersright">
                         <input type="text" id="ScreeningThreshold" name="ScreeningThreshold" size="5" value="'.$ScreeningThreshold.'"></input>
                         * selecting a median value for similiar m/z values (default: 2.0)
                     </td>
                 </tr>
                 <tr class="advancedusers">
-                    <td class="advancedusersleft">m/z Intensity Limit:</td>
+                    <td class="advancedusersleft">MS/MS Intensity Limit:</td>
                     <td class="advancedusersright">
                         <input type="text" id="IntensityLimit" name="IntensityLimit" size="5" value="'.$IntensityLimit.'"></input>
                         * lowest m/z intensity accepted (default: 0.03 or 3%)
                     </td>
                 </tr>
                 <tr class="advancedusers">
-                    <td class="advancedusersleft">Confirmed Threshold:</td>
+                    <td class="advancedusersleft">Confirmed Match Threshold:</td>
                     <td class="advancedusersright">
                         <input type="text" id="CMthreshold" name="CMthreshold" size="5" value="'.$CMthreshold.'"></input>
                         * (default: +-1.0)
