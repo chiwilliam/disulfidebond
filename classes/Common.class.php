@@ -243,7 +243,7 @@ class Commonclass {
 
         //prepare file paths
         $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/".$vertices.$totaledges."U";
-        $path = str_replace("/", "\\", $path);
+        //$path = str_replace("/", "\\", $path);
         $extensionIN = ".in";
         $extensionOUT = ".out";
 
