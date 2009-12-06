@@ -266,7 +266,7 @@ class Commonclass {
             $command = str_replace("/", "\\", $command);
         }
         else{
-            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/weighted-match/./wmatch ".
+            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/./wmatch ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
         }
         
