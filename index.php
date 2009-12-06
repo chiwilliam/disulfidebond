@@ -30,7 +30,7 @@
 		<ul>
 			<li><a href="index.php">Home</a></li>
                         <li><a href="index.php">Standard User</a></li>
-                        <li><a href="analysis.php?mode=advanced">Advanced User</a></li>
+                        <li><a href="Analysis.php?mode=advanced">Advanced User</a></li>
 		</ul>
 	</div>
 	<!-- End Navigation -->
