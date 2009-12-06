@@ -284,8 +284,18 @@ class Commonclass {
         }
 
         //extract maximum weighted match results
-        //$output = str_replace("\r\n", " ", $output);
-        $results = explode(" ", trim($output));
+        if($_ENV['OS'] == "Windows_NT"){
+            $output = str_replace("\r\n", " ", $output);
+            $results = explode(" ", trim($output));
+        }
+        else{
+            $output = str_replace(" ","",$output);
+            $results = array();
+            
+            for($l=0;$l<strlen($output);$l++){
+                $results[$l] = substr($output, $l, 1);
+            }
+        }
 
         //create an array with all chosen V-E-V (vertex-edge-vertex) combinations
         for($i=0;$i<count($results);$i+=2){
