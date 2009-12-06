@@ -284,7 +284,7 @@ class Commonclass {
         }
 
         //extract maximum weighted match results
-        $output = str_replace("\r\n", " ", $output);
+        //$output = str_replace("\r\n", " ", $output);
         $results = explode(" ", trim($output));
 
         //create an array with all chosen V-E-V (vertex-edge-vertex) combinations
