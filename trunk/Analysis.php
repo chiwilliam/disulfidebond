@@ -1,6 +1,6 @@
 <?php
 
-    require_once $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/classes/Users.class.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/Users.class.php";
     $Users = new Usersclass();
 
     if($_REQUEST["mode"] == "advanced"){
@@ -8,7 +8,7 @@
         $mode = "advanced";
         $advancedusers = $Users->getAdvancedUserHTML();
         
-        include $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/index.php";
+        include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
         
     }
     else{
@@ -675,7 +675,7 @@
             unset($debug);
         }
 
-        include $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/index.php";
+        include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
     }
     
 
