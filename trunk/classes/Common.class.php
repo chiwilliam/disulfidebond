@@ -242,7 +242,7 @@ class Commonclass {
         $input = $vertices." ".$totaledges." U \n\n".$input."\n";
 
         //prepare file paths
-        $path = $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/gabow/".$vertices.$totaledges."U";
+        $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/".$vertices.$totaledges."U";
         $path = str_replace("/", "\\", $path);
         $extensionIN = ".in";
         $extensionOUT = ".out";
@@ -256,7 +256,7 @@ class Commonclass {
         file_put_contents($path.$extensionIN, $input);
 
         //write command to be executed to run wmatch executable
-        $command = $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/gabow/wmatch.exe ".
+        $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/wmatch.exe ".
                    $path.$extensionIN." > ".$path.$extensionOUT;
         $command = str_replace("/", "\\", $command);
 
