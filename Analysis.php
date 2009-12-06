@@ -150,7 +150,7 @@
                 //read DTA files
                 $zip = zip_open($zipFile["tmp_name"]);
                 if($zip){
-                    $dirPath = "DTA/".$zipFile["name"];
+                    $dirPath = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"];
                     if(!is_dir($dirPath)){
                         mkdir($dirPath);
                     }
@@ -180,7 +180,7 @@
                                     $PMLNames[$index] = $filename;
 
                                     //store data in a local file
-                                    $path = "DTA/".$zipFile["name"]."/".$index.".txt";
+                                    $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"]."/".$index.".txt";
                                     file_put_contents($path, $data);
                                 }
                             }
