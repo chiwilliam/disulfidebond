@@ -292,7 +292,7 @@ class Commonclass {
             $results = array();
             for($l=0;$l<strlen($output);$l++){
                 $value = substr($output, $l, 1);
-                if(is_int($value)){
+                if(strlen(trim($value)) > 0){
                     $results[] = $value;
                 }
             }
