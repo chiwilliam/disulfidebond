@@ -243,7 +243,11 @@ class Commonclass {
 
         //prepare file paths
         $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/".$vertices.$totaledges."U";
-        //$path = str_replace("/", "\\", $path);
+
+        if($_ENV['OS'] == "Windows_NT"){
+            $path = str_replace("/", "\\", $path);
+        }
+
         $extensionIN = ".in";
         $extensionOUT = ".out";
 
@@ -258,8 +262,17 @@ class Commonclass {
         //write command to be executed to run wmatch executable
         $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/wmatch.exe ".
                    $path.$extensionIN." > ".$path.$extensionOUT;
-        $command = str_replace("/", "\\", $command);
 
+        if($_ENV['OS'] == "Windows_NT"){
+            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/wmatch.exe ".
+                       $path.$extensionIN." > ".$path.$extensionOUT;
+            $command = str_replace("/", "\\", $command);
+        }
+        else{
+            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/weighted-match/wmatch ".
+                       $path.$extensionIN." > ".$path.$extensionOUT;
+        }
+        
         //execute command
         exec($command);
 
