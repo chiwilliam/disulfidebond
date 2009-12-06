@@ -260,16 +260,13 @@ class Commonclass {
         file_put_contents($path.$extensionIN, $input);
 
         //write command to be executed to run wmatch executable
-        $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/wmatch.exe ".
-                   $path.$extensionIN." > ".$path.$extensionOUT;
-
         if($_ENV['OS'] == "Windows_NT"){
             $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/wmatch.exe ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
             $command = str_replace("/", "\\", $command);
         }
         else{
-            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/weighted-match/wmatch ".
+            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/weighted-match/./wmatch ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
         }
         
