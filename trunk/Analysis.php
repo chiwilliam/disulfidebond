@@ -12,10 +12,10 @@
         
     }
     else{
-        require_once $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/classes/AA.class.php";
-        require_once $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/classes/InitialMatch.class.php";
-        require_once $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/classes/Common.class.php";
-        require_once $_SERVER['DOCUMENT_ROOT']."/DisulfideBond/classes/ConfirmedMatch.class.php";
+        require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/AA.class.php";
+        require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/InitialMatch.class.php";
+        require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/Common.class.php";
+        require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/ConfirmedMatch.class.php";
 
         $IMClass = new InitialMatchclass();
         $Func = new Commonclass();
