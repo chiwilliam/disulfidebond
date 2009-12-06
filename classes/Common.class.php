@@ -289,11 +289,12 @@ class Commonclass {
             $results = explode(" ", trim($output));
         }
         else{
-            $output = str_replace(" ","",$output);
             $results = array();
-            
             for($l=0;$l<strlen($output);$l++){
-                $results[$l] = substr($output, $l, 1);
+                $value = substr($output, $l, 1);
+                if(is_int($value)){
+                    $results[] = $value;
+                }
             }
         }
 
