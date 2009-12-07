@@ -14,23 +14,23 @@
 </head>
 
 <body>
-
+<script type="text/javascript" src="js/wz_tooltip.js"></script>
 <!-- Begin Container -->
 <div id="container">
 	<!-- Begin Masthead -->
 	<div id="masthead">
-		<img alt="Your Company Logo Here" height="66" src="images/logo.gif" width="150" />
+		<img alt="MS2DBp logo" height="66" src="images/logo.gif" width="150" onmouseover="Tip('MS2DBp Project')" onmouseout="UnTip()"/>
 		<div id="mastheadright">
-			<img alt="SFSU Logo" height="39" src="images/SFSU_logo.jpg" width="150" />
+			<img alt="SFSU Logo" height="39" src="images/SFSU_logo.jpg" width="150" onmouseover="Tip('SFSU http://www.sfsu.edu')" onmouseout="UnTip()"/>
 		</div>
 	</div>
 	<!-- End Masthead -->
 	<!-- Begin Navigation -->
 	<div id="navigation" class="horizontalmenu">
 		<ul>
-			<li><a href="index.php">Home</a></li>
-                        <li><a href="index.php">Standard User</a></li>
-                        <li><a href="Analysis.php?mode=advanced">Advanced User</a></li>
+			<li><a href="index.php" onmouseover="Tip('MS2DBp Home Page')" onmouseout="UnTip()">Home</a></li>
+                        <li><a href="index.php" onmouseover="Tip('MS2DBp for Beginner users')" onmouseout="UnTip()">Standard User</a></li>
+                        <li><a href="Analysis.php?mode=advanced" onmouseover="Tip('MS2DBp for Advanced users')" onmouseout="UnTip()">Advanced User</a></li>
 		</ul>
 	</div>
 	<!-- End Navigation -->
@@ -47,7 +47,9 @@
                                             <label>Upload ZIP with DTA files:</label>
                                         </td>
                                         <td class="inputright">
-                                            <input type="file" id="zipFile" name="zipFile" size="50"></input>
+                                            <input type="file" id="zipFile" name="zipFile" size="50"
+                                                   onmouseover="Tip('Select a ZIP file containing DTA files from a MS/MS experiment')"
+                                                   onmouseout="UnTip()"></input>
                                         </td>
                                     </tr>
                                     <tr class="input">
@@ -55,7 +57,10 @@
                                             <label>Enter FASTA protein sequence:</label>
                                         </td>
                                         <td class="inputright">
-                                            <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="50"><?php if(isset($fastaProtein)){echo $fastaProtein;}?></textarea>
+                                            <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="50"
+                                                      onmouseover="Tip('Enter a protein sequence in FASTA format (a.k.a Pearson format)')"
+                                                      onmouseout="UnTip()"
+                                                      ><?php if(isset($fastaProtein)){echo $fastaProtein;}?></textarea>
                                         </td>
                                     </tr>
                                     <tr class="input">
@@ -63,7 +68,9 @@
                                             <label>Choose protease used in digestion:</label>
                                         </td>
                                         <td class="inputright">
-                                            <select id="protease" name="protease">
+                                            <select id="protease" name="protease"
+                                                    onmouseover="Tip('Choose a protease using to digest the protein sequence entered above')"
+                                                    onmouseout="UnTip()">
                                                 <option <?php if(!isset($protease)){$protease = "T";} if($protease == "T"){echo "selected";} ?> value="T">Trypsin</option>
                                                 <option <?php if(!isset($protease)){$protease = "T";} if($protease == "C"){echo "selected";} ?> value="C">Chymotrypsin</option>
                                                 <option <?php if(!isset($protease)){$protease = "T";} if($protease == "TC"){echo "selected";} ?> value="TC">Trypsin + Chymotrypsin</option>
@@ -76,7 +83,9 @@
                                             <label>Missing cleavages:</label>
                                         </td>
                                         <td class="inputright">
-                                            <select id="missingcleavages" name="missingcleavages">
+                                            <select id="missingcleavages" name="missingcleavages"
+                                                    onmouseover="Tip('Choose the number of missing cleavages. The default is 2')"
+                                                    onmouseout="UnTip()">
                                                 <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "-1"){echo "selected";} ?> value="-1">Optional</option>
                                                 <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "0"){echo "selected";} ?> value="0">0</option>
                                                 <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "1"){echo "selected";} ?> value="1">1</option>
@@ -108,7 +117,10 @@
                                             <label style="visibility:hidden">Click Search Disulfide Bonds to process your request</label>
                                         </td>
                                         <td class="inputright">
-                                            <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"></input>
+                                            <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"
+                                                   onmouseover="Tip('Click Search Disulfide Bonds button to process your request')"
+                                                   onmouseout="UnTip()">
+                                            </input>
                                         </td>
                                     </tr>
                                     <tr class="input">
