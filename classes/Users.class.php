@@ -16,35 +16,45 @@ class Usersclass {
                 <tr class="advancedusers">
                     <td class="advancedusersleft">Initial Match Threshold:</td>
                     <td class="advancedusersright">
-                        <input type="text" id="IMthreshold" name="IMthreshold" size="5" value="'.$IMthreshold.'"></input>
+                        <input type="text" id="IMthreshold" name="IMthreshold" size="5" value="'.$IMthreshold.'"
+                        onmouseover="Tip(\'Threshold used during the matching between precursor ions and disulfide bonded structures\')"
+                        onmouseout="UnTip()"></input>
                         * (default: +-1.0)
                     </td>
                 </tr>
                 <tr class="advancedusers">
                     <td class="advancedusersleft">MS/MS Formation Threshold:</td>
                     <td class="advancedusersright">
-                        <input type="text" id="TMLthreshold" name="TMLthreshold" size="5" value="'.$TMLthreshold.'"></input>
-                        * expand m/z values according to precursor charge state (default: 2.0)
+                        <input type="text" id="TMLthreshold" name="TMLthreshold" size="5" value="'.$TMLthreshold.'"
+                        onmouseover="Tip(\'Threshold used when expanding m/z values from a DTA file according to its precursor ion charge state\')"
+                        onmouseout="UnTip()"></input>
+                        * (default: 2.0)
                     </td>
                 </tr>
                 <tr class="advancedusers">
                     <td class="advancedusersleft">MS/MS Screening Threshold:</td>
                     <td class="advancedusersright">
-                        <input type="text" id="ScreeningThreshold" name="ScreeningThreshold" size="5" value="'.$ScreeningThreshold.'"></input>
-                        * selecting a median value for similiar m/z values (default: 2.0)
+                        <input type="text" id="ScreeningThreshold" name="ScreeningThreshold" size="5" value="'.$ScreeningThreshold.'"
+                        onmouseover="Tip(\'Threshold used while selecting a representative median value for \\\'close\\\' m/z values\')"
+                        onmouseout="UnTip()"></input>
+                        * (default: 2.0)
                     </td>
                 </tr>
                 <tr class="advancedusers">
                     <td class="advancedusersleft">MS/MS Intensity Limit:</td>
                     <td class="advancedusersright">
-                        <input type="text" id="IntensityLimit" name="IntensityLimit" size="5" value="'.$IntensityLimit.'"></input>
-                        * lowest m/z intensity accepted (default: 0.03 or 3%)
+                        <input type="text" id="IntensityLimit" name="IntensityLimit" size="5" value="'.$IntensityLimit.'"
+                        onmouseover="Tip(\'Lowest m/z intensity limit. (IntensityLimit x Maximum Intensity)\')"
+                        onmouseout="UnTip()"></input>
+                        * (default: 0.03)
                     </td>
                 </tr>
                 <tr class="advancedusers">
                     <td class="advancedusersleft">Confirmed Match Threshold:</td>
                     <td class="advancedusersright">
-                        <input type="text" id="CMthreshold" name="CMthreshold" size="5" value="'.$CMthreshold.'"></input>
+                        <input type="text" id="CMthreshold" name="CMthreshold" size="5" value="'.$CMthreshold.'"
+                        onmouseover="Tip(\'Threshold used while matching fragments from a DTA file with fragment ions from the matched precursor ion\')"
+                        onmouseout="UnTip()"></input>
                         * (default: +-1.0)
                     </td>
                 </tr>
