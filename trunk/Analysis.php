@@ -480,13 +480,17 @@
                                             }
 
                                             if(isset($bond)){
-                                                if(!isset($numberBonds[$bond])){
-                                                    $numberBonds[$bond] = 1;
+
+                                                //match ration determination
+                                                if(!isset($numberBonds[$i][$bond])){
+                                                    $numberBonds[$i][$bond] = 1;
+                                                    $numberBonds[$i]["bond"] = $bond;
                                                 }
                                                 else{
-                                                    $numberBonds[$bond]++;
+                                                    $numberBonds[$i][$bond]++;
                                                 }
 
+                                                //disulfide bonds
                                                 if(!in_array($bond, $bonds)){
                                                     $bonds[] = $bond;
                                                 }
@@ -540,6 +544,12 @@
                                             //end of outputting code
                                         }
 
+                                        //match ration determination
+                                        if(isset($numberBonds[$i])){
+                                            $numberBonds[$i]["CM"] = $totalCMs;
+                                            $numberBonds[$i]["TML"] = $totalscreenedTML;
+                                        }
+                                        
                                         //output for debugging
                                         $debug .= '<tr>';
                                         $debug .= '<td align="left" colspan="3"><b>PARTIAL NUMBER OF MATCHES: ';
@@ -552,9 +562,52 @@
                             }//end if DTA could be read
                         }// end foreach IM
 
+                        //remove disulfide bonds using match ratio
+                        //remove disulfide bonds which do not respect CM/TML > 0.40
+                        $numbonds = count($numberBonds);
+                        $truebonds = array();
+                        for($w=0;$w<$numbonds;$w++){
+                            if((($numberBonds[$w]["CM"]/$numberBonds[$w]["TML"]) > 0.40) && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$numberBonds[$w]["CM"]) > 0.50)){
+                                    $truebonds[$numberBonds[$w]["bond"]] = true;
+                            }
+                        }
+                        $truecysteines = array();
+                        $newgraph = array();
+                        $SS = array_keys($truebonds);
+                        for($w=0;$w<count($SS);$w++){
+                            $dashpos = strpos($SS[$w], "-");
+                            //get involved cysteines
+                            $cys1 = substr($SS[$w], 0, $dashpos);
+                            $cys2 = substr($SS[$w],$dashpos+1);
+                            //list cysteine bonds
+                            $tmp = $graph[$cys1];
+                            for($z=0;$z<count($tmp);$z++){
+                                if($tmp[$z] != $cys2){
+                                    unset($tmp[$z]);
+                                }
+                            }
+                            if(count($newgraph[$cys1]) > 0)
+                                $newgraph[$cys1] = array_merge($newgraph[$cys1],$tmp);
+                            else
+                                $newgraph[$cys1] = $tmp;
+
+                            $tmp2 = $graph[$cys2];
+                            for($z=0;$z<count($tmp2);$z++){
+                                if($tmp2[$z] != $cys1){
+                                    unset($tmp2[$z]);
+                                }
+                            }
+                            if(count($newgraph[$cys2]) > 0)
+                                $newgraph[$cys2] = array_merge($newgraph[$cys2],$tmp2);
+                            else
+                                $newgraph[$cys2] = $tmp2;
+                        }
+                        //destroy old graph, and keep new graph with only "valid" SS bonds
+                        unset($graph);
+                        
                         //Using Gabow algorithm to solve maximum weighted matching problem
                         if(count($bonds) > 0){
-                            $bonds = $Func->executeGabow($graph);
+                            $bonds = $Func->executeGabow($newgraph);
                         }
 
                         for($i=0;$i<count($bonds);$i++){
