@@ -284,5 +284,30 @@ class AAclass {
         
         return $result;
     }
+
+    public function possibleBonds($sequence){
+        
+        $cysteines = array();
+        $bonds = array();
+        $length = strlen($sequence);
+
+        for($i=1;$i<=$length;$i++){
+            $AA = substr($sequence, $i-1,1);
+            if($AA == "C"){
+                $cysteines[] = $i;
+            }
+        }
+        
+        $length = count($cysteines);
+
+        for($i=0;$i<$length-1;$i++){
+            for($j=$i+1;$j<$length;$j++)
+            {
+                $bonds[] = $cysteines[$i]."-".$cysteines[$j];
+            }
+        }
+
+        return $bonds;
+    }
 }
 ?>
