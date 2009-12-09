@@ -131,6 +131,8 @@
             $debug .= '</h3></td></tr>';
 
             //digest protein
+            $possiblebonds = $AAs->possibleBonds($fastaProtein);
+
             $disulfideBondedPeptides = $IMClass->digestProtein($fastaProtein, $protease);
 
             if(count($disulfideBondedPeptides) > 0)
@@ -319,8 +321,9 @@
 
                             //construct TML
                             $data = file($dirPath."/".$IM[$i]["PML"].".txt");
+                            $numberfragments = count($data);
 
-                            if(count($data) > 0){
+                            if($numberfragments > 0){
 
                                 //store precursor ion
                                 $precursor = $data[0];
@@ -345,19 +348,20 @@
                                 //function to screen fragments from a DTA file. The goal is to find all fragments
                                 //Do 3% screening and consider only the highest intensity picks as matches,
 
-                                //test conversion
-                                $numberfragments = count($data);
-
                                 //according to threshold
                                 $TML = $CMClass->screenDataHighPicks($data,$IntensityLimit,$ScreeningThreshold);
 
-                                if(count($TML) > 0){
+                                $totalscreenedTML = count($TML);
+
+                                if($totalscreenedTML > 0){
 
                                     //define threshold to either save fragment or discard it based on
                                     //the precursor ion mass
                                     //$fragmentmass <= ($precursormass + $threshold)
                                     
                                     $TML = $CMClass->expandTMLByCharges($TML, $precursor, $TMLthreshold);
+
+                                    $totalexpandedTML = count($TML);
 
                                     //construct FMS
                                     $FMS = array();
@@ -378,7 +382,9 @@
                                     $FMS = $FMSpolynomial['FMS'];
                                     $CM = $FMSpolynomial['CM'];
 
-                                    if(count($CM) > 0){
+                                    $totalCMs = count($CM);
+
+                                    if($totalCMs > 0){
 
                                         //debugging
                                         //$test2 = count($CM);
@@ -390,7 +396,7 @@
                                         $reportdata['sumCM'] += count($CM);
                                         */
 
-                                        for($k=0;$k<count($CM);$k++){
+                                        for($k=0;$k<$totalCMs;$k++){
 
                                             if(strpos($CM[$k]['peptide'],'<=>') > 0){
 
@@ -544,7 +550,7 @@
                                     }//end if count(CM) > 0
                                 }//end if count(TML) > 0
                             }//end if DTA could be read
-                        }
+                        }// end foreach IM
 
                         //Using Gabow algorithm to solve maximum weighted matching problem
                         if(count($bonds) > 0){
@@ -561,6 +567,20 @@
                             $message .= "Disulfide Bonds not found!";
                         }
                         else{
+
+                            //sensitivity, specificity, accuracy, and Mathew's coefficient
+                            $SSbonds = count($bonds);
+                            $countpossiblebonds = count($possiblebonds);
+                            for($i=0;$i<$SSbonds;$i++){
+                                for($j=0;$j<$countpossiblebonds;$j++){
+                                    if($bonds[$i] == $possiblebonds[$j]){
+                                        unset($possiblebonds[$j]);
+                                    }
+                                }
+                            }
+                            $nonExistingBonds = count($possiblebonds);
+                            $message .= "<b>Non-existing Bonds : ".$nonExistingBonds."</b><br><br>";
+
                             $debug .= "</table>";
 
                             //populate disulfide bonds graph
