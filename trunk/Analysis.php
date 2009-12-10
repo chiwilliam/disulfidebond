@@ -567,10 +567,16 @@
                         $numbonds = count($numberBonds);
                         $truebonds = array();
                         for($w=0;$w<$numbonds;$w++){
-                            if((($numberBonds[$w]["CM"]/$numberBonds[$w]["TML"]) > 0.40) && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$numberBonds[$w]["CM"]) > 0.50)){
-                                    $truebonds[$numberBonds[$w]["bond"]] = true;
+                            $CMtotal = $numberBonds[$w]["CM"];
+                            $TMLtotal = $numberBonds[$w]["TML"];
+                            if($CMtotal > 0 && $TMLtotal > 0){
+                                if((($CMtotal/$TMLtotal) > 0.33)
+                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.33)){
+                                        $truebonds[$numberBonds[$w]["bond"]] = true;
+                                }
                             }
                         }
+                        
                         $truecysteines = array();
                         $newgraph = array();
                         $SS = array_keys($truebonds);
@@ -580,21 +586,27 @@
                             $cys1 = substr($SS[$w], 0, $dashpos);
                             $cys2 = substr($SS[$w],$dashpos+1);
                             //list cysteine bonds
+                            unset($tmp);
+                            unset($tmp2);
                             $tmp = $graph[$cys1];
-                            for($z=0;$z<count($tmp);$z++){
-                                if($tmp[$z] != $cys2){
-                                    unset($tmp[$z]);
+                            $counttmp = count($tmp);
+                            for($z=0;$z<$counttmp;$z++){
+                                if($tmp[$z] == $cys2){
+                                    $tmp2[] = $tmp[$z];
                                 }
                             }
                             if(count($newgraph[$cys1]) > 0)
-                                $newgraph[$cys1] = array_merge($newgraph[$cys1],$tmp);
+                                $newgraph[$cys1] = array_merge($newgraph[$cys1],$tmp2);
                             else
-                                $newgraph[$cys1] = $tmp;
+                                $newgraph[$cys1] = $tmp2;
 
-                            $tmp2 = $graph[$cys2];
-                            for($z=0;$z<count($tmp2);$z++){
-                                if($tmp2[$z] != $cys1){
-                                    unset($tmp2[$z]);
+                            unset($tmp);
+                            unset($tmp2);
+                            $tmp = $graph[$cys2];
+                            $counttmp = count($tmp);
+                            for($z=0;$z<$counttmp;$z++){
+                                if($tmp[$z] == $cys1){
+                                    $tmp2[] = $tmp[$z];
                                 }
                             }
                             if(count($newgraph[$cys2]) > 0)
@@ -604,6 +616,8 @@
                         }
                         //destroy old graph, and keep new graph with only "valid" SS bonds
                         unset($graph);
+                        unset($tmp);
+                        unset($tmp2);
                         
                         //Using Gabow algorithm to solve maximum weighted matching problem
                         if(count($bonds) > 0){
