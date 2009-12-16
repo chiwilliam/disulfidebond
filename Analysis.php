@@ -690,7 +690,7 @@
                                 }
                                 //if it does, color background
                                 if($isBonded){
-                                    $SSgraph .= '<td class="graphselectedtd">'.$AAsarray[$i].'</td>';
+                                    $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\''.($i+1).'\')">'.$AAsarray[$i].'</td>';
                                 }
                                 else{
                                     $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
