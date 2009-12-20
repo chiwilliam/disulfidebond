@@ -56,7 +56,8 @@
         }
         else{
             $IMthreshold = 1.0;
-        }        
+        }
+        //default commented -- too technical for users to change
         //Threshold used to expand TML: new_fragment < precursor_mass+TMLthreshold
         if(isset($_POST["TMLthreshold"])){
             $TMLthreshold = $_POST["TMLthreshold"];
@@ -70,13 +71,14 @@
         }
         else{
             $CMthreshold = 1.0;
-        }        
+        }
+        //same as Confirmed Match threshold
         //Screening threshold: separate close picks, so the median can be calculated
         if(isset($_POST["ScreeningThreshold"])){
             $ScreeningThreshold = $_POST["ScreeningThreshold"];
         }
         else{
-            $ScreeningThreshold = 2.0;
+            $ScreeningThreshold = $CMthreshold;
         }
         //Screening Intensity Limit
         if(isset($_POST["IntensityLimit"])){
