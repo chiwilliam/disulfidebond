@@ -285,8 +285,8 @@ class InitialMatchclass {
 
         //get value used to trim lists
         //second parameter: average or median
-        $delta = $AAs->getDelta($disulfideBondedPeptides,'median');
-        //$delta = $AAs->getDelta($disulfideBondedPeptides,'average');
+        //$delta = $AAs->getDelta($disulfideBondedPeptides,'median');
+        $delta = $AAs->getDelta($disulfideBondedPeptides,'average');
         
         $PMLkeys = array_keys($PML);
         for($k=0;$k<count($PMLkeys);$k++){
