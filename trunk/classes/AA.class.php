@@ -115,20 +115,33 @@ class AAclass {
 
     }
 
-    public function getDelta($peptides){
+    public function getDelta($peptides, $method = 'average'){
 
         $total = count($peptides);
         $keys = array_keys($peptides);
-        $sum = 0;
-        for($i=0;$i<$total;$i++){
-            $sum += (int)substr($keys[$i],0,4);
-        }
-        $average = $sum/$total;
 
         $first = (int)substr($keys[0],0,4);
         $last = (int)substr($keys[$total-1],0,4);
 
-        $delta = (double)($last-$first)/$average;
+        if($method == 'average'){
+            $sum = 0;
+            for($i=0;$i<$total;$i++){
+                $sum += (int)substr($keys[$i],0,4);
+            }
+            $average = $sum/$total;
+            $delta = (double)($last-$first)/$average;
+        }
+        //median
+        else{
+            if($total%2 == 0){
+                $median = (int)substr($keys[(int)($total/2)],0,4);
+            }
+            else{
+                $median = (int)substr($keys[((int)($total/2)+1)],0,4);
+            }
+            $delta = (double)($last-$first)/$median;
+        }
+
         $delta = (double)$delta/(2*count($peptides));
 
         return $delta;
@@ -188,7 +201,7 @@ class AAclass {
         return $trimmed;
     }
 
-    public function getDeltaCM($peptides){
+    public function getDeltaCM($peptides, $method = 'average'){
 
         //In this function I'm not considering if it is a B or Y ion.
         //Im also not considering that it loses 2Da per S-S bond

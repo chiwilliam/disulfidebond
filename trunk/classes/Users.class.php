@@ -22,6 +22,7 @@ class Usersclass {
                         * (default: +-1.0)
                     </td>
                 </tr>
+                <!--
                 <tr class="advancedusers">
                     <td class="advancedusersleft">MS/MS Formation Threshold:</td>
                     <td class="advancedusersright">
@@ -40,6 +41,7 @@ class Usersclass {
                         * (default: 2.0)
                     </td>
                 </tr>
+                -->
                 <tr class="advancedusers">
                     <td class="advancedusersleft">MS/MS Intensity Limit:</td>
                     <td class="advancedusersright">

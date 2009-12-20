@@ -284,7 +284,9 @@ class InitialMatchclass {
         $disulfideBondedPeptides = $this->reIndexSubsetSum($AAs, $disulfideBondedPeptides, $maxPrecursor);
 
         //get value used to trim lists
-        $delta = $AAs->getDelta($disulfideBondedPeptides);
+        //second parameter: average or median
+        $delta = $AAs->getDelta($disulfideBondedPeptides,'median');
+        //$delta = $AAs->getDelta($disulfideBondedPeptides,'average');
         
         $PMLkeys = array_keys($PML);
         for($k=0;$k<count($PMLkeys);$k++){

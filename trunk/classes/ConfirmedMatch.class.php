@@ -57,8 +57,8 @@ class ConfirmedMatchclass {
                 //next pick information
                 $intensityNP = (int)substr($values[$j],strpos($values[$j], " ")+1);
                 $valueNP = (float)substr($values[$j],0,strpos($values[$j], " "));
-                // +threshold due to +-threshold
-                if($valueNP <= ($value + $threshold)){
+                // +2*threshold due to +-threshold
+                if($valueNP <= ($value + (2*$threshold))){
                     $tmp[$intensityNP] = $valueNP;
                 }
                 else{
@@ -469,7 +469,8 @@ class ConfirmedMatchclass {
         $AAs = new AAclass();
 
         //get value used to trim lists
-        $delta = $AAs->getDeltaCM($peptides);
+        //second parameter: average or median
+        $delta = $AAs->getDeltaCM($peptides,'average');
 
         $countTML = count($TML);
         for($k=0;$k<$countTML;$k++){
