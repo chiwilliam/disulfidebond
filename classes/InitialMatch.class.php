@@ -287,6 +287,9 @@ class InitialMatchclass {
         //second parameter: average or median
         $delta = $AAs->getDelta($disulfideBondedPeptides,'median');
         //$delta = $AAs->getDelta($disulfideBondedPeptides,'average');
+
+        //debugging - calculate regression
+        //$regression = $AAs->getDeltaDebug($disulfideBondedPeptides,'median');
         
         $PMLkeys = array_keys($PML);
         for($k=0;$k<count($PMLkeys);$k++){
@@ -404,6 +407,7 @@ class InitialMatchclass {
 
         $result['DMS'] = $DMS;
         $result['IM'] = $IM;
+        //$result['regression'] = $regression;
 
         return $result;
     }

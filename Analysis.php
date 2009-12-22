@@ -226,6 +226,9 @@
                     $DMS = $result['DMS'];
                     $IM = $result['IM'];
 
+                    //$regression = $result['regression'];
+                    //unset($IM);
+
                     //$DMSsize = count($DMS);
 
                     //sort PML by mass
@@ -578,6 +581,29 @@
                                 }
                             }
                         }
+                        //in case no disulfide bonds were found due to few matches
+                        //do not consider CMtotal/TMLtotal
+                        if(count($truebonds) == 0){
+                            for($w=0;$w<$numbonds;$w++){
+                                $CMtotal = $numberBonds[$w]["CM"];
+                                $TMLtotal = $numberBonds[$w]["TML"];
+                                if($CMtotal > 0 && $TMLtotal > 0){
+                                    if((($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.33)){
+                                            $truebonds[$numberBonds[$w]["bond"]] = true;
+                                    }
+                                }
+                            }
+                        }
+                        //if still no SS-bonds were found consider all of them
+                        if(count($truebonds) == 0){
+                            for($w=0;$w<$numbonds;$w++){
+                                $CMtotal = $numberBonds[$w]["CM"];
+                                $TMLtotal = $numberBonds[$w]["TML"];
+                                if($CMtotal > 0 && $TMLtotal > 0){
+                                    $truebonds[$numberBonds[$w]["bond"]] = true;
+                                }
+                            }
+                        }
                         
                         $truecysteines = array();
                         $newgraph = array();
@@ -627,8 +653,11 @@
                         }
 
                         for($i=0;$i<count($bonds);$i++){
-                            //$message .= "<b>Disulfide Bond found(".$numberBonds[$bonds[$i]].")  on positions: ".$bonds[$i]."</b><br><br>";
-                            $message .= "<b>Disulfide Bond found on positions: ".$bonds[$i]."</b><br><br>";
+
+                            if(strlen(trim($bonds[$i])) > 3){
+                                //$message .= "<b>Disulfide Bond found(".$numberBonds[$bonds[$i]].")  on positions: ".$bonds[$i]."</b><br><br>";
+                                $message .= "<b>Disulfide Bond found on positions: ".$bonds[$i]."</b><br><br>";
+                            }
                         }
 
                         if(count($bonds) == 0){

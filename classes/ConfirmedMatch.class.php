@@ -475,11 +475,6 @@ class ConfirmedMatchclass {
         $countTML = count($TML);
         for($k=0;$k<$countTML;$k++){
 
-            //debugging purposes
-            if($k == 153){
-                $stophere = true;
-            }
-
             $precursorMass = $TML[$k]['mass'];
             $precursorCharge = $TML[$k]['charge'];
 

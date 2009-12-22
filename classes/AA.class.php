@@ -147,6 +147,49 @@ class AAclass {
         return $delta;
     }
 
+    public function getDeltaDebug($peptides, $method = 'average'){
+
+        $total = count($peptides);
+        $keys = array_keys($peptides);
+
+        $first = (int)substr($keys[0],0,4);
+        $last = (int)substr($keys[$total-1],0,4);
+
+        if($method == 'average'){
+            $sum = 0;
+            for($i=0;$i<$total;$i++){
+                $sum += (int)substr($keys[$i],0,4);
+            }
+            $average = $sum/$total;
+            $coeficient = (double)($last-$first)/$average;
+        }
+        //median
+        else{
+            if($total%2 == 0){
+                $median = (int)substr($keys[(int)($total/2)],0,4);
+            }
+            else{
+                $median = (int)substr($keys[((int)($total/2)+1)],0,4);
+            }
+            $coeficient = (double)($last-$first)/$median;
+        }
+
+        $delta = (double)$coeficient/(2*count($peptides));
+
+        $results = array();
+        $results['delta'] = $delta;
+        $results['2k'] = 2*count($peptides);
+        $results['ccpmax'] = $last;
+        $results['cppmin'] = $first;
+        if($method == 'average')
+            $results['ccpavg'] = $average;
+        else
+            $results['ccpavg'] = $median;
+        $results['coeficient'] = $coeficient;
+
+        return $results;
+    }
+
     public function trimListBigger($list,$delta){
 
         $trimmed = array();
@@ -232,18 +275,23 @@ class AAclass {
                 $sum += $mass;
             }
             $average[$i] = $sum/$countAAs;
-            $AAs[$i] = $countAAs;
+            $counttotalAAs[$i] = $countAAs;
 
         }
 
-        $overallaverage = 1;
-        $overallAAs = 1;
-        //Didn't use 0 to avoid divison by 0 in case an error happens
-
+        $overallaverage = 0;
+        $overallAAs = 0;
+        
         for($i=0;$i<$total;$i++){
             $overallaverage += $average[$i];
-            $overallAAs += $AAs[$i];
+            $overallAAs += $counttotalAAs[$i];
         }
+        //Didn't use 0 to avoid divison by 0 in case an error happens
+        if($overallaverage == 0)
+            $overallaverage = 1;
+        if($overallAAs == 0)
+            $overallAAs = 1;
+
         $overallaverage = $overallaverage/$total;
         $overallAAs = $overallAAs/$total;
 
