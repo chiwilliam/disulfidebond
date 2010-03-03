@@ -622,11 +622,11 @@ class ConfirmedMatchclass {
                     $list1 = array_merge($list1, $list2);
                     ksort(&$list1);
 
-                    $list1 = $AAs->trimListBigger($list1,$delta);
+                    //$list1 = $AAs->trimListKeepBigger($list1,$delta);
                     
-                    //$list1 = $AAs->trimListSmaller($list1,$delta);
-                    //$list1alpha = $AAs->trimListSmaller($list1,$delta);
-                    //$list1beta = $AAs->trimListBigger($list1,$delta);
+                    //$list1 = $AAs->trimListKeepSmaller($list1,$delta);
+                    //$list1alpha = $AAs->trimListKeepSmaller($list1,$delta);
+                    //$list1beta = $AAs->trimListKeepBigger($list1,$delta);
                     //$list1 = array_merge($list1alpha, $list1beta);
                 }
 

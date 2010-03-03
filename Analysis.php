@@ -225,6 +225,7 @@
                     $result = $IMClass->polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor);
                     $DMS = $result['DMS'];
                     $IM = $result['IM'];
+                    $IMdelta = $result['delta'];
 
                     //$regression = $result['regression'];
                     //unset($IM);
@@ -486,7 +487,7 @@
 
                                             if(isset($bond)){
 
-                                                //match ration determination
+                                                //match ratio determination
                                                 if(!isset($numberBonds[$i][$bond])){
                                                     $numberBonds[$i][$bond] = 1;
                                                     $numberBonds[$i]["bond"] = $bond;
@@ -549,7 +550,7 @@
                                             //end of outputting code
                                         }
 
-                                        //match ration determination
+                                        //match ratio determination
                                         if(isset($numberBonds[$i])){
                                             $numberBonds[$i]["CM"] = $totalCMs;
                                             $numberBonds[$i]["TML"] = $totalscreenedTML;
@@ -594,13 +595,15 @@
                                 }
                             }
                         }
-                        //if still no SS-bonds were found consider all of them
+                        //if still no SS-bonds were found, lower bound to 20%
                         if(count($truebonds) == 0){
                             for($w=0;$w<$numbonds;$w++){
                                 $CMtotal = $numberBonds[$w]["CM"];
                                 $TMLtotal = $numberBonds[$w]["TML"];
                                 if($CMtotal > 0 && $TMLtotal > 0){
-                                    $truebonds[$numberBonds[$w]["bond"]] = true;
+                                    if((($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.33)){
+                                        $truebonds[$numberBonds[$w]["bond"]] = true;
+                                    }
                                 }
                             }
                         }
