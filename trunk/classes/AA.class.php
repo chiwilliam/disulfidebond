@@ -115,6 +115,26 @@ class AAclass {
 
     }
 
+    public function getDeltaRegression($peptides){
+
+        $total = count($peptides);
+        $keys = array_keys($peptides);
+
+        $first = (int)substr($keys[0],0,4);
+        $last = (int)substr($keys[$total-1],0,4);
+
+        $sum = 0;
+        for($i=0;$i<$total;$i++){
+            $sum += (int)substr($keys[$i],0,4);
+        }
+        $average = $sum/$total;
+        
+        $delta = -0.00000509426*$average-0.00068*$total+0.045602;
+
+        return $delta;
+
+    }
+
     public function getDelta($peptides, $method = 'average'){
 
         $total = count($peptides);
@@ -190,7 +210,7 @@ class AAclass {
         return $results;
     }
 
-    public function trimListBigger($list,$delta){
+    public function trimListKeepBigger($list,$delta){
 
         $trimmed = array();
 
@@ -208,6 +228,9 @@ class AAclass {
                 $trimmed[$keys[$i]] = $list[$keys[$i]];
                 $last = $current;
             }
+            else{
+                $value = (1+$delta)*$current;
+            }
         }
 
         $totalList = count($keys);
@@ -218,7 +241,7 @@ class AAclass {
         return $trimmed;
     }
 
-    public function trimListSmaller($list,$delta){
+    public function trimListKeepSmaller($list,$delta){
 
         $trimmed = array();
 
