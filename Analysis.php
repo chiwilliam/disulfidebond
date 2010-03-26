@@ -287,6 +287,9 @@
                         //saves number of CMs per IM
                         $numberBonds = array();
 
+                        //consider only b and y ions or all ion types
+                        $alliontypes = "Y";
+
                         //compute Confirmed Match
                         for($i=0;$i<count($IM);$i++){
 
@@ -354,8 +357,12 @@
                                 //function to screen fragments from a DTA file. The goal is to find all fragments
                                 //Do 3% screening and consider only the highest intensity picks as matches,
 
+                                //decide whether to use all peaks or use the median
+                                //median or all
+                                $method = 'median';
+
                                 //according to threshold
-                                $TML = $CMClass->screenDataHighPicks($data,$IntensityLimit,$ScreeningThreshold);
+                                $TML = $CMClass->screenDataHighPicks($data,$IntensityLimit,$ScreeningThreshold, $method);
 
                                 $totalscreenedTML = count($TML);
 
@@ -381,7 +388,7 @@
                                     //sort FMS by mass
                                     //ksort(&$FMS);
 
-                                    $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold);
+                                    $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes);
 
                                     //$CM = $CMClass->Cmatch($FMS, $TML, $precursor, $CMthreshold);
 
@@ -553,7 +560,8 @@
                                         //match ratio determination
                                         if(isset($numberBonds[$i])){
                                             $numberBonds[$i]["CM"] = $totalCMs;
-                                            $numberBonds[$i]["TML"] = $totalscreenedTML;
+                                            //$numberBonds[$i]["TML"] = $totalscreenedTML;
+                                            $numberBonds[$i]["TML"] = $totalexpandedTML;
                                         }
                                         
                                         //output for debugging
@@ -569,7 +577,7 @@
                         }// end foreach IM
 
                         //remove disulfide bonds using match ratio
-                        //remove disulfide bonds which do not respect CM/TML > 0.40
+                        //remove disulfide bonds which do not respect CM/TML > 1
                         $numbonds = count($numberBonds);
                         $truebonds = array();
                         for($w=0;$w<$numbonds;$w++){
