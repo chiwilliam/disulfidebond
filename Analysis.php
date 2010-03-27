@@ -3,6 +3,9 @@
     require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/Users.class.php";
     $Users = new Usersclass();
 
+    //remove time limit when executing a script
+    set_time_limit(0);
+
     if($_REQUEST["mode"] == "advanced"){
 
         $mode = "advanced";
@@ -359,7 +362,7 @@
 
                                 //decide whether to use all peaks or use the median
                                 //median or all
-                                $method = 'all';
+                                $method = 'median';
 
                                 //according to threshold
                                 $TML = $CMClass->screenDataHighPicks($data,$IntensityLimit,$ScreeningThreshold, $method);
