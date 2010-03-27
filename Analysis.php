@@ -359,7 +359,7 @@
 
                                 //decide whether to use all peaks or use the median
                                 //median or all
-                                $method = 'median';
+                                $method = 'all';
 
                                 //according to threshold
                                 $TML = $CMClass->screenDataHighPicks($data,$IntensityLimit,$ScreeningThreshold, $method);
