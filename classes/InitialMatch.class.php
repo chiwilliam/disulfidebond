@@ -290,11 +290,26 @@ class InitialMatchclass {
         //$delta = $AAs->getDelta($disulfideBondedPeptides,'average');
 
         //debugging - calculate regression
-        //$regression = $AAs->getDeltaDebug($disulfideBondedPeptides,'median');
+        /*
+        $regression = $AAs->getDeltaDebug($disulfideBondedPeptides);
+        if(isset($regression)){
+            return;
+        }
+        */
+
+        //compute DMS size. The idea here is to sum all DMS sizes and divide by
+        //the total number of PML (# DMS)
+        //$size = 0;
         
         $PMLkeys = array_keys($PML);
         for($k=0;$k<count($PMLkeys);$k++){
 
+            /*
+            if($k>0){
+                $size += count($list1);
+            }
+            */
+            
             $precursor = $PML[$PMLkeys[$k]];
             $precursorMass = substr($precursor,0,strpos($precursor, ' '));
 
@@ -410,6 +425,7 @@ class InitialMatchclass {
         $result['IM'] = $IM;
         $result['delta'] = $delta;
         //$result['regression'] = $regression;
+        //$result['size'] = $size;
 
         return $result;
     }

@@ -322,7 +322,7 @@ class Commonclass {
 
     //function to generate the different ion types (a, b, c, x, y, z) for peptides
     //necessary for the validation step of the experiment.
-    public function generateFragments($peptides, $alltypes = "N"){
+    public function generateFragments($peptides, $alltypes = "all"){
 
         $AAs = new AAclass();
 
@@ -333,51 +333,53 @@ class Commonclass {
             //peptide sequence
             $peptide = $peptides[$p];
 
-            //Y-ions
-            if($p%2 == 0){
-                $fragtype = 'Y';
-            }
-            else{
-                $fragtype = 'y';
-            }
-            for($i=0;$i<strlen($peptide);$i++){
-                $fragment = substr($peptide,$i);
-                $peplength = strlen($peptide);
-                $mass = $AAs->calculatePeptideMass($fragment,"CM");
+            if($alltypes == "all" || $alltypes == "by"){
+                //Y-ions
+                if($p%2 == 0){
+                    $fragtype = 'Y';
+                }
+                else{
+                    $fragtype = 'y';
+                }
+                for($i=0;$i<strlen($peptide);$i++){
+                    $fragment = substr($peptide,$i);
+                    $peplength = strlen($peptide);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
 
-                //check if peptide contains cysteines
-                $cyscount = substr_count($fragment, 'C');
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
 
-                //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
-                //because of an extra H in the amino group NH3+
-                $mass += 19.01838;
-                $fragments[$p][] = array("mass" => $mass,
-                    "fragment" => $fragment, "peptide" => $peptide,
-                    "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
+                    //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
+                    //because of an extra H in the amino group NH3+
+                    $mass += 19.01838;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
+                }
+
+                //B-ions
+                if($p%2 == 0){
+                    $fragtype = 'B';
+                }
+                else{
+                    $fragtype = 'b';
+                }
+                for($i=strlen($peptide);$i>0;$i--){
+                    $fragment = substr($peptide,0,$i);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //H on N-terminus mass
+                    $mass += 1.00782;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
+                }
             }
 
-            //B-ions
-            if($p%2 == 0){
-                $fragtype = 'B';
-            }
-            else{
-                $fragtype = 'b';
-            }
-            for($i=strlen($peptide);$i>0;$i--){
-                $fragment = substr($peptide,0,$i);
-                $mass = $AAs->calculatePeptideMass($fragment,"CM");
-
-                //check if peptide contains cysteines
-                $cyscount = substr_count($fragment, 'C');
-
-                //H on N-terminus mass
-                $mass += 1.00782;
-                $fragments[$p][] = array("mass" => $mass,
-                    "fragment" => $fragment, "peptide" => $peptide,
-                    "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
-            }
-
-            if($alltypes == "Y"){
+            if($alltypes == "all" || $alltypes == "acxz"){
             
                 //A-ions
                 if($p%2 == 0){
