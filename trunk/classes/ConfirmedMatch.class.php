@@ -479,8 +479,22 @@ class ConfirmedMatchclass {
 
         //get value used to trim lists
         //second parameter: average or median
-        $delta = $AAs->getDeltaCM($peptides,'average');
-
+        //$delta = $AAs->getDeltaCM($peptides,'average');
+        $delta = $AAs->getDeltaCMRegression($peptides);
+        
+        /*
+        //calculate delta and implement regression analysis
+        //$regression = $AAs->getDeltaCMDebug($peptides,'average');
+        $regression = $AAs->getDeltaCMRegression($peptides);
+        if(isset($regression)){
+            $result = array();
+            $result['FMS'] = array();
+            $result['CM'] = array();
+            $result['REGRESSION'] = $regression;
+            return $result;
+        }
+        */
+        
         $fragments = $Common->generateFragments($peptides,$alliontypes);
 
         $total = count($peptides);
@@ -490,6 +504,7 @@ class ConfirmedMatchclass {
 
             $precursorMass = $TML[$k]['mass'];
             $precursorCharge = $TML[$k]['charge'];
+            $precursorIntensity = $TML[$k]['intensity'];
 
             $list1 = array();
             $list1['0000-000'] = array('mass' => 0, 'fragment' => "", 'peptide' => "", 
@@ -562,6 +577,10 @@ class ConfirmedMatchclass {
                                     $match["peptide"] = $list2[$index]["peptide"];
                                     $match["ion"] = $list2[$index]["ion"];
                                     $match["cysteines"] = $list2[$index]["cysteines"];
+                                    $match["intensity"] = $precursorIntensity;
+
+                                    //check how many b/y ions and how many a/c/x/z ions
+                                    $ions = $this->calculateCMIonsDistribution($list2[$index]["ion"]);
 
                                     //tries to identify good CMs
                                     //check mass from all the structures, including the variance, depending on the charge state
@@ -575,7 +594,7 @@ class ConfirmedMatchclass {
                                     }
 
                                     //for debugging
-                                    $match["debug"] = array("FMS" => $index, "TML" => $k);
+                                    $match["debug"] = array("FMS" => $index, "TML" => $k, "by" => $ions["by"], "others" => $ions["others"]);
                                     //end debugging
 
                                     $CM[] = $match;
@@ -589,7 +608,7 @@ class ConfirmedMatchclass {
                     $list1 = array_merge($list1, $list2);
                     ksort(&$list1);
 
-                    //$list1 = $AAs->trimListKeepBigger($list1,$delta);
+                    $list1 = $AAs->trimListKeepBigger($list1,$delta);
                     
                     //$list1 = $AAs->trimListKeepSmaller($list1,$delta);
                     //$list1alpha = $AAs->trimListKeepSmaller($list1,$delta);
@@ -618,7 +637,13 @@ class ConfirmedMatchclass {
 
     public function expandTMLByCharges($data, $precursor, $TMLthreshold){
 
+        $results = array();
+
         $TML = array();
+
+        //get maximum intensity
+        $AAs = new AAclass();
+        $max_intensity = $AAs->getMaximumIntensity(array_keys($data));
 
         //subtract 1 due to the fact that in a DTA format file, the precursor mass
         //is measured as M+H.
@@ -636,7 +661,7 @@ class ConfirmedMatchclass {
                 //$massvalue = ($mzvalue*$c)-$c;
                 $massvalue = ($mzvalue*$c);
                 if($massvalue <= ($precursormass+$TMLthreshold)){
-                    $TML[] = array("mass" => $massvalue, "charge" => $c, "intensity" => $keys[$i]);
+                    $TML[] = array("mass" => $massvalue, "charge" => $c, "intensity" => ($keys[$i]/$max_intensity), "%highpeak" => number_format(($keys[$i]/$max_intensity)*100).'%');
                 }
             }
         }
@@ -672,7 +697,10 @@ class ConfirmedMatchclass {
         //sort TML by mass
         sort(&$TML);
 
-        return $TML;
+        $results['TML'] = $TML;
+        $results['maxintensity'] = $max_intensity;
+
+        return $results;
     }
 
     public function shrinkFMS($data, $minMass, $maxMass){
@@ -698,6 +726,41 @@ class ConfirmedMatchclass {
         }
 
         return $data;
+    }
+
+    public function calculateMassSpaceSizeConsideringIntensity($MassSpace){
+
+        $size = 0;
+        
+        for($i=0;$i<count($MassSpace);$i++){
+            $size += $MassSpace[$i]['intensity'];
+        }
+
+        return $size;
+    }
+
+    public function calculateCMIonsDistribution($fragment){
+        
+        $ions = array();
+        $by = 0;
+        $others = 0;
+
+        for($i=0;$i<count($fragment);$i++){
+            $frags = explode('<=>', $fragment);
+            for($j=0;$j<count($frags);$j++){
+                if(strpos(strtoupper($frags[$j]),"B") === false && strpos(strtoupper($frags[$j]),"Y") === false){
+                    $others++;
+                }
+                else{
+                    $by++;
+                }
+            }
+        }
+
+        $ions['by'] = $by;
+        $ions['others'] = $others;
+
+        return $ions;
     }
 
 }

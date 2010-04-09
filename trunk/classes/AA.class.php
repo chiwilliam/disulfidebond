@@ -129,7 +129,11 @@ class AAclass {
         }
         $average = $sum/$total;
         
-        $delta = -0.00000509426*$average-0.00068*$total+0.045602;
+        //delta - considers only four proteins (beta-lg, st8siaIV, FucT7, b1-4GalT)
+        $delta = 0.007124495*(($last-$first)/$average)-0.000616872*$total+0.036634436;
+        //delta2 - considers all proteins, except GnT2
+        $delta2 = 0.013938868*(($last-$first)/$average)-0.001082447*$total+0.039490416;
+        $difference = (string)((int)((($delta2-$delta)/$delta2)*100)).'%';
 
         return $delta;
 
@@ -201,11 +205,13 @@ class AAclass {
         $results['2k'] = 2*count($peptides);
         $results['ccpmax'] = $last;
         $results['cppmin'] = $first;
-        if($method == 'average')
+        if($method == 'average'){
             $results['ccpavg'] = $average;
-        else
+        }
+        else{
             $results['ccpavg'] = $median;
-        $results['coeficient'] = $coeficient;
+            $results['coeficient'] = $coeficient;
+        }
 
         return $results;
     }
@@ -325,6 +331,141 @@ class AAclass {
 
     }
 
+        public function getDeltaCMRegression($peptides){
+
+        //In this function I'm not considering if it is a B or Y ion.
+        //Im also not considering that it loses 2Da per S-S bond
+        //REASON: Low influence in final delta result
+
+        $total = count($peptides);
+        //biggest mass: W - 186.2132Da
+        $min = 186.2132;
+        for($i=0;$i<$total;$i++){
+            $average[$i] = 0;
+        }
+        //smallest mass: G - 57.0519Da
+        $max = 57.0519;
+
+        for($i=0;$i<$total;$i++){
+
+            $sum = 0;
+            $AAs = str_split($peptides[$i]);
+            $countAAs = count($AAs);
+            for($j=0;$j<$countAAs;$j++){
+                $mass = $this->calculatePeptideMass($AAs[$j]);
+                if($mass < $min){
+                    $min = $mass;
+                }
+                if($mass > $max){
+                    $max = $mass;
+                }
+                $sum += $mass;
+            }
+            $average[$i] = $sum/$countAAs;
+            $counttotalAAs[$i] = $countAAs;
+
+        }
+
+        $overallaverage = 0;
+        $overallAAs = 0;
+
+        for($i=0;$i<$total;$i++){
+            $overallaverage += $average[$i];
+            $overallAAs += $counttotalAAs[$i];
+        }
+        //Didn't use 0 to avoid divison by 0 in case an error happens
+        if($overallaverage == 0)
+            $overallaverage = 1;
+        if($overallAAs == 0)
+            $overallAAs = 1;
+
+        $overallaverage = $overallaverage/$total;
+        $overallAAs = $overallAAs/$total;
+
+        //delta - considers only four proteins (beta-lg, st8siaIV, FucT7, b1-4GalT)
+        $delta = 0.006174423*(($max-$min)/$overallaverage)-0.002213736*$total+0.061904351;
+        //delta2 - considers all proteins, except GnT2
+        $delta2 = 0.034571535*(($max-$min)/$overallaverage)-0.003093646*$total+0.050730533;
+        $difference = ((($delta2-$delta)/$delta2)*100);
+
+        /*
+        $results = array();
+        $results['delta'] = $delta;
+        $results['delta2'] = $delta;
+        $results['diff'] = $difference;
+        $results['%'] = (int)$difference;
+
+        return $results;
+        */
+
+        return $delta2;
+
+    }
+
+    public function getDeltaCMDebug($peptides, $method = 'average'){
+
+        //In this function I'm not considering if it is a B or Y ion.
+        //Im also not considering that it loses 2Da per S-S bond
+        //REASON: Low influence in final delta result
+
+        $total = count($peptides);
+        //biggest mass: W - 186.2132Da
+        $min = 186.2132;
+        for($i=0;$i<$total;$i++){
+            $average[$i] = 0;
+        }
+        //smallest mass: G - 57.0519Da
+        $max = 57.0519;
+
+        for($i=0;$i<$total;$i++){
+
+            $sum = 0;
+            $AAs = str_split($peptides[$i]);
+            $countAAs = count($AAs);
+            for($j=0;$j<$countAAs;$j++){
+                $mass = $this->calculatePeptideMass($AAs[$j]);
+                if($mass < $min){
+                    $min = $mass;
+                }
+                if($mass > $max){
+                    $max = $mass;
+                }
+                $sum += $mass;
+            }
+            $average[$i] = $sum/$countAAs;
+            $counttotalAAs[$i] = $countAAs;
+
+        }
+
+        $overallaverage = 0;
+        $overallAAs = 0;
+
+        for($i=0;$i<$total;$i++){
+            $overallaverage += $average[$i];
+            $overallAAs += $counttotalAAs[$i];
+        }
+        //Didn't use 0 to avoid divison by 0 in case an error happens
+        if($overallaverage == 0)
+            $overallaverage = 1;
+        if($overallAAs == 0)
+            $overallAAs = 1;
+
+        $overallaverage = $overallaverage/$total;
+        $overallAAs = $overallAAs/$total;
+
+        $delta = (double)($max-$min)/$overallaverage;
+        $delta = (double)$delta/(2*$overallAAs);
+
+        $results = array();
+        $results['AAmax'] = $max;
+        $results['AAmin'] = $min;
+        $results['AAavg'] = $overallaverage;
+        $results['||p||'] = $overallAAs;
+        $results['gama'] = $delta;
+        return $results;
+
+    }
+
     public function formatFASTAsequence($fastaProtein){
 
         $tmp = explode("\r\n", $fastaProtein);
@@ -393,5 +534,19 @@ class AAclass {
 
         return $bonds;
     }
+
+    public function getMaximumIntensity($intensities){
+        
+        $max = $intensities[0];
+
+        for($i=1;$i<count($intensities);$i++){
+            if($intensities[$i] > $max){
+                $max = $intensities[$i];
+            }
+        }
+
+        return $max;
+    }
+
 }
 ?>

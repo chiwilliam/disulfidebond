@@ -230,6 +230,9 @@
                     $IM = $result['IM'];
                     $IMdelta = $result['delta'];
 
+                    //$DMSsize = $result['size'];
+                    //unset($IM);
+
                     //$regression = $result['regression'];
                     //unset($IM);
 
@@ -290,8 +293,17 @@
                         //saves number of CMs per IM
                         $numberBonds = array();
 
-                        //consider only b and y ions or all ion types
-                        $alliontypes = "Y";
+                        //consider:
+                        // by => only b and y ions
+                        // acxz => only a, c, x, and z ions
+                        // all => all ion types
+                        $alliontypes = "all";
+
+                        //calculate trimming parameter regression curve
+                        //populates an array with all deltas for all IMs
+                        //$regression = array();
+
+                        $FMSsize = array();
 
                         //compute Confirmed Match
                         for($i=0;$i<count($IM);$i++){
@@ -362,7 +374,7 @@
 
                                 //decide whether to use all peaks or use the median
                                 //median or all
-                                $method = 'median';
+                                $method = 'all';
 
                                 //according to threshold
                                 $TML = $CMClass->screenDataHighPicks($data,$IntensityLimit,$ScreeningThreshold, $method);
@@ -375,9 +387,15 @@
                                     //the precursor ion mass
                                     //$fragmentmass <= ($precursormass + $threshold)
                                     
-                                    $TML = $CMClass->expandTMLByCharges($TML, $precursor, $TMLthreshold);
+                                    $TMLresults = $CMClass->expandTMLByCharges($TML, $precursor, $TMLthreshold);
 
-                                    $totalexpandedTML = count($TML);
+                                    $TML = $TMLresults['TML'];
+                                    $maxintensity = $TMLresults['maxintensity'];
+                                    unset($TMLresults);
+
+                                    //calculates totalexpanderTML as a product:
+                                    //# fragments * normalized fragment intensity
+                                    $totalexpandedTMLConsideringIntensity = $CMClass->calculateMassSpaceSizeConsideringIntensity($TML);
 
                                     //construct FMS
                                     $FMS = array();
@@ -397,9 +415,12 @@
 
                                     $FMS = $FMSpolynomial['FMS'];
                                     $CM = $FMSpolynomial['CM'];
+                                    //$regression[$i] = $FMSpolynomial['REGRESSION'];
+                                    $FMSsize[$i] = count($FMS);
 
                                     $totalCMs = count($CM);
-
+                                    $totalCMsConsideringIntensity = $CMClass->calculateMassSpaceSizeConsideringIntensity($CM);
+                                    
                                     if($totalCMs > 0){
 
                                         //debugging
@@ -527,7 +548,7 @@
                                             $debug .= 'DTA Mass = ';
                                             $debug .= $CM[$k]["matches"]["TML"];
                                             $debug .= ', Intensity = ';
-                                            $debug .= $TML[$CM[$k]["debug"]["TML"]]["intensity"];
+                                            $debug .= $TML[$CM[$k]["debug"]["TML"]]["%highpeak"];
                                             $debug .= ', M/Z = ';
                                             $debug .= ($TML[$CM[$k]["debug"]["TML"]]["mass"]/$TML[$CM[$k]["debug"]["TML"]]["charge"]);
                                             $debug .= ', Z = ';
@@ -562,9 +583,20 @@
 
                                         //match ratio determination
                                         if(isset($numberBonds[$i])){
-                                            $numberBonds[$i]["CM"] = $totalCMs;
+                                            $numberBonds[$i]["CM"] = $totalCMsConsideringIntensity;
                                             //$numberBonds[$i]["TML"] = $totalscreenedTML;
-                                            $numberBonds[$i]["TML"] = $totalexpandedTML;
+                                            $numberBonds[$i]["TML"] = $totalexpandedTMLConsideringIntensity;
+
+                                            //compute number of by ions and number of other ions types
+                                            $by = 0;
+                                            $others = 0;
+                                            for($l=0;$l<count($CM);$l++){
+                                                $by += $CM[$l]["debug"]["by"];
+                                                $others += $CM[$l]["debug"]["others"];
+                                            }
+                                            $numberBonds[$i]["by"] = $by;
+                                            $numberBonds[$i]["others"] = $others;
+
                                         }
                                         
                                         //output for debugging
@@ -579,20 +611,49 @@
                             }//end if DTA could be read
                         }// end foreach IM
 
+                        /*
+                        //Gama multiple variation regression analysis - variable regression
+                        //Removing duplicate entries (analyzing same peptide sequence(s)
+                        if(isset($regression) && count(($regression)) > 0){
+                            $i=0;
+                            $total = count($regression);
+                            while($i<$total){
+                                $gama = $regression[$i]['gama'];
+                                $j=$i+1;
+                                while($j<$total){
+                                    if($regression[$j]['gama'] == $gama){
+                                        unset($regression[$j]);
+                                        $total--;
+                                        sort(&$regression);
+                                    }
+                                    else{
+                                        $j++;
+                                    }
+                                }
+                                $i++;
+                            }
+                        }
+                        */
+                        
+                        //sort(&$FMSsize);
+
                         //remove disulfide bonds using match ratio
                         //remove disulfide bonds which do not respect CM/TML > 1
                         $numbonds = count($numberBonds);
                         $truebonds = array();
+                        //ionFactor = 1 if only b and y ions. Ion factor is X if all ion types
+                        $ionFactor = 1;
                         for($w=0;$w<$numbonds;$w++){
                             $CMtotal = $numberBonds[$w]["CM"];
                             $TMLtotal = $numberBonds[$w]["TML"];
                             if($CMtotal > 0 && $TMLtotal > 0){
-                                if((($CMtotal/$TMLtotal) > 0.33)
-                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.33)){
+                                if((($CMtotal/$TMLtotal) > 0.2*$ionFactor)
+                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.2*$ionFactor)){
                                         $truebonds[$numberBonds[$w]["bond"]] = true;
                                 }
                             }
                         }
+                        /*
                         //in case no disulfide bonds were found due to few matches
                         //do not consider CMtotal/TMLtotal
                         if(count($truebonds) == 0){
@@ -600,7 +661,7 @@
                                 $CMtotal = $numberBonds[$w]["CM"];
                                 $TMLtotal = $numberBonds[$w]["TML"];
                                 if($CMtotal > 0 && $TMLtotal > 0){
-                                    if((($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.33)){
+                                    if((($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.2*$ionFactor)){
                                             $truebonds[$numberBonds[$w]["bond"]] = true;
                                     }
                                 }
@@ -612,12 +673,13 @@
                                 $CMtotal = $numberBonds[$w]["CM"];
                                 $TMLtotal = $numberBonds[$w]["TML"];
                                 if($CMtotal > 0 && $TMLtotal > 0){
-                                    if((($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.33)){
+                                    if((($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.2*$ionFactor)){
                                         $truebonds[$numberBonds[$w]["bond"]] = true;
                                     }
                                 }
                             }
                         }
+                        */
                         
                         $truecysteines = array();
                         $newgraph = array();
