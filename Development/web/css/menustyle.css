@@ -1,0 +1,39 @@
+.l0_out, .l0_over {
+    font: bold 11pt/41px Arial;
+    text-align: center;
+}
+
+.l0_out {
+    color: #101010;
+    background: url(../images/l0_bg_out.gif);
+}
+
+.l0_over {
+    color: #C80202;
+    background: url(../images/l0_bg_over.gif);
+}
+
+.l1_out, .l1_over {
+    font: 8pt/19px Arial;
+    text-align: center;
+}
+
+.l1_over {
+    color: #DF0000;
+}
+
+.l1_out {
+    color: #616060;
+}
+
+.l1_bg_0 {
+    background: #F8F7F7 no-repeat url(../images/l1_bg_0.gif);
+}
+
+.l1_bg_1 {
+    background: #F8F7F7 no-repeat url(../images/l1_bg_1.gif);
+}
+
+.l1_bg_other {
+    background: #F8F7F7 no-repeat url(../images/l1_bg_other.gif);
+}
