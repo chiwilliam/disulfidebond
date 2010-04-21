@@ -11,7 +11,7 @@
         $mode = "advanced";
         $advancedusers = $Users->getAdvancedUserHTML();
         
-        include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
+        include $_SERVER['DOCUMENT_ROOT']."/index.php";
         
     }
     else{
