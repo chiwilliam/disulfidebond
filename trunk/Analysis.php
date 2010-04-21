@@ -88,7 +88,7 @@
             $IntensityLimit = $_POST["IntensityLimit"];
         }
         else{
-            $IntensityLimit = 0.03;
+            $IntensityLimit = 0.10;
         }
 
         //If User is Advanced, create Advanced User Div
@@ -647,13 +647,15 @@
                             $CMtotal = $numberBonds[$w]["CM"];
                             $TMLtotal = $numberBonds[$w]["TML"];
                             if($CMtotal > 0 && $TMLtotal > 0){
-                                if((($CMtotal/$TMLtotal) > 0.2*$ionFactor)
-                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.2*$ionFactor)){
-                                        $truebonds[$numberBonds[$w]["bond"]] = true;
+                                if((($CMtotal/$TMLtotal) > 0.5*$ionFactor)
+                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.5*$ionFactor)){
+                                        //avoid matches with double bonds
+                                        if(count($numberBonds[$w]) == 6){
+                                            $truebonds[$numberBonds[$w]["bond"]] = true;
+                                        }
                                 }
                             }
                         }
-                        /*
                         //in case no disulfide bonds were found due to few matches
                         //do not consider CMtotal/TMLtotal
                         if(count($truebonds) == 0){
@@ -679,7 +681,6 @@
                                 }
                             }
                         }
-                        */
                         
                         $truecysteines = array();
                         $newgraph = array();
@@ -870,6 +871,7 @@
         }
 
         include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
+        echo $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
     }
     
 
