@@ -870,8 +870,7 @@
             unset($debug);
         }
 
-        //include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
-        echo $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
+        include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
     }
     
 
