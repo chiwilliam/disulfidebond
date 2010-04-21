@@ -1,7 +1,7 @@
 <?php
 
-    //require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/Users.class.php";
-    //$Users = new Usersclass();
+    require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/Users.class.php";
+    $Users = new Usersclass();
 
     //remove time limit when executing a script
     set_time_limit(0);
@@ -11,7 +11,7 @@
         $mode = "advanced";
         $advancedusers = $Users->getAdvancedUserHTML();
         
-        include $_SERVER['DOCUMENT_ROOT']."/index.php";
+        include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/index.php";
         
     }
     else{
