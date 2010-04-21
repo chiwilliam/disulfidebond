@@ -647,8 +647,8 @@
                             $CMtotal = $numberBonds[$w]["CM"];
                             $TMLtotal = $numberBonds[$w]["TML"];
                             if($CMtotal > 0 && $TMLtotal > 0){
-                                if((($CMtotal/$TMLtotal) > 0.5*$ionFactor)
-                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.5*$ionFactor)){
+                                if((($CMtotal/$TMLtotal) > 0.65*$ionFactor)
+                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.65*$ionFactor)){
                                         //avoid matches with double bonds
                                         if(count($numberBonds[$w]) == 6){
                                             $truebonds[$numberBonds[$w]["bond"]] = true;
@@ -656,6 +656,7 @@
                                 }
                             }
                         }
+                        /*
                         //in case no disulfide bonds were found due to few matches
                         //do not consider CMtotal/TMLtotal
                         if(count($truebonds) == 0){
@@ -669,6 +670,9 @@
                                 }
                             }
                         }
+
+                        /*
+                        
                         //if still no SS-bonds were found, lower bound to 20%
                         if(count($truebonds) == 0){
                             for($w=0;$w<$numbonds;$w++){
@@ -681,6 +685,7 @@
                                 }
                             }
                         }
+                        */
                         
                         $truecysteines = array();
                         $newgraph = array();
