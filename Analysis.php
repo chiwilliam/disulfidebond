@@ -597,7 +597,6 @@
                                             }
                                             $numberBonds[$i]["by"] = $by;
                                             $numberBonds[$i]["others"] = $others;
-
                                         }
                                         
                                         //output for debugging
@@ -731,7 +730,7 @@
                             $score = $truebonds[$SS[$w]][score];
                             $truebonds[$SS[$w]]['score'] = ((int)(($score/$minimumscore)*100));
                         }
-
+                        
                         $newgraph = array();
                         $SS = array_keys($truebonds);
                         for($w=0;$w<count($SS);$w++){
