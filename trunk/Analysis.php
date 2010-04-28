@@ -586,6 +586,7 @@
                                             $numberBonds[$i]["CM"] = $totalCMsConsideringIntensity;
                                             //$numberBonds[$i]["TML"] = $totalscreenedTML;
                                             $numberBonds[$i]["TML"] = $totalexpandedTMLConsideringIntensity;
+                                            $numberBonds[$i]["DTA"] = $PMLNames[$IM[$i]["PML"]];
 
                                             //compute number of by ions and number of other ions types
                                             $by = 0;
@@ -637,21 +638,49 @@
                         
                         //sort(&$FMSsize);
 
+                        //fix when array numberBonds has missing keys
+                        $tmpBonds = $numberBonds;
+                        unset($numberBonds);
+                        $keys = array_keys($tmpBonds);
+                        for($w=0;$w<count($keys);$w++){
+                            $numberBonds[$w] = $tmpBonds[$keys[$w]];
+                        }
+                        unset($tmpBonds);
+                        unset($keys);
+
                         //remove disulfide bonds using match ratio
                         //remove disulfide bonds which do not respect CM/TML > 1
                         $numbonds = count($numberBonds);
                         $truebonds = array();
                         //ionFactor = 1 if only b and y ions. Ion factor is X if all ion types
                         $ionFactor = 1;
+                        //keep minimum score to create graph to be send to gabow routine
+                        $minimumscore = 100;
                         for($w=0;$w<$numbonds;$w++){
                             $CMtotal = $numberBonds[$w]["CM"];
                             $TMLtotal = $numberBonds[$w]["TML"];
+                            $score = $CMtotal/$TMLtotal;
+                            $SSbond = (string)$numberBonds[$w]["bond"];
+                            $DTA = (string)$numberBonds[$w]["DTA"];
                             if($CMtotal > 0 && $TMLtotal > 0){
-                                if((($CMtotal/$TMLtotal) > 0.65*$ionFactor)
-                                   && (($numberBonds[$w][$numberBonds[$w]["bond"]]/$CMtotal) > 0.65*$ionFactor)){
+                                if((($score) > 0.65*$ionFactor) && $numberBonds[$w][$SSbond] >= 10
+                                   && (($numberBonds[$w][$SSbond]/$CMtotal) > 0.65*$ionFactor)){
                                         //avoid matches with double bonds
-                                        if(count($numberBonds[$w]) == 6){
-                                            $truebonds[$numberBonds[$w]["bond"]] = true;
+                                        if(count($numberBonds[$w]) == 7){
+                                            //Consider a true bond ony if either:
+                                            //1. The bond is not previously found
+                                            //2. If the new bond has higher score than previous
+                                            if(!isset($truebonds[$DTA]['bond']) || $truebonds[$DTA]['score'] < $score){
+                                                $truebonds[$DTA]['bond'] = $SSbond;
+                                                $truebonds[$DTA]['score'] = $score;
+                                                $dashpos = strpos($SSbond, "-");
+                                                $truebonds[$DTA]['cys1'] = substr($SSbond, 0, $dashpos);
+                                                $truebonds[$DTA]['cys2'] = substr($SSbond,$dashpos+1);
+                                                $truebonds[$DTA]['DTA'] = $DTA;
+
+                                                if($score < $minimumscore)
+                                                    $minimumscore = $score;
+                                            }
                                         }
                                 }
                             }
@@ -670,9 +699,6 @@
                                 }
                             }
                         }
-
-                        /*
-                        
                         //if still no SS-bonds were found, lower bound to 20%
                         if(count($truebonds) == 0){
                             for($w=0;$w<$numbonds;$w++){
@@ -686,48 +712,41 @@
                             }
                         }
                         */
-                        
-                        $truecysteines = array();
+
+                        //convert array indexes to disulfide bonds
+                        $filteredbonds = array();
+                        $keys = array_keys($truebonds);
+                        for($w=0;$w<count($keys);$w++){
+                            $filteredbonds[$truebonds[$keys[$w]]['bond']] = $truebonds[$keys[$w]];
+                        }
+                        unset($truebonds);
+                        $truebonds = $filteredbonds;
+                        unset($filteredbonds);
+
+                        //normalize the bond scores in order to properly mount the graph to
+                        //send to the gabow routine.
+                        //divide all scores by minimum score
+                        $SS = array_keys($truebonds);
+                        for($w=0;$w<count($SS);$w++){
+                            $score = $truebonds[$SS[$w]][score];
+                            $truebonds[$SS[$w]]['score'] = ((int)(($score/$minimumscore)*100));
+                        }
+
                         $newgraph = array();
                         $SS = array_keys($truebonds);
                         for($w=0;$w<count($SS);$w++){
-                            $dashpos = strpos($SS[$w], "-");
-                            //get involved cysteines
-                            $cys1 = substr($SS[$w], 0, $dashpos);
-                            $cys2 = substr($SS[$w],$dashpos+1);
-                            //list cysteine bonds
-                            unset($tmp);
-                            unset($tmp2);
-                            $tmp = $graph[$cys1];
-                            $counttmp = count($tmp);
-                            for($z=0;$z<$counttmp;$z++){
-                                if($tmp[$z] == $cys2){
-                                    $tmp2[] = $tmp[$z];
-                                }
-                            }
-                            if(count($newgraph[$cys1]) > 0)
-                                $newgraph[$cys1] = array_merge($newgraph[$cys1],$tmp2);
-                            else
-                                $newgraph[$cys1] = $tmp2;
+                            
+                            $cys1 = (string)$truebonds[$SS[$w]]['cys1'];
+                            $cys2 = (string)$truebonds[$SS[$w]]['cys2'];
 
-                            unset($tmp);
-                            unset($tmp2);
-                            $tmp = $graph[$cys2];
-                            $counttmp = count($tmp);
+                            $counttmp = $truebonds[$SS[$w]]['score'];
                             for($z=0;$z<$counttmp;$z++){
-                                if($tmp[$z] == $cys1){
-                                    $tmp2[] = $tmp[$z];
-                                }
+                                $newgraph[$cys1][] = $cys2;
+                                $newgraph[$cys2][] = $cys1;
                             }
-                            if(count($newgraph[$cys2]) > 0)
-                                $newgraph[$cys2] = array_merge($newgraph[$cys2],$tmp2);
-                            else
-                                $newgraph[$cys2] = $tmp2;
                         }
                         //destroy old graph, and keep new graph with only "valid" SS bonds
                         unset($graph);
-                        unset($tmp);
-                        unset($tmp2);
                         
                         //Using Gabow algorithm to solve maximum weighted matching problem
                         if(count($bonds) > 0){
