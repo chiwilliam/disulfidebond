@@ -424,6 +424,7 @@ class InitialMatchclass {
         $result['DMS'] = $DMS;
         $result['IM'] = $IM;
         $result['delta'] = $delta;
+        $result['peptides'] = $disulfideBondedPeptides;
         //$result['regression'] = $regression;
         //$result['size'] = $size;
 
@@ -688,7 +689,7 @@ class InitialMatchclass {
                             }
                             break;
                         case 'C':
-                                if(($AAs[$j] == 'L' || $AAs[$j] == 'F' || $AAs[$j] == 'Y' || $AAs[$j] == 'W' || $AAs[$j] == 'M') && $AAs[$j+1] != 'P'){
+                            if(($AAs[$j] == 'L' || $AAs[$j] == 'F' || $AAs[$j] == 'Y' || $AAs[$j] == 'W' || $AAs[$j] == 'M') && $AAs[$j+1] != 'P'){
                                 $found++;
 
                                 //adjust cysteine position
@@ -903,7 +904,7 @@ class InitialMatchclass {
                                 $DBP[$newindex] = array('sequence' => ($pep['sequence'].$extraAAs),
                                                         'cysteines' => $newcysteines, 'start' => $pep['start']);
 
-                                if($found == 1){
+                                if($found < $missingcleavages){
                                     //use for pre and pos cleavage
                                     $PrePosSequence = $preAAs.$extraAAs;
                                     $PrePosStart = $prestart;
@@ -949,7 +950,7 @@ class InitialMatchclass {
                                 $DBP[$newindex] = array('sequence' => ($pep['sequence'].$extraAAs),
                                                         'cysteines' => $newcysteines, 'start' => $pep['start']);
 
-                                if($found == 1){
+                                if($found < $missingcleavages){
                                     //use for pre and pos cleavage
                                     $PrePosSequence = $preAAs.$extraAAs;
                                     $PrePosStart = $prestart;
@@ -994,7 +995,7 @@ class InitialMatchclass {
                                 $DBP[$newindex] = array('sequence' => ($pep['sequence'].$extraAAs),
                                                         'cysteines' => $newcysteines, 'start' => $pep['start']);
 
-                                if($found == 1){
+                                if($found < $missingcleavages){
                                     //use for pre and pos cleavage
                                     $PrePosSequence = $preAAs.$extraAAs;
                                     $PrePosStart = $prestart;
@@ -1039,7 +1040,7 @@ class InitialMatchclass {
                                 $DBP[$newindex] = array('sequence' => ($pep['sequence'].$extraAAs),
                                                         'cysteines' => $newcysteines, 'start' => $pep['start']);
 
-                                if($found == 1){
+                                if($found < $missingcleavages){
                                     //use for pre and pos cleavage
                                     $PrePosSequence = $preAAs.$extraAAs;
                                     $PrePosStart = $prestart;
