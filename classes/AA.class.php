@@ -135,6 +135,10 @@ class AAclass {
         $delta2 = 0.013938868*(($last-$first)/$average)-0.001082447*$total+0.039490416;
         $difference = (string)((int)((($delta2-$delta)/$delta2)*100)).'%';
 
+        if($delta < 0){
+            $delta = 0.0;
+        }
+
         return $delta;
 
     }
@@ -214,6 +218,46 @@ class AAclass {
         }
 
         return $results;
+    }
+
+    public function removeImpossibleCombinations($list){
+
+        $trimmed = array();
+
+        $keys = array_keys($list);
+
+        for($i=0;$i<count($keys);$i++){
+            $structure = $list[$keys[$i]]['peptides'];
+            if(count($structure) == 1){
+                $trimmed[$keys[$i]] = $list[$keys[$i]];
+            }
+            else{
+                $remove = 'no';
+                for($j=0;$j<count($structure);$j++){
+                    $peptide = $structure[$j];
+                    if($keys[$i] == "2994-37728-000"){
+                        $stop = "here";
+                    }
+                    for($k=$j+1;$k<count($structure);$k++){
+                        if(strpos($structure[$k],$peptide) === false
+                           && strpos($peptide,$structure[$k]) === false){
+                            //do nothing
+                        }
+                        else{
+                            $remove = 'yes';
+                            break;
+                        }
+                    }
+                    if($remove == 'yes'){
+                        break;
+                    }
+                }
+                if($remove == 'no'){
+                    $trimmed[$keys[$i]] = $list[$keys[$i]];
+                }
+            }
+        }
+        return $trimmed;
     }
 
     public function trimListKeepBigger($list,$delta){
