@@ -11,6 +11,7 @@
         <link href="styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
         <link href="styles/style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/wz_jsgraphics.js"></script>
+        <script type="text/javascript" src="js/functions.js"></script>
     </head>
 
     <body>
@@ -153,7 +154,12 @@
                                     <td colspan="2"><p /></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2"><p /></td>
+                                    <td colspan="2">
+                                        <p class="processing">
+                                            <img id="loadingimage" style="visibility:hidden;" src="images/loading.gif"></img>
+                                            <label id="processing"></label>
+                                        </p>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="inputleft">
