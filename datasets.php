@@ -35,7 +35,472 @@
                 <!-- Begin Left Column -->
                 <div id="column_l">
                     <!-- #BeginEditable "content" -->
-                    
+                    <table class="content" id="datasets" cellpadding="0" cellspacing="0" summary="" width="80%">
+                        <tr>
+                            <td class="list">
+                                <ol>
+                                    <li class="spacing">
+                                        <a href="#Lactoglobulin">Lactoglobulin</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Sialytransferase St8Sia IV">Sialytransferase St8Sia IV</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Fucosyltransferase 7">Fucosyltransferase 7</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Core 2-branching enzyme">Core 2-branching enzyme</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Lysozyme C">Lysozyme C</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Fucosyltransferase 3">Fucosyltransferase 3</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Beta-1,4-galactosyltransferase 1">Beta-1,4-galactosyltransferase 1</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Muscle-type aldolase">Muscle-type aldolase</a>
+                                    </li>
+                                    <li class="spacing">
+                                        <a href="#Aspartoacylase">Aspartoacylase</a>
+                                    </li>
+                                </ol>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Lactoglobulin"></a>Lactoglobulin</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/P02754" target="_blank">Swiss-Prot ID P02754</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Lactoglobulin is a primary component of whey, it binds retinol and is probably involved in the transport of that molecule.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/P02754.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/lactoglobulin-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Sialytransferase St8Sia IV"></a>Sialytransferase St8Sia IV</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/Q92187" target="_blank">Swiss-Prot ID Q92187</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Sialytransferase St8Sia IV catalyzes the polycondensation of alpha-2,8-linked sialic acid required for the synthesis of polysialic acid (PSA), which is present on the embryonic neural cell adhesion molecule (N-CAM), necessary for plasticity of neural cells.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/Q92187.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Chymotryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/sia8d-chymotrypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Fucosyltransferase 7"></a>Fucosyltransferase 7</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/Q11130" target="_blank">Swiss-Prot ID Q11130</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Fucosyltransferase 7 may catalyze alpha-1,3 glycosidic linkages involved in the expression of sialyl Lewis X antigens.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/Q11130.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/FucT7-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <b><i>Chymotryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/FucT7-chymotrypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Core 2-branching enzyme"></a>Core 2-branching enzyme</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/Q09324" target="_blank">Swiss-Prot ID Q09324</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Core 2-branching enzyme forms critical branches in O-glycans.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/Q09324.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/GnT-II-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <b><i>Chymotryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/GnT-II-chymotrypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Lysozyme C"></a>Lysozyme C</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/P00698" target="_blank">Swiss-Prot ID P00698</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Lysozymes have primarily a bacteriolytic function; those in tissues and body fluids are associated with the monocyte-macrophage system and enhance the activity of immunoagents.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/P00698.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/lysozyme-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Fucosyltransferase 3"></a>Fucosyltransferase 3</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/P21217" target="_blank">Swiss-Prot ID P21217</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Fucosyltransferase 3 may catalyze alpha-1,3 and alpha-1,4 glycosidic linkages involved in the expression of Vim-2, Lewis A, Lewis B, sialyl Lewis X and Lewis X/SSEA-1 antigens. May be involved in blood group Lewis determination; Lewis-positive (Le+) individuals have an active enzyme while Lewis-negative (Le-) individuals have an inactive enzyme.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/P21217.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/FUT3-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Beta-1,4-galactosyltransferase 1"></a>Beta-1,4-galactosyltransferase 1</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/P08037" target="_blank">Swiss-Prot ID P08037</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Beta-1,4-galactosyltransferase catalyzes the production of lactose in the lactating mammary gland and could also be responsible for the synthesis of complex-type N-linked oligosaccharides in many glycoproteins as well as the carbohydrate moieties of glycolipids (Golgi complex form). The cell surface form functions as a recognition molecule during a variety of cell to cell and cell to matrix interactions, as those occurring during development and egg fertilization, by binding to specific oligosaccharide ligands on opposing cells or in the extracellular matrix.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/P08037.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/b1-4GalT-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Muscle-type aldolase"></a>Muscle-type aldolase</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/P00883" target="_blank">Swiss-Prot ID P00883</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/P00883.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/Aldolase-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h4><a name="Aspartoacylase"></a>Aspartoacylase</h4>
+                                        </td>
+                                        <td>
+                                            (<a href="http://www.uniprot.org/uniprot/Q9R1T5" target="_blank">Swiss-Prot ID Q9R1T5</a>)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <ul>
+                                    <li>
+                                        Function: Aspartoacylase Catalyzes the deacetylation of N-acetylaspartic acid (NAA) to produce acetate and L-aspartate. NAA occurs in high concentration in brain and its hydrolysis NAA plays a significant part in the maintenance of intact white matter.
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        FASTA Sequence: Click <a href="http://www.uniprot.org/uniprot/Q9R1T5.fasta" target="_blank">here</a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <li>Digestion:</li>
+                                            </td>
+                                            <td>
+                                                <b><i>Tryptic</i></b> digested
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        DTA files: Click <a href="./datasets/aspa-trypsin.zip" target="_blank">here</a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
                     <!-- #EndEditable "content" -->
                 </div>
                 <!-- End Left Column -->
