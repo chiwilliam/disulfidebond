@@ -174,7 +174,7 @@ class Commonclass {
     }
 
     //function to execute Gabow's algorithm given a input file
-    public function executeGabow($graph){
+    public function executeGabow($graph, $root){
 
         //input string that will be converted to the input file for wmatch
         $input = "";
@@ -242,7 +242,7 @@ class Commonclass {
         $input = $vertices." ".$totaledges." U \n\n".$input."\n";
 
         //prepare file paths
-        $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/".$vertices.$totaledges."U";
+        $path = $root."/disulfidebond/gabow/".$vertices.$totaledges."U";
 
         if($_ENV['OS'] == "Windows_NT"){
             $path = str_replace("/", "\\", $path);
@@ -261,12 +261,12 @@ class Commonclass {
 
         //write command to be executed to run wmatch executable
         if($_ENV['OS'] == "Windows_NT"){
-            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/wmatch.exe ".
+            $command = $root."/disulfidebond/gabow/wmatch.exe ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
             $command = str_replace("/", "\\", $command);
         }
         else{
-            $command = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/gabow/./wmatch ".
+            $command = $root."/disulfidebond/gabow/./wmatch ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
         }
         
