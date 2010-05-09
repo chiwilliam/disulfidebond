@@ -45,7 +45,7 @@
                     <!-- Begin Left Column -->
                     <div id="column_l">
                             <!-- #BeginEditable "content" -->
-                            <form action="kernel.php?mode=stantard" name="submitForm" enctype="multipart/form-data" method="post">
+                            <form action="test.php?mode=stantard" name="submitForm" enctype="multipart/form-data" method="post">
                                 <div>
                                     <table class="input">
                                         <tr>

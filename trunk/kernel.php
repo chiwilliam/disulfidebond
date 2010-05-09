@@ -144,10 +144,6 @@
             $zip = zip_open($zipFile["tmp_name"]);
             if($zip){
                 $dirPath = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"];
-                
-                $debug .= $dirPath.'<br />';
-                include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/stdanalysis.php";
-
                 if(!is_dir($dirPath)){
                     mkdir($dirPath);
                 }
@@ -178,9 +174,6 @@
 
                                 //store data in a local file
                                 $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"]."/".$index.".txt";
-
-                                $debug .= $path.'<br />';
-
                                 file_put_contents($path, $data);
                             }
                         }
