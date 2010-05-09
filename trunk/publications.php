@@ -70,7 +70,7 @@
                                         Conference on Bioinformatics Research and Development (BIRD)</i>,
                                         Communications in Computer and Information Science, Vol. 13, pp.
                                         140-153, Springer Verlag, 2008</font>
-                                        <a href="./papers/BIRD2008-MS2DB.pdf">
+                                        <a href="http://tintin.sfsu.edu/papers/BIRD2008-MS2DB.pdf">
                                             <img alt="[PDF]" border="0" height="16" src="./images/pdf.gif" width="16" />
                                         </a>
                                     </li>
@@ -81,7 +81,7 @@
                                         Identification of Disulfide Connectivity in Proteins Using Tandem
                                         Mass Spectrometry, <i>Computational Systems Bioinformatics Conference
                                         (CSB), pp. 41-51, 2007 </i></font>
-                                        <a href="./papers/CSB-2007.pdf">
+                                        <a href="http://tintin.sfsu.edu/papers/CSB-2007.pdf">
                                             <img alt="[PDF]" border="0" height="16" src="./images/pdf.gif" width="16" />
                                         </a>
                                     </li>
@@ -92,7 +92,7 @@
                                         of Disulfide Linkage Patterns in Protein Utilizing Mass Spectrometric
                                         Data, <i>IEEE International Symposium on Computer-Based Medical
                                         Systems (CBMS),</i> pp. 397-402, 2007</font>
-                                        <a href="./papers/Lee-Disulfide.pdf">
+                                        <a href="http://tintin.sfsu.edu/papers/Lee-Disulfide.pdf">
                                             <img alt="[PDF]" border="0" height="16" src="./images/pdf.gif" width="16" />
                                         </a>
                                     </li>
@@ -103,7 +103,7 @@
                                         Linkage Patterns in Proteins by Utilizing Tandem Mass Spectrometric
                                         Data, <i>IEEE International Symposium on Computer-Based Medical
                                         Systems</i> (CBMS), pp. 947-952, 2006 </font>
-                                        <a href="./papers/CBMS-DisulfideBond-2006.pdf">
+                                        <a href="http://tintin.sfsu.edu/papers/CBMS-DisulfideBond-2006.pdf">
                                             <img alt="[PDF]" border="0" height="16" src="./images/pdf.gif" width="16" />
                                         </a>
                                     </li>

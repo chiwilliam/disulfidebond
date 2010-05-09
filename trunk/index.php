@@ -80,7 +80,7 @@
 				structural configuration that can match a given spectra.
 				</p>
                                 <p>
-                                    If you are not familiar to <b><span style="color:blue;">MS2DB+</span></b>, check the tutorial video
+                                    If you are not familiar with <b><span style="color:blue;">MS2DB+</span></b>, check the tutorial video
                                     below to get started.
 				</p>
                             </td>
