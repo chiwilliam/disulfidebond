@@ -150,7 +150,7 @@
 
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
-            if($zip){
+            if(isset($zip)){
                 $dirPath = $root."/disulfidebond/DTA/".$zipFile["name"];
             
                 if(isset($istintin)){include $root."/disulfidebond/test.php";}
