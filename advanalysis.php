@@ -116,7 +116,7 @@
                                             <tr class="advancedusers">
                                                 <td class="advancedusersleft">Initial Match Threshold:</td>
                                                 <td class="advancedusersright">
-                                                    <input type="text" id="IMthreshold" name="IMthreshold" size="5" value="<?php if (isset($IMthreshold)) {echo $IMthreshold;echo '1.0';} ?>"
+                                                    <input type="text" id="IMthreshold" name="IMthreshold" size="5" value="<?php if (isset($IMthreshold)) {echo $IMthreshold;}else {echo '1.0';} ?>"
                                                            onmouseover="Tip('Threshold used during the matching between precursor ions and disulfide bonded structures')"
                                                            onmouseout="UnTip()"></input>
                                                     * (default: +-1.0)
