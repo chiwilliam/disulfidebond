@@ -24,10 +24,6 @@
     $AAs = new AAclass();
     $CMClass = new ConfirmedMatchclass();
 
-    if(isset($istintin)){
-        include $root."/disulfidebond/stdanalysis.php";
-    }
-
     //error messages
     $errors = array();
     $errors["nofile"]["code"] = "01";
@@ -191,6 +187,10 @@
                         }
                     }
                 }
+            }
+
+            if(isset($istintin)){
+                include $root."/disulfidebond/stdanalysis.php";
             }
 
             if(count($PML) > 0){
