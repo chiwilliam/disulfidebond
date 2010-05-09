@@ -82,11 +82,6 @@
         $IntensityLimit = 0.10;
     }
 
-    //If User is Advanced, create Advanced User Div
-    if($mode == "advanced"){
-        $advancedusers = $Users->getAdvancedUserHTML($IMthreshold,$TMLthreshold,$ScreeningThreshold,$IntensityLimit,$CMthreshold);
-    }
-
     $zipFile = $_FILES["zipFile"];
     $fastaProtein = (string)$_POST["fastaProtein"];
 
@@ -149,6 +144,9 @@
             $zip = zip_open($zipFile["tmp_name"]);
             if($zip){
                 $dirPath = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"];
+                
+                $debug .= $dirPath.'<br />';
+
                 if(!is_dir($dirPath)){
                     mkdir($dirPath);
                 }
@@ -179,6 +177,9 @@
 
                                 //store data in a local file
                                 $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"]."/".$index.".txt";
+
+                                $debug .= $path.'<br />';
+
                                 file_put_contents($path, $data);
                             }
                         }
