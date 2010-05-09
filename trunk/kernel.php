@@ -129,12 +129,10 @@
         $debug .= ', Missing Cleavages: '.$missingcleavages;
         $debug .= '</h3></td></tr>';
 
-        if(isset($istintin)){
-            include $root."/disulfidebond/test.php";
-        }
-
         //digest protein
         $possiblebonds = $AAs->possibleBonds($fastaProtein);
+
+        if(isset($istintin)){include $root."/disulfidebond/test.php";}
 
         $disulfideBondedPeptides = $IMClass->digestProtein($fastaProtein, $protease);
 
