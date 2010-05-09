@@ -5,7 +5,7 @@
     //fix for tintin
     if(trim($root) == "/var/www/html/bioinformatics"){
         $root = "/home/whemurad/public_html";
-        include $root."/disulfidebond/stdanalysis.php";
+        $istintin = "yes";
     }
 
     require_once $root."/disulfidebond/classes/Users.class.php";
@@ -23,6 +23,10 @@
     $Func = new Commonclass();
     $AAs = new AAclass();
     $CMClass = new ConfirmedMatchclass();
+
+    if(isset($istintin)){
+        include $root."/disulfidebond/stdanalysis.php";
+    }
 
     //error messages
     $errors = array();
