@@ -132,8 +132,6 @@
         //digest protein
         $possiblebonds = $AAs->possibleBonds($fastaProtein);
 
-        if(isset($istintin)){include $root."/disulfidebond/test.php";}
-
         $disulfideBondedPeptides = $IMClass->digestProtein($fastaProtein, $protease);
 
         if(count($disulfideBondedPeptides) > 0)
@@ -149,6 +147,8 @@
 
             //expected amino acid mass
             $me = 111.17;
+
+            if(isset($istintin)){include $root."/disulfidebond/test.php";}
 
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
