@@ -147,7 +147,7 @@
                                     <td colspan="2" align="center">
                                         <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"
                                                onmouseover="Tip('Click Search Disulfide Bonds button to process your request')"
-                                               onmouseout="UnTip()" />
+                                               onmouseout="UnTip()" onclick="showProcessing()" />
                                     </td>
                                 </tr>
                                 <tr>
