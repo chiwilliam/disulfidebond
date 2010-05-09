@@ -149,9 +149,7 @@
             $me = 111.17;
 
             if(isset($istintin)){
-                echo $dirPath;
-                echo $path;
-                include $root."/disulfidebond/stdanalysis.php";
+                include $root."/disulfidebond/test.php";
             }
 
             //read DTA files
