@@ -146,6 +146,7 @@
                 $dirPath = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"];
                 
                 $debug .= $dirPath.'<br />';
+                include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/stdanalysis.php";
 
                 if(!is_dir($dirPath)){
                     mkdir($dirPath);
