@@ -192,7 +192,7 @@
             if(isset($istintin)){
                 echo $dirPath;
                 echo $path;
-                //include $root."/disulfidebond/stdanalysis.php";
+                include $root."/disulfidebond/stdanalysis.php";
             }
 
             if(count($PML) > 0){
