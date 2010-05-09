@@ -148,9 +148,9 @@
             //expected amino acid mass
             $me = 111.17;
 
+            if(isset($istintin)){include $root."/disulfidebond/test.php";}
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
-            if(isset($istintin)){include $root."/disulfidebond/test.php";}
             if($zip){
                 $dirPath = $root."/disulfidebond/DTA/".$zipFile["name"];
             
