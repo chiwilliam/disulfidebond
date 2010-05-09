@@ -1,15 +1,22 @@
 <?php
 
-    require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/Users.class.php";
+    //build root path (i.e.: C:\xampp\htdocs\)
+    $root = $_SERVER['DOCUMENT_ROOT'];
+    //fix for tintin
+    if(trim($root) == "/var/www/html/bioinformatics"){
+        $root = "/home/whemurad/public_html";
+    }
+
+    require_once $root."/disulfidebond/classes/Users.class.php";
     $Users = new Usersclass();
 
     //remove time limit when executing a script
     set_time_limit(0);
 
-    require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/AA.class.php";
-    require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/InitialMatch.class.php";
-    require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/Common.class.php";
-    require_once $_SERVER['DOCUMENT_ROOT']."/disulfidebond/classes/ConfirmedMatch.class.php";
+    require_once $root."/disulfidebond/classes/AA.class.php";
+    require_once $root."/disulfidebond/classes/InitialMatch.class.php";
+    require_once $root."/disulfidebond/classes/Common.class.php";
+    require_once $root."/disulfidebond/classes/ConfirmedMatch.class.php";
 
     $IMClass = new InitialMatchclass();
     $Func = new Commonclass();
@@ -143,7 +150,7 @@
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
             if($zip){
-                $dirPath = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"];
+                $dirPath = $root."/disulfidebond/DTA/".$zipFile["name"];
                 if(!is_dir($dirPath)){
                     mkdir($dirPath);
                 }
@@ -173,7 +180,7 @@
                                 $PMLNames[$index] = $filename;
 
                                 //store data in a local file
-                                $path = $_SERVER['DOCUMENT_ROOT']."/disulfidebond/DTA/".$zipFile["name"]."/".$index.".txt";
+                                $path = $root."/disulfidebond/DTA/".$zipFile["name"]."/".$index.".txt";
                                 file_put_contents($path, $data);
                             }
                         }
@@ -743,7 +750,7 @@
 
                     //Using Gabow algorithm to solve maximum weighted matching problem
                     if(count($bonds) > 0){
-                        $bonds = $Func->executeGabow($newgraph);
+                        $bonds = $Func->executeGabow($newgraph, $root);
                     }
 
                     for($i=0;$i<count($bonds);$i++){
@@ -888,9 +895,9 @@
     }
 
     if($_REQUEST["mode"] == "advanced"){
-        include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/advanalysis.php";
+        include $root."/disulfidebond/advanalysis.php";
     }
     else{
-        include $_SERVER['DOCUMENT_ROOT']."/disulfidebond/stdanalysis.php";
+        include $root."/disulfidebond/stdanalysis.php";
     }
 ?>
