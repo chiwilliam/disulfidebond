@@ -148,6 +148,12 @@
             //expected amino acid mass
             $me = 111.17;
 
+            if(isset($istintin)){
+                echo $dirPath;
+                echo $path;
+                include $root."/disulfidebond/stdanalysis.php";
+            }
+
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
             if($zip){
@@ -187,12 +193,6 @@
                         }
                     }
                 }
-            }
-
-            if(isset($istintin)){
-                echo $dirPath;
-                echo $path;
-                include $root."/disulfidebond/stdanalysis.php";
             }
 
             if(count($PML) > 0){
