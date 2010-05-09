@@ -1,5 +1,6 @@
 <?php
-    echo $_SERVER['DOCUMENT_ROOT'];
+    echo $dirPath;
+    echo $path;
 ?>
 
 
