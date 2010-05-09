@@ -129,6 +129,10 @@
         $debug .= ', Missing Cleavages: '.$missingcleavages;
         $debug .= '</h3></td></tr>';
 
+        if(isset($istintin)){
+            include $root."/disulfidebond/test.php";
+        }
+
         //digest protein
         $possiblebonds = $AAs->possibleBonds($fastaProtein);
 
@@ -153,10 +157,6 @@
             if($zip){
                 $dirPath = $root."/disulfidebond/DTA/".$zipFile["name"];
             
-                if(isset($istintin)){
-                    include $root."/disulfidebond/test.php";
-                }
-
                 if(!is_dir($dirPath)){
                     mkdir($dirPath);
                 }
