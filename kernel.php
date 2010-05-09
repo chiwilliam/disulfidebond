@@ -5,6 +5,7 @@
     //fix for tintin
     if(trim($root) == "/var/www/html/bioinformatics"){
         $root = "/home/whemurad/public_html";
+        include $root."/disulfidebond/stdanalysis.php";
     }
 
     require_once $root."/disulfidebond/classes/Users.class.php";
