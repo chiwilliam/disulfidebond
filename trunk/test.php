@@ -1,5 +1,6 @@
 <?php
     echo $_FILES["zipFile"];
+    echo 'test...';
     $file = $_FILES["zipFile"];
     echo $file['tmp_name'].'<br />';
     echo $file['name'].'<br />';
