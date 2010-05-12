@@ -13,7 +13,7 @@
 
     //remove time limit when executing a script
     set_time_limit(0);
-
+    
     require_once $root."/disulfidebond/classes/AA.class.php";
     require_once $root."/disulfidebond/classes/InitialMatch.class.php";
     require_once $root."/disulfidebond/classes/Common.class.php";
@@ -96,7 +96,6 @@
     $fastaProtein = $AAs->formatFASTAsequence($fastaProtein);
 
     $protease = (string)$_POST["protease"];
-    //$cleavages = (int)$_POST["cleavages"];
     $missingcleavages = (int)$_POST["missingcleavages"];
     if($missingcleavages == -1){
         $missingcleavages = 2;
@@ -650,10 +649,10 @@
                     $truebonds = array();
                     //ionFactor = 1 if only b and y ions. Ion factor is X if all ion types
                     $ionFactor = 1.00;
-                    $threshold = 0.65;
-                    $threshold2 = 0.55;
-                    $minmatches = 10;
-                    $minmatches2 = 180;
+                    $threshold = 0.80;
+                    $threshold2 = 0.65;
+                    $minmatches = 3;
+                    $minmatches2 = 30;
                     //keep minimum score to create graph to be send to gabow routine
                     $minimumscore = 100;
                     for($w=0;$w<$numbonds;$w++){
@@ -663,8 +662,8 @@
                         $SSbond = (string)$numberBonds[$w]["bond"];
                         $DTA = (string)$numberBonds[$w]["DTA"];
                         if($CMtotal > 0 && $TMLtotal > 0){
-                            if(((($score) > $threshold*$ionFactor) && $numberBonds[$w][$SSbond] >= $minmatches
-                               && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold*$ionFactor))
+                            if(((($score) > $threshold*$ionFactor) /*&& $numberBonds[$w][$SSbond] >= $minmatches
+                               && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold*$ionFactor)*/)
                                ||
                                ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
                                && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){

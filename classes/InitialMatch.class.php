@@ -312,6 +312,13 @@ class InitialMatchclass {
             
             $precursor = $PML[$PMLkeys[$k]];
             $precursorMass = substr($precursor,0,strpos($precursor, ' '));
+            $precursorCharge = (int)(trim(substr($precursor,strpos($precursor, ' ')+1,1)));
+
+            //adjust mass according to charge state. The mass value from the DTA file is (M+H).
+            //If doubly charged, add 1H (1.00782). If triply charged, add 2H (2.01564)
+            if($precursorCharge > 1){
+                $precursorMass += ($precursorCharge-1)*1.00782;
+            }
 
             $keys = array_keys($disulfideBondedPeptides);
             $total = count($keys);
@@ -353,20 +360,51 @@ class InitialMatchclass {
                         $list1premass = substr($list1keys[$z],0,(strlen($list1keys[$z])-4));
                         $list1mass = (double)str_replace('-', '.', $list1premass);
                         $list1mass += $mass;
+                        //mass to calculate index
+                        $massindex = $list1mass;
 
                         $counter++;
 
-                        //if(count($list1peptides) > 1 || (count($list1peptides) == 1 && count($list1cysteines) >= 2))
+                        if(strpos($peptide,"FCAICDRYPHLPR") === false){
+                        }
+                        else{
+                            $stophere = true;
+                        }
+
+                        //discount disulfide bond if either two or more peptides
+                        //not for intrabond, since this peptide can be bonded with
+                        //other peptides since it goes to list2, later merged with
+                        //list1
                         if(count($list1peptides) > 1)
+                        {
+                            $massindex -= 2.01564;
+                        }
+
+                        //discount disulfide bond if either two or more peptides
+                        //or intrabond
+                        if(count($list1peptides) > 1 || (count($list1peptides) == 1 && count($list1cysteines[0]) >= 2))
                         {
                             //discount 2 H lost per S-S bond
                             $list1mass -= 2.01564;
                         }
 
+                        //peptides charge adjustment
+                        //Each peptide mass is calculated as M+H
+                        //The overall charges of the peptides must be the same
+                        //as the precursor ion charge
+                        $adjustMassByCharge = 0.0;
+                        $adjustMassByCharge = $precursorCharge-count($list1peptides);
+                        if($adjustMassByCharge >=0){
+                            $list1mass += $adjustMassByCharge*1.00782;
+                        }
+                        else{
+                            $list1mass -= $adjustMassByCharge*1.00782;
+                        }
+
                         if($list1mass <= ((double)($precursorMass) + (double)($IMthreshold))){
 
                             //generate index
-                            $tmp = explode('.', ((string)$list1mass));
+                            $tmp = explode('.', ((string)$massindex));
                             //ensure sorting works by adjusting index XXXX-XXXXX digits
                             while(strlen($tmp[0]) < 4)
                                 $tmp[0] = '0'.$tmp[0];
@@ -388,18 +426,25 @@ class InitialMatchclass {
                             $list2[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
 
                             if($list1mass >= ((double)($precursorMass) - (double)($IMthreshold))){
-                                unset($pepMatch);
-                                unset($pepDMS);
-                                $pepMatch['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
-                                $pepMatch[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
-                                $pepDMS = $this->convertIndextoAAs($pepMatch);
 
-                                if(count($pepDMS) > 0){
+                                //remove impossible bond combinations
+                                $pep1 = $list1peptides[0];
+                                $pep2 = $list1peptides[1];
+                                if(strpos($pep1, $pep2) === false && strpos($pep2, $pep1) === false){
 
-                                    $IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+                                    if(isset($pepMatch))unset($pepMatch);
+                                    if(isset($pepDMS))unset($pepDMS);
+                                    $pepMatch['0000-00000-000'] = array('peptides' => array(), 'cysteines' => array());
+                                    $pepMatch[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
+                                    $pepDMS = $this->convertIndextoAAs($pepMatch);
 
-                                    $DMS = array_merge($DMS,$pepDMS);
+                                    if(count($pepDMS) > 0){
 
+                                        $IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+
+                                        $DMS = array_merge($DMS,$pepDMS);
+
+                                    }
                                 }
                             }
                         }
@@ -419,8 +464,8 @@ class InitialMatchclass {
             }
         }
 
-        unset($list1);
-        unset($list2);
+        if(isset($list1))unset($list1);
+        if(isset($list2))unset($list2);
 
         $result['DMS'] = $DMS;
         $result['IM'] = $IM;
@@ -637,6 +682,7 @@ class InitialMatchclass {
                 //count of missing cleavages found
                 $found = 0;
                 $stop = false;
+                $shift = 0;
                 //look for following AAs that are responsible for cleavages
                 for($j=($pos-2);$j>=0;$j--){
                     switch ($protease){
