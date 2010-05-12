@@ -4,7 +4,7 @@
     echo $file['name'].'<br />';
     //$zip = zip_open($file["tmp_name"]);
     //echo $zip;
-    echo 'test...';
+    echo 'Working folder: '.getcwd();
 ?>
 
 
