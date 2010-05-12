@@ -49,12 +49,18 @@
     //message displayed on screen
     $message = "";
 
+    //set User Type
+    if(isset($_REQUEST['mode'])){
+        $mode = $_REQUEST['mode'];
+    }
+    else{
+        $mode = "standard";
+    }
+    
     //THRESHOLDS
     //InitialMatch threshold +-1.0
     if(isset($_POST["IMthreshold"])){
         $IMthreshold = $_POST["IMthreshold"];
-        //set User Type
-        $mode = "advanced";
     }
     else{
         $IMthreshold = 1.0;
@@ -84,7 +90,8 @@
     }
     //Screening Intensity Limit
     if(isset($_POST["IntensityLimit"])){
-        $IntensityLimit = $_POST["IntensityLimit"];
+        //$IntensityLimit = $_POST["IntensityLimit"];
+        $IntensityLimit = 0.10;
     }
     else{
         $IntensityLimit = 0.10;
@@ -147,7 +154,7 @@
             //expected amino acid mass
             $me = 111.17;
 
-            if(isset($istintin)){include $root."/disulfidebond/test.php";}
+            if(isset($istintin) && $mode == "standard"){include $root."/disulfidebond/test.php";}
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
             if($zip){
