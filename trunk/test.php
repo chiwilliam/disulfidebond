@@ -3,9 +3,8 @@
     echo $file['tmp_name'].'<br />';
     echo $file['name'].'<br />';
     echo 'Working folder: '.getcwd().'<br />';
-    $zipDir = getcwd().DIRECTORY_SEPARATOR;
-    //$zip = zip_open($zipDir.$file["tmp_name"]);
-    $zip = zip_open($zipDir.$file["name"]);
+    $zip = zip_open($file["tmp_name"]);
+    //$zip = zip_open($zipDir.$file["name"]);
     echo $zip.'<br />';
     
 ?>
