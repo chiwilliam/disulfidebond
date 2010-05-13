@@ -196,9 +196,9 @@ class Commonclass {
         for($i=0;$i<$vertices;$i++){
             
             //unset variables to avoid it from carrying garbage
-            unset($matches);
-            unset($edges);
-            unset($edgeskeys);
+            if(isset($matches))unset($matches);
+            if(isset($edges))unset($edges);
+            if(isset($edgeskeys))unset($edgeskeys);
 
             //given one vertex, find all the possible edges
             $matches = $graph[$keys[$i]];
@@ -256,10 +256,17 @@ class Commonclass {
             unlink($path.$extensionIN);
         }
 
+        $debug .= 'passed deleting old files...<br />';
+        $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
+
         //save input string to input file
         file_put_contents($path.$extensionIN, $input);
 
+        $debug .= 'passed saving files old files...<br />';
+        $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
+
         //write command to be executed to run wmatch executable
+        $command = "";
         if($_ENV['OS'] == "Windows_NT"){
             $command = $root."/disulfidebond/gabow/wmatch.exe ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
@@ -269,27 +276,38 @@ class Commonclass {
             $command = $root."/disulfidebond/gabow/./wmatch ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
         }
-        
+
+        $debug .= 'command: '.$command.'<br /><br />';
         //execute command
         exec($command);
+
+        $debug .= 'passed execute command...<br />';
+        $debug .= 'path:'.$command.'<br /><br />';
 
         //delete files created
         if(file_exists($path.$extensionIN)){
             unlink($path.$extensionIN);
         }
+        
+        $debug .= 'passed deleting newly created input file...<br />';
+        $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
+
         if(file_exists($path.$extensionOUT)){
             //read output file to output string
             $output = file_get_contents($path.$extensionOUT);
             unlink($path.$extensionOUT);
         }
 
+        $debug .= 'passed reading and deleting newly created output file...<br />';
+        $debug .= 'path:'.$path.$extensionOUT.'<br /><br />';
+
         //extract maximum weighted match results
+        $results = array();
         if($_ENV['OS'] == "Windows_NT"){
             $output = str_replace("\r\n", " ", $output);
             $results = explode(" ", trim($output));
         }
         else{
-            $results = array();
             for($l=0;$l<strlen($output);$l++){
                 $value = substr($output, $l, 1);
                 if(strlen(trim($value)) > 0){
@@ -315,6 +333,11 @@ class Commonclass {
             }
         }
 
+        if($root == "/home/whemurad/public_html"){
+            //debug code to see where the problem is
+            return $debug;
+        }
+
         //return final array with selected disulfide bonds according to Gabow's
         //algorithm to solve maximum weighted matching problems
         return $bonds;
@@ -327,6 +350,7 @@ class Commonclass {
         $AAs = new AAclass();
 
         $fragments = array();
+        $fragtype = "";
         $total = count($peptides);
 
         for($p=0;$p<$total;$p++){
