@@ -759,6 +759,7 @@
 
                     //Using Gabow algorithm to solve maximum weighted matching problem
                     if(count($bonds) > 0){
+                        $message .= "Got here! Count Bonds: ".count($bonds);
                         $bonds = $Func->executeGabow($newgraph, $root);
                     }
 
