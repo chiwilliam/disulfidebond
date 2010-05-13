@@ -253,20 +253,11 @@ class Commonclass {
 
         //delete old files if they exist
         if(file_exists($path.$extensionIN)){
-            $tmp = unlink($path.$extensionIN);
+            unlink($path.$extensionIN);
         }
 
-        $debug .= 'passed deleting old files...<br />';
-        $debug .= $tmp.'<br />';
-        $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
-
         //save input string to input file
-        $tmp = file_put_contents($path.$extensionIN, $input);
-
-        $debug .= 'passed saving files old files...<br />';
-        $debug .= $tmp.'<br />';
-        $debug .= 'path:'.$path.$extensionIN.'<br />';
-        $debug .= 'input: '.strlen($input).'<br /><br />';
+        file_put_contents($path.$extensionIN, $input);
 
         //write command to be executed to run wmatch executable
         $command = "";
@@ -279,38 +270,19 @@ class Commonclass {
             $command = $root."/disulfidebond/gabow/./wmatch ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
         }
-
-        $disabled = explode(', ', ini_get('disable_functions'));
-        $tmp = 'is exec enabled? '.!in_array('exec', $disabled);
-        $debug .= $tmp.'<br /><br />';
         
-        $debug .= 'command: '.$command.'<br /><br />';
         //execute command
-        $tmp = exec($command);
-
-        $debug .= 'passed execute command...<br />';
-        $debug .= $tmp.'<br />';
-        $debug .= 'path:'.$command.'<br /><br />';
+        exec($command);
 
         //delete files created
         if(file_exists($path.$extensionIN)){
-            //$tmp = unlink($path.$extensionIN);
+            unlink($path.$extensionIN);
         }
-        
-        $debug .= 'passed deleting newly created input file...<br />';
-        $debug .= $tmp.'<br />';
-        $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
-
         if(file_exists($path.$extensionOUT)){
             //read output file to output string
             $output = file_get_contents($path.$extensionOUT);
-            //$tmp = unlink($path.$extensionOUT);
+            unlink($path.$extensionOUT);
         }
-
-        $debug .= 'passed reading and deleting newly created output file...<br />';
-        $debug .= $tmp.'<br />';
-        $debug .= 'path:'.$path.$extensionOUT.'<br />';
-        $debug .= 'output: '.strlen($output).'<br /><br />';
 
         //extract maximum weighted match results
         $results = array();
@@ -342,11 +314,6 @@ class Commonclass {
             if($exist === false && $results[$i] != "0" && $results[$i+1] != "0"){
                 $bonds[] = $keys[$results[$i]-1]."-".$keys[$results[$i+1]-1];
             }
-        }
-
-        if($root == "/home/whemurad/public_html"){
-            //debug code to see where the problem is
-            return $debug;
         }
 
         //return final array with selected disulfide bonds according to Gabow's

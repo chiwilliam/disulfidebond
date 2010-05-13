@@ -154,7 +154,6 @@
             //expected amino acid mass
             $me = 111.17;
 
-            //if(isset($istintin) && $mode == "standard"){include $root."/disulfidebond/test.php";}
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
             if($zip){
@@ -760,11 +759,6 @@
                     //Using Gabow algorithm to solve maximum weighted matching problem
                     if(count($bonds) > 0){
                         $bonds = $Func->executeGabow($newgraph, $root);
-                    }
-
-                    if($root == "/home/whemurad/public_html"){
-                        $message .= $bonds;
-                        $bonds = 0;
                     }
 
                     for($i=0;$i<count($bonds);$i++){
