@@ -265,7 +265,8 @@ class Commonclass {
 
         $debug .= 'passed saving files old files...<br />';
         $debug .= $tmp.'<br />';
-        $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
+        $debug .= 'path:'.$path.$extensionIN.'<br />';
+        $debug .= 'input: '.strlen($input).'<br /><br />';
 
         //write command to be executed to run wmatch executable
         $command = "";
@@ -308,7 +309,8 @@ class Commonclass {
 
         $debug .= 'passed reading and deleting newly created output file...<br />';
         $debug .= $tmp.'<br />';
-        $debug .= 'path:'.$path.$extensionOUT.'<br /><br />';
+        $debug .= 'path:'.$path.$extensionOUT.'<br />';
+        $debug .= 'output: '.strlen($output).'<br /><br />';
 
         //extract maximum weighted match results
         $results = array();
