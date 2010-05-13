@@ -253,16 +253,18 @@ class Commonclass {
 
         //delete old files if they exist
         if(file_exists($path.$extensionIN)){
-            unlink($path.$extensionIN);
+            $tmp = unlink($path.$extensionIN);
         }
 
         $debug .= 'passed deleting old files...<br />';
+        $debug .= $tmp.'<br />';
         $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
 
         //save input string to input file
-        file_put_contents($path.$extensionIN, $input);
+        $tmp = file_put_contents($path.$extensionIN, $input);
 
         $debug .= 'passed saving files old files...<br />';
+        $debug .= $tmp.'<br />';
         $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
 
         //write command to be executed to run wmatch executable
@@ -277,28 +279,35 @@ class Commonclass {
                        $path.$extensionIN." > ".$path.$extensionOUT;
         }
 
+        $disabled = explode(', ', ini_get('disable_functions'));
+        $tmp = 'is exec enabled? '.!in_array('exec', $disabled);
+        $debug .= $tmp.'<br /><br />';
+        
         $debug .= 'command: '.$command.'<br /><br />';
         //execute command
-        exec($command);
+        $tmp = exec($command);
 
         $debug .= 'passed execute command...<br />';
+        $debug .= $tmp.'<br />';
         $debug .= 'path:'.$command.'<br /><br />';
 
         //delete files created
         if(file_exists($path.$extensionIN)){
-            unlink($path.$extensionIN);
+            $tmp = unlink($path.$extensionIN);
         }
         
         $debug .= 'passed deleting newly created input file...<br />';
+        $debug .= $tmp.'<br />';
         $debug .= 'path:'.$path.$extensionIN.'<br /><br />';
 
         if(file_exists($path.$extensionOUT)){
             //read output file to output string
             $output = file_get_contents($path.$extensionOUT);
-            unlink($path.$extensionOUT);
+            $tmp = unlink($path.$extensionOUT);
         }
 
         $debug .= 'passed reading and deleting newly created output file...<br />';
+        $debug .= $tmp.'<br />';
         $debug .= 'path:'.$path.$extensionOUT.'<br /><br />';
 
         //extract maximum weighted match results
