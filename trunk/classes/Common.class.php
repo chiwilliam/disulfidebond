@@ -294,7 +294,7 @@ class Commonclass {
 
         //delete files created
         if(file_exists($path.$extensionIN)){
-            $tmp = unlink($path.$extensionIN);
+            //$tmp = unlink($path.$extensionIN);
         }
         
         $debug .= 'passed deleting newly created input file...<br />';
@@ -304,7 +304,7 @@ class Commonclass {
         if(file_exists($path.$extensionOUT)){
             //read output file to output string
             $output = file_get_contents($path.$extensionOUT);
-            $tmp = unlink($path.$extensionOUT);
+            //$tmp = unlink($path.$extensionOUT);
         }
 
         $debug .= 'passed reading and deleting newly created output file...<br />';
