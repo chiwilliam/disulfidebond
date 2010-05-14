@@ -2,23 +2,25 @@
 
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
-    //fix for tintin
+   
+    //fix for tintin root path
     if(trim($root) == "/var/www/html/bioinformatics"){
         $root = "/home/whemurad/public_html";
         $istintin = "yes";
     }
 
-    require_once $root."/disulfidebond/classes/Users.class.php";
-    $Users = new Usersclass();
-
     //remove time limit when executing a script
     set_time_limit(0);
-    
+
+    //include necessary classes
+    require_once $root."/disulfidebond/classes/Users.class.php";
     require_once $root."/disulfidebond/classes/AA.class.php";
     require_once $root."/disulfidebond/classes/InitialMatch.class.php";
     require_once $root."/disulfidebond/classes/Common.class.php";
     require_once $root."/disulfidebond/classes/ConfirmedMatch.class.php";
 
+    //initialize objects
+    $Users = new Usersclass();
     $IMClass = new InitialMatchclass();
     $Func = new Commonclass();
     $AAs = new AAclass();
@@ -97,11 +99,14 @@
         $IntensityLimit = 0.10;
     }
 
+    //Check File uploaded
     $zipFile = $_FILES["zipFile"];
     $fastaProtein = (string)$_POST["fastaProtein"];
 
+    //Format fasta sequence, removing unnecessary characters
     $fastaProtein = $AAs->formatFASTAsequence($fastaProtein);
 
+    //Get protease and number of missing cleavages
     $protease = (string)$_POST["protease"];
     $missingcleavages = (int)$_POST["missingcleavages"];
     if($missingcleavages == -1){
@@ -135,9 +140,10 @@
         $debug .= ', Missing Cleavages: '.$missingcleavages;
         $debug .= '</h3></td></tr>';
 
-        //digest protein
+        //Digest protein
         $possiblebonds = $AAs->possibleBonds($fastaProtein);
 
+        //Form possible cysteine containing peptides
         $disulfideBondedPeptides = $IMClass->digestProtein($fastaProtein, $protease);
 
         if(count($disulfideBondedPeptides) > 0)
@@ -196,6 +202,7 @@
                 }
             }
 
+            //If DTA files are present
             if(count($PML) > 0){
 
                 //remove defective DTA entries
@@ -226,6 +233,7 @@
                 $numPML = count($PML);
                 //$numDMS = count($DMS);
 
+                //First Stage matching. Generated DMS and Initial Matches (IM)
                 $result = $IMClass->polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor);
                 $DMS = $result['DMS'];
                 $IM = $result['IM'];
@@ -411,6 +419,7 @@
                                 //sort FMS by mass
                                 //ksort(&$FMS);
 
+                                //Second Stage Matching. Forms FMS and Confirmed Matches (CMs)
                                 $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes);
 
                                 //$CM = $CMClass->Cmatch($FMS, $TML, $precursor, $CMthreshold);
@@ -423,6 +432,7 @@
                                 $totalCMs = count($CM);
                                 $totalCMsConsideringIntensity = $CMClass->calculateMassSpaceSizeConsideringIntensity($CM);
 
+                                //IF CM exist
                                 if($totalCMs > 0){
 
                                     //debugging
@@ -435,6 +445,7 @@
                                     $reportdata['sumCM'] += count($CM);
                                     */
 
+                                    //Analyze confirmed matches
                                     for($k=0;$k<$totalCMs;$k++){
 
                                         if(strpos($CM[$k]['peptide'],'<=>') > 0){
@@ -877,6 +888,7 @@
                         ": ".$errors["digestion"]["message"]."<br />";
         }
     }
+    //Handle errors
     else{
         if(strlen($_FILES["zipFile"]["name"]) == 0){
             $message .= "Error ".$errors["nofile"]["code"].
@@ -902,6 +914,7 @@
         unset($debug);
     }
 
+    //Load UI
     if($_REQUEST["mode"] == "advanced"){
         include $root."/disulfidebond/advanalysis.php";
     }
