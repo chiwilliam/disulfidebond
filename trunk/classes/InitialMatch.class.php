@@ -309,11 +309,17 @@ class InitialMatchclass {
             $precursorMass = substr($precursor,0,strpos($precursor, ' '));
             $precursorCharge = (int)(trim(substr($precursor,strpos($precursor, ' ')+1,1)));
 
+            /*Calculating mass together with charge state
             //adjust mass according to charge state. The mass value from the DTA file is (M+H).
             //If doubly charged, add 1H (1.00782). If triply charged, add 2H (2.01564)
             if($precursorCharge > 1){
                 $precursorMass += ($precursorCharge-1)*1.00782;
             }
+            */
+
+            //calculate mass based on M, since DTA file presents mass M+H
+            //subtract the extra H
+            $precursorMass -= 1.00782;
 
             $keys = array_keys($disulfideBondedPeptides);
             $total = count($keys);
@@ -360,12 +366,6 @@ class InitialMatchclass {
 
                         $counter++;
 
-                        if(strpos($peptide,"FCAICDRYPHLPR") === false){
-                        }
-                        else{
-                            $stophere = true;
-                        }
-
                         //discount disulfide bond if either two or more peptides
                         //not for intrabond, since this peptide can be bonded with
                         //other peptides since it goes to list2, later merged with
@@ -383,6 +383,7 @@ class InitialMatchclass {
                             $list1mass -= 2.01564;
                         }
 
+                        /*
                         //peptides charge adjustment
                         //Each peptide mass is calculated as M+H
                         //The overall charges of the peptides must be the same
@@ -395,6 +396,7 @@ class InitialMatchclass {
                         else{
                             $list1mass -= $adjustMassByCharge*1.00782;
                         }
+                        */
 
                         if($list1mass <= ((double)($precursorMass) + (double)($IMthreshold))){
 

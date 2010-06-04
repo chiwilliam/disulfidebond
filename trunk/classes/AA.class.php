@@ -9,7 +9,8 @@ class AAclass {
     var $AAs = array();
 
     public function  __construct() {
-        
+
+        /*Average mass
         $this->AAs['A'] = 71.0788;
         $this->AAs['R'] = 156.1875;
         $this->AAs['N'] = 114.1038;
@@ -31,8 +32,9 @@ class AAclass {
         $this->AAs['W'] = 186.2132;
         $this->AAs['Y'] = 163.1760;
         $this->AAs['V'] = 99.1326;
+        */
 
-        /*Monoisotopic values
+        //Monoisotopic values
         $this->AAs['A'] = 71.03711;
         $this->AAs['R'] = 156.10111;
         $this->AAs['N'] = 114.04293;
@@ -54,7 +56,7 @@ class AAclass {
         $this->AAs['W'] = 186.07931;
         $this->AAs['Y'] = 163.06333;
         $this->AAs['V'] = 99.06841;
-         */
+        
 
     }
 

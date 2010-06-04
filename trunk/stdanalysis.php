@@ -107,6 +107,22 @@
                                         </td>
                                     </tr>
                                     <tr class="input">
+                                        <td class="inputleft">
+                                            <label>Transmembrane region from:</label>
+                                        </td>
+                                        <td class="inputright">
+                                            <input id="transmembranefrom" name="transmembranefrom" 
+                                                   value="<?php if(isset($transmembranefrom)){echo $transmembranefrom;}?>"
+                                                   onmouseover="Tip('Protein transmembrane region start')"
+                                                   onmouseout="UnTip()" size="4" maxlength="4"></input>
+                                            <label>to</label>
+                                            <input id="transmembraneto" name="transmembraneto" 
+                                                   value="<?php if(isset($transmembraneto)){echo $transmembraneto;}?>"
+                                                   onmouseover="Tip('Protein transmembrane region end')"
+                                                   onmouseout="UnTip()" size="4" maxlength="4"></input>
+                                        </td>
+                                    </tr>
+                                    <tr class="input">
                                         <td colspan="2" align="center">
                                             <input type="submit" id="submit" size="200" name="submit" value="Search Disulfide Bonds"
                                                    onmouseover="Tip('Click Search Disulfide Bonds button to process your request')"
