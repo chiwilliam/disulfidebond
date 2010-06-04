@@ -99,6 +99,12 @@
         $IntensityLimit = 0.10;
     }
 
+    //Determine of the protein has any transmembrane region
+    //If it does, remove the possible disulfide bonds in which one of the cysteines
+    //is inside that region
+    $transmembranefrom = trim($_POST["transmembranefrom"]);
+    $transmembraneto = trim($_POST["transmembraneto"]);
+
     //Check File uploaded
     $zipFile = $_FILES["zipFile"];
     $fastaProtein = (string)$_POST["fastaProtein"];
@@ -600,6 +606,7 @@
                                         //$numberBonds[$i]["TML"] = $totalscreenedTML;
                                         $numberBonds[$i]["TML"] = $totalexpandedTMLConsideringIntensity;
                                         $numberBonds[$i]["DTA"] = $PMLNames[$IM[$i]["PML"]];
+                                        $numberBonds[$i]["score"] = $totalCMsConsideringIntensity/$totalexpandedTMLConsideringIntensity;
 
                                         //compute number of by ions and number of other ions types
                                         $by = 0;
@@ -660,13 +667,20 @@
                     unset($tmpBonds);
                     unset($keys);
 
+
+                    //remove disulfide bonds which contains a cysteine within
+                    //the transmembrane region
+                    if(strlen($transmembranefrom) > 0 && strlen($transmembraneto) > 0){
+                        $numberBonds = $Func->removeBondsWithinTransmembraneRegion($numberBonds,$transmembranefrom,$transmembraneto);
+                    }
+
                     //remove disulfide bonds using match ratio
                     //remove disulfide bonds which do not respect CM/TML > 1
                     $numbonds = count($numberBonds);
                     $truebonds = array();
                     //ionFactor = 1 if only b and y ions. Ion factor is X if all ion types
                     $ionFactor = 1.00;
-                    $threshold = 0.80;
+                    $threshold = 0.78;
                     $threshold2 = 0.65;
                     $minmatches = 3;
                     $minmatches2 = 30;
@@ -685,7 +699,7 @@
                                ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
                                && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){
                                     //avoid matches with double bonds
-                                    if(count($numberBonds[$w]) == 7){
+                                    if(count($numberBonds[$w]) == 8){
                                         //Consider a true bond ony if either:
                                         //1. The bond is not previously found
                                         //2. If the new bond has higher score than previous

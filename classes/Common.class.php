@@ -469,5 +469,23 @@ class Commonclass {
 
         return $fragments;
     }
+
+    public function removeBondsWithinTransmembraneRegion($bonds,$from,$to){
+
+        $newbonds = array();
+
+        for($i=0;$i<count($bonds);$i++){
+            $cysteines = explode('-', $bonds[$i]['bond']);
+            if(($cysteines[0] > $from && $cysteines[0] < $to) ||
+               ($cysteines[1] > $from && $cysteines[1] < $to)){
+                //bond is not possible
+            }
+            else{
+                $newbonds[] = $bonds[$i];
+            }
+        }
+
+        return $newbonds;
+    }
 }
 ?>

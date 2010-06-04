@@ -111,6 +111,20 @@
                                     </td>
                                 </tr>
                                 <tr class="input">
+                                    <td class="inputleft">
+                                        <label>Transmembrane region from:</label>
+                                    </td>
+                                    <td class="inputright">
+                                        <input id="transmembranefrom" name="transmembranefrom" value=""
+                                               onmouseover="Tip('Protein transmembrane region start')"
+                                               onmouseout="UnTip()" size="4" maxlength="4"></input>
+                                        <label>to</label>
+                                        <input id="transmembraneto" name="transmembraneto" value=""
+                                               onmouseover="Tip('Protein transmembrane region end')"
+                                               onmouseout="UnTip()" size="4" maxlength="4"></input>
+                                    </td>
+                                </tr>
+                                <tr class="input">
                                     <td colspan="2">
                                         <table class="advancedusers">
                                             <tr class="advancedusers">
