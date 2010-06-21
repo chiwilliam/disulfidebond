@@ -18,6 +18,7 @@
     require_once $root."/disulfidebond/classes/InitialMatch.class.php";
     require_once $root."/disulfidebond/classes/Common.class.php";
     require_once $root."/disulfidebond/classes/ConfirmedMatch.class.php";
+    require_once $root."/disulfidebond/classes/Charting.class.php";
 
     //initialize objects
     $Users = new Usersclass();
@@ -25,6 +26,33 @@
     $Func = new Commonclass();
     $AAs = new AAclass();
     $CMClass = new ConfirmedMatchclass();
+    
+    /*
+    $data = array();
+    $data[0]['mass'] = 1000;
+    $data[0]['intensity'] = 0.9;
+    $data[0]['ions'] = 'b1y1';
+    $data[0]['charge'] = '2';
+    $data[1]['mass'] = 300;
+    $data[1]['intensity'] = 0.8;
+    $data[1]['ions'] = 'B1Y1';
+    $data[1]['charge'] = '3';
+    $data[2]['mass'] = 500;
+    $data[2]['intensity'] = 0.2;
+    $data[2]['ions'] = 'x3z3';
+    $data[2]['charge'] = '1';
+    $data[3]['mass'] = 800;
+    $data[3]['intensity'] = 0.4;
+    $data[3]['ions'] = 'a4c4';
+    $data[3]['charge'] = '3';
+    //$title goes on top of the graph"
+    //$data is an array containg the mass, intensity, ions if available, and charge state
+    //   $data[0]['mass'] = 1000;
+    //   $data[0]['intensity'] = 0.9;
+    //   $data[0]['ions'] = 'b1y1';
+    //   $data[0]['charge'] = '2';
+    $url = $chart->getChart($title, $data);
+    */
 
     //error messages
     $errors = array();
@@ -320,6 +348,7 @@
                     //$regression = array();
 
                     $FMSsize = array();
+                    $Pvalues = array();
 
                     //compute Confirmed Match
                     for($i=0;$i<count($IM);$i++){
@@ -441,15 +470,30 @@
                                 //IF CM exist
                                 if($totalCMs > 0){
 
-                                    //debugging
-                                    //$test2 = count($CM);
-                                    //report results for paper
+                                    //Insert spectra into page
+                                    $debug .= '<tr><td colspan="3" align="center">';
+                                    $chart = new Chartingclass();
+                                    $title = $PMLNames[$IM[$i]["PML"]].' ['.$IM[$i]["PML"].']';
+                                    $chartData = $chart->prepareData($TML,$CM);
+                                    $url = $chart->getChart($title, $chartData);
+                                    $debug .= '<img id="'.((string)($i+1)).((string)($k+1)).'" src="'.$url.'" />';
+                                    $debug .= '</td></tr>';
                                     /*
-                                    $reportdata['FMS'] = count($FMS);
-                                    $reportdata['TML'] = count($TML);
-                                    $reportdata['CM'] = count($CM);
-                                    $reportdata['sumCM'] += count($CM);
+                                    $debug .= '<tr><td colspan="3" align="left">';
+                                    $debug .= $url;
+                                    $debug .= '</td></tr>';
                                     */
+                                    unset($title);
+                                    unset($chartData);
+                                    unset($url);
+                                    unset($chart);
+                                    //end of spectra inserting
+
+                                    //Calculating P and PP-values
+                                    $detectionrange = $maxPrecursor;
+                                    $Pvalues[$i]['ppvalue'] = $Func->calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange);
+                                    $Pvalues[$i]['pp2value'] = $Func->calculatePP2value($TML, $CM, $CMthreshold, $detectionrange);
+                                    //End of calculating P and PP-values
 
                                     //Analyze confirmed matches
                                     for($k=0;$k<$totalCMs;$k++){
@@ -607,6 +651,8 @@
                                         $numberBonds[$i]["TML"] = $totalexpandedTMLConsideringIntensity;
                                         $numberBonds[$i]["DTA"] = $PMLNames[$IM[$i]["PML"]];
                                         $numberBonds[$i]["score"] = $totalCMsConsideringIntensity/$totalexpandedTMLConsideringIntensity;
+                                        $numberBonds[$i]["ppvalue"] = $Pvalues[$i]["ppvalue"];
+                                        $numberBonds[$i]["pp2value"] = $Pvalues[$i]["pp2value"];
 
                                         //compute number of by ions and number of other ions types
                                         $by = 0;
@@ -699,13 +745,15 @@
                                ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
                                && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){
                                     //avoid matches with double bonds
-                                    if(count($numberBonds[$w]) == 8){
+                                    if(count($numberBonds[$w]) == 10){
                                         //Consider a true bond ony if either:
                                         //1. The bond is not previously found
                                         //2. If the new bond has higher score than previous
                                         if(!isset($truebonds[$DTA]['bond']) || $truebonds[$DTA]['score'] < $score){
                                             $truebonds[$DTA]['bond'] = $SSbond;
                                             $truebonds[$DTA]['score'] = $score;
+                                            $truebonds[$DTA]['ppvalue'] = $numberBonds[$w]["ppvalue"];
+                                            $truebonds[$DTA]['pp2value'] = $numberBonds[$w]["pp2value"];
                                             $dashpos = strpos($SSbond, "-");
                                             $truebonds[$DTA]['cys1'] = substr($SSbond, 0, $dashpos);
                                             $truebonds[$DTA]['cys2'] = substr($SSbond,$dashpos+1);
@@ -790,7 +838,9 @@
 
                         if(strlen(trim($bonds[$i])) > 3){
                             //$message .= "<b>Disulfide Bond found(".$numberBonds[$bonds[$i]].")  on positions: ".$bonds[$i]."</b><br><br>";
-                            $message .= "<b>Disulfide Bond found on positions: ".$bonds[$i]."</b><br><br>";
+                            $message .= "<b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
+                            $message .= "(score:".$truebonds[$bonds[$i]]["score"]."; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
+                            $message .= ")<br><br>";
                         }
                     }
 

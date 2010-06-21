@@ -487,5 +487,130 @@ class Commonclass {
 
         return $newbonds;
     }
+
+    private function calculatep2($totalIons, $CMthreshold, $detectionrange){
+
+        $p2 = 2.0*$totalIons*$CMthreshold;
+        $p2 = $p2/$detectionrange;
+
+        return $p2;
+    }
+
+    private function calculateI($TML, $CM){
+        
+        $matches = count($CM);
+        $intensity = 0.0;
+        for($i=0;$i<$matches;$i++){
+            $intensity += $TML[$CM[$i]["debug"]["TML"]]["intensity"];
+        }
+        
+        return $intensity;
+    }
+
+    private function calculateImean($TML, $p2){
+        
+        $ions = count($TML);
+        $intensity = 0.0;
+        for($i=0;$i<$ions;$i++){
+            $intensity += $TML[$i]["intensity"];
+        }
+
+        $intensity = $intensity/$ions;
+        $intensity = $ions*$p2*$intensity;
+        
+        return $intensity;
+    }
+
+    private function calculateIvariance($TML, $p2){
+        
+        $mean = $this->calculateImean($TML, $p2);
+        $ions = count($TML);
+        $varianceI = 1.0/($ions-1.0);
+        $tmp = 0.0;
+        for($i=0;$i<$ions;$i++){
+            $tmp += pow(($TML[$i]["intensity"]-$mean),2);
+        }
+        $varianceI = $varianceI*$tmp;
+
+        $variance = $ions*$p2*(1.0-$p2)*pow($mean,2);
+        $variance += $ions*$p2*$varianceI;
+        
+        return $variance;
+    }
+
+    //this function uses an approximation scheme, due to a gauss error function
+    //in the integral solution, but it is apparently wrong
+    private function calculatePPalfa2($I, $mean, $variance){
+
+        $alfa = 0.0;
+        $term1 = exp((-3.0*pow($mean,2))/(8*$variance));
+        $term2_1 = pow(((sqrt(2)/(2*sqrt($variance)))*($I-($mean/2))),2);
+        $term2_2 = 1.413251*$term2_1;
+        $term2_3 = 1.140012*$term2_1;
+        $term2 = sqrt(1-exp(-1.0*$term2_1*($term2_2/$term2_3)));
+
+        $alfa = $term1*$term2;
+        return $alfa;
+    }
+
+    private function calculatePPalfa($I, $mean, $variance){
+
+        $alfa = 0.0;
+
+        $term1 = 1/(sqrt(2*pi()*$variance));
+        $term2 = exp((-1.0*pow($mean,2)/(2*$variance))+($mean*$I/$variance)-(pow($I,2)/sqrt(2*$variance)));
+
+        $alfa = $term1*$term2*$I;
+
+        return $alfa;
+    }
+
+    private function factorial($value){
+        $scale = 500;
+        if($value == 0){
+            return 1;
+        }
+        return bcmul($value, $this->factorial(bcsub($value, '1'), $scale), $scale);
+    }
+
+    public function calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange){
+
+        $totalIons = count($TML);
+        $p2 = $this->calculatep2($totalIons, $CMthreshold, $detectionrange);
+        $numMatches = count($CM);
+        $alfa = 0.0;
+        for($i=$numMatches;$i<=$totalIons;$i++){
+            $tmp = $this->factorial($totalIons);
+            $tmp2 = $this->factorial($i);
+            $tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
+            $tmp = bcdiv($tmp,$tmp2,500);
+            $tmp = $tmp*(pow($p2,$i));
+            $tmp = $tmp*(pow((1.0-$p2),($totalIons-$i)));
+            $alfa += $tmp;
+        }
+        if($alfa == 0.0){
+            $alfa = pow($p2,$i);
+        }
+        //p value
+        $beta = -1.0*log10($alfa);
+
+        return $beta;
+    }
+
+    public function calculatePP2value($TML, $CM, $CMthreshold, $detectionrange){
+
+        $totalIons = count($TML);
+        $I = $this->calculateI($TML, $CM);
+        $p2 = $this->calculatep2($totalIons, $CMthreshold, $detectionrange);
+        $mean = $this->calculateImean($TML, $p2);
+        $variance = $this->calculateIvariance($TML, $p2);
+
+        $alfa = $this->calculatePPalfa($I, $mean, $variance);
+
+        //pp value
+        $beta = -1*log10($alfa);
+
+        return $beta;
+    }
 }
 ?>
