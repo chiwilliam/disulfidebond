@@ -580,6 +580,7 @@ class Commonclass {
         $numMatches = count($CM);
         $alfa = 0.0;
         for($i=$numMatches;$i<=$totalIons;$i++){
+            /*
             $tmp = $this->factorial($totalIons);
             $tmp2 = $this->factorial($i);
             $tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
@@ -587,6 +588,8 @@ class Commonclass {
             $tmp = $tmp*(pow($p2,$i));
             $tmp = $tmp*(pow((1.0-$p2),($totalIons-$i)));
             $alfa += $tmp;
+            */
+            $alfa = 10.0;
         }
         if($alfa == 0.0){
             $alfa = pow($p2,$i);

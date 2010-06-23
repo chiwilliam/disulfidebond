@@ -491,10 +491,8 @@
 
                                     //Calculating P and PP-values
                                     $detectionrange = $maxPrecursor;
-                                    $Pvalues[$i]['pp2value'] = $Func->calculatePP2value($TML, $CM, $CMthreshold, $detectionrange);
-                                    echo 'test';
-                                    exit;
                                     $Pvalues[$i]['ppvalue'] = $Func->calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange);
+                                    $Pvalues[$i]['pp2value'] = $Func->calculatePP2value($TML, $CM, $CMthreshold, $detectionrange);
                                     //End of calculating P and PP-values
                                    
                                     //Analyze confirmed matches
