@@ -495,6 +495,9 @@
                                     $Pvalues[$i]['pp2value'] = $Func->calculatePP2value($TML, $CM, $CMthreshold, $detectionrange);
                                     //End of calculating P and PP-values
 
+                                    echo 'test';
+                                    exit;
+
                                     //Analyze confirmed matches
                                     for($k=0;$k<$totalCMs;$k++){
 
