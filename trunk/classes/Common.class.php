@@ -589,8 +589,8 @@ class Commonclass {
         for($i=$numMatches;$i<=$totalIons;$i++){
             //$tmp = $this->factorial($totalIons);
             //$tmp2 = $this->factorial($i);
-            $tmp = $this->factorial2($totalIons);
-            $tmp2 = $this->factorial2($i);
+            $tmp = $this->factorial2(11);
+            $tmp2 = $this->factorial2(10);
             //$tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
             //$tmp = bcdiv($tmp,$tmp2,500);
             $tmp = $tmp/$tmp2;
