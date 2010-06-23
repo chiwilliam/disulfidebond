@@ -577,7 +577,7 @@ class Commonclass {
         if($value == 0){
             return 1;
         }
-        return $value*$this->factorial2(0);
+        return $value*$this->factorial2(1);
     }
 
     public function calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange){
