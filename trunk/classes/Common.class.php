@@ -577,7 +577,7 @@ class Commonclass {
         if($value == 0){
             return 1;
         }
-        return $value*$this->factorial($value-1);
+        return $value;
     }
 
     public function calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange){
@@ -594,7 +594,7 @@ class Commonclass {
             //$tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
             //$tmp = bcdiv($tmp,$tmp2,500);
             //$tmp = $tmp/$tmp2;
-            $tmp = $this->factorial2(4);
+            $tmp = $this->factorial2(10);
             $tmp = $tmp*(pow($p2,$i));
             $tmp = $tmp*(pow((1.0-$p2),($totalIons-$i)));
             $alfa += $tmp;
