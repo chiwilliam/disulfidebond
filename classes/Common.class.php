@@ -594,7 +594,7 @@ class Commonclass {
             //$tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
             //$tmp = bcdiv($tmp,$tmp2,500);
             //$tmp = $tmp/$tmp2;
-            $tmp = 10;
+            $tmp = $this->factorial2(4);
             $tmp = $tmp*(pow($p2,$i));
             $tmp = $tmp*(pow((1.0-$p2),($totalIons-$i)));
             $alfa += $tmp;
