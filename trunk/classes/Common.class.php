@@ -589,11 +589,12 @@ class Commonclass {
         for($i=$numMatches;$i<=$totalIons;$i++){
             //$tmp = $this->factorial($totalIons);
             //$tmp2 = $this->factorial($i);
-            $tmp = $this->factorial2(11);
-            $tmp2 = $this->factorial2(10);
+            //$tmp = $this->factorial2(11);
+            //$tmp2 = $this->factorial2(10);
             //$tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
             //$tmp = bcdiv($tmp,$tmp2,500);
-            $tmp = $tmp/$tmp2;
+            //$tmp = $tmp/$tmp2;
+            $tmp = 10;
             $tmp = $tmp*(pow($p2,$i));
             $tmp = $tmp*(pow((1.0-$p2),($totalIons-$i)));
             $alfa += $tmp;
