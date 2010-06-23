@@ -489,15 +489,15 @@
                                     unset($chart);
                                     //end of spectra inserting
 
+                                    echo 'test';
+                                    exit;
+
                                     //Calculating P and PP-values
                                     $detectionrange = $maxPrecursor;
                                     $Pvalues[$i]['ppvalue'] = $Func->calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange);
                                     $Pvalues[$i]['pp2value'] = $Func->calculatePP2value($TML, $CM, $CMthreshold, $detectionrange);
                                     //End of calculating P and PP-values
-
-                                    echo 'test';
-                                    exit;
-
+                                   
                                     //Analyze confirmed matches
                                     for($k=0;$k<$totalCMs;$k++){
 
