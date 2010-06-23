@@ -573,13 +573,6 @@ class Commonclass {
         return bcmul($value, $this->factorial(bcsub($value, '1'), $scale), $scale);
     }
 
-    private function factorial2($value){
-        if($value == 0){
-            return 1;
-        }
-        return $value*$this->factorial2(0);
-    }
-
     public function calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange){
 
         $totalIons = count($TML);
@@ -587,12 +580,10 @@ class Commonclass {
         $numMatches = count($CM);
         $alfa = 0.0;
         for($i=$numMatches;$i<=$totalIons;$i++){
-            //$tmp = $this->factorial($totalIons);
-            //$tmp2 = $this->factorial($i);
-            //$tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
-            //$tmp = bcdiv($tmp,$tmp2,500);
-            $tmp2 = $this->factorial2(100);
-            $tmp = bcdiv(1000,$tmp2,500);
+            $tmp = $this->factorial($totalIons);
+            $tmp2 = $this->factorial($i);
+            $tmp2 = bcmul($tmp2,$this->factorial(($totalIons-$i)),500);
+            $tmp = bcdiv($tmp,$tmp2,500);
             $tmp = $tmp*(pow($p2,$i));
             $tmp = $tmp*(pow((1.0-$p2),($totalIons-$i)));
             $alfa += $tmp;
