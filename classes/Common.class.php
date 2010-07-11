@@ -377,6 +377,102 @@ class Commonclass {
             }
 
             if($alltypes == "all" || $alltypes == "acxz"){
+
+                //Yo-ions (-H2O)
+                if($p%2 == 0){
+                    $fragtype = 'Yo';
+                }
+                else{
+                    $fragtype = 'yo';
+                }
+                for($i=0;$i<strlen($peptide);$i++){
+                    $fragment = substr($peptide,$i);
+                    $peplength = strlen($peptide);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
+                    //because of an extra H in the amino group NH3+
+                    $mass += 19.01838;
+                    //losing water H20
+                    $mass -= 18.01464;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
+                }
+
+                //Y*-ions (-NH3)
+                if($p%2 == 0){
+                    $fragtype = 'Y*';
+                }
+                else{
+                    $fragtype = 'y*';
+                }
+                for($i=0;$i<strlen($peptide);$i++){
+                    $fragment = substr($peptide,$i);
+                    $peplength = strlen($peptide);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //OH on C-terminus and H on N-terminus mass plus 1Da for Y ions
+                    //because of an extra H in the amino group NH3+
+                    $mass += 19.01838;
+                    //losing NH3
+                    $mass -= 17.03018;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
+                }
+
+                //Bo-ions (-H2O)
+                if($p%2 == 0){
+                    $fragtype = 'Bo';
+                }
+                else{
+                    $fragtype = 'bo';
+                }
+                for($i=strlen($peptide);$i>0;$i--){
+                    $fragment = substr($peptide,0,$i);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //H on N-terminus mass
+                    $mass += 1.00782;
+                    //losing water H20
+                    $mass -= 18.01464;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
+                }
+
+                //B*-ions (-NH3)
+                if($p%2 == 0){
+                    $fragtype = 'B*';
+                }
+                else{
+                    $fragtype = 'b*';
+                }
+                for($i=strlen($peptide);$i>0;$i--){
+                    $fragment = substr($peptide,0,$i);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //H on N-terminus mass
+                    $mass += 1.00782;
+                    //losing NH3
+                    $mass -= 17.03018;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
+                }
             
                 //A-ions
                 if($p%2 == 0){
@@ -399,6 +495,54 @@ class Commonclass {
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
 
+                /*
+                //Ao-ions (-H20)
+                if($p%2 == 0){
+                    $fragtype = 'Ao';
+                }
+                else{
+                    $fragtype = 'ao';
+                }
+                for($i=strlen($peptide);$i>0;$i--){
+                    $fragment = substr($peptide,0,$i);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //adding H on N-terminus mass and subtracting CO on C-terminus
+                    $mass -= 26.9978;
+                    //losing water H20
+                    $mass -= 18.01464;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
+                }
+
+                //A*-ions (-NH3)
+                if($p%2 == 0){
+                    $fragtype = 'A*';
+                }
+                else{
+                    $fragtype = 'a*';
+                }
+                for($i=strlen($peptide);$i>0;$i--){
+                    $fragment = substr($peptide,0,$i);
+                    $mass = $AAs->calculatePeptideMass($fragment,"CM");
+
+                    //check if peptide contains cysteines
+                    $cyscount = substr_count($fragment, 'C');
+
+                    //adding H on N-terminus mass and subtracting CO on C-terminus
+                    $mass -= 26.9978;
+                    //losing NH3
+                    $mass -= 17.03018;
+                    $fragments[$p][] = array("mass" => $mass,
+                        "fragment" => $fragment, "peptide" => $peptide,
+                        "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
+                }
+                */
+                
                 //C-ions
                 if($p%2 == 0){
                     $fragtype = 'C';
