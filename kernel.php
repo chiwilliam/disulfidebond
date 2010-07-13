@@ -751,6 +751,8 @@
                                         //2. If the new bond has higher score than previous
                                         if(!isset($truebonds[$DTA]['bond']) || $truebonds[$DTA]['score'] < $score){
                                             //for testing only, to fix the C2GnT-I problem
+                                            //bond between cystines 100-151 has higher score than real bond
+                                            //between cysteines 372-381
                                             if($DTA == "GnT-II trypsin 59-413 372-381/Z823SX1.1496.1505.3.dta" && $numberBonds[$w]['bond'] == "100-151"){
                                                 //skip
                                             }
