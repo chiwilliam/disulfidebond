@@ -268,6 +268,11 @@ class InitialMatchclass {
     public function polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor){
         
         $counter=0;
+        $counterDMS=0;
+        $counterDMStrimmed=0;
+        $countertrimmedporcentage=0;
+        $completelist = array();
+        $trimmedlist = array();
 
         $DMS = array();
         $IM = array();
@@ -304,6 +309,7 @@ class InitialMatchclass {
                 $size += count($list1);
             }
             */
+            $counterIM=0;
             
             $precursor = $PML[$PMLkeys[$k]];
             $precursorMass = substr($precursor,0,strpos($precursor, ' '));
@@ -451,8 +457,13 @@ class InitialMatchclass {
                     $list1 = array_merge($list1, $list2);
                     ksort(&$list1);
 
+                    $completelist = array_merge($completelist,$list1);
+
                     $list1 = $AAs->removeImpossibleCombinations($list1);
                     $list1 = $AAs->trimListKeepBigger($list1,$delta);
+
+                    $trimmedlist = array_merge($trimmedlist,$list1);
+
                     //$list1 = $AAs->trimListKeepSmaller($list1,$delta);
                     //$list1alpha = $AAs->trimListKeepSmaller($list1,$delta);
                     //$list1beta = $AAs->trimListKeepBigger($list1,$delta);
@@ -460,6 +471,10 @@ class InitialMatchclass {
                 }
             }
         }
+
+        $counterDMS = count($completelist);
+        $counterDMStrimmed = count($trimmedlist);
+        $countertrimmedporcentage = (1-($counterDMStrimmed/$counterDMS))*100;
 
         if(isset($list1))unset($list1);
         if(isset($list2))unset($list2);
