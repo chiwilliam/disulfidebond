@@ -349,43 +349,46 @@
 
                     $FMSsize = array();
                     $Pvalues = array();
+                    
+                    //array that holds the debug data
+                    $aDebug = array();
 
                     //compute Confirmed Match
                     for($i=0;$i<count($IM);$i++){
 
                         //output for debugging
-                        if($i > 0)
-                            $debug .= '<tr><td><br /><br /></td></tr>';
-                        $debug .= '<tr>';
-                        $debug .= '<td><span style="color:red;">';
-                        $debug .= ((string)($i+1)).'. ';
-                        $debug .= 'Peptides Total Mass = '.$DMS[$IM[$i]["DMS"]]["mass"];
-                        $debug .= '</span></td>';
-                        $debug .= '<td width="50px;"></td>';
-                        $debug .= '<td><span style="color:red;">';
+                        $aDebug[$i]['string'] = '';
+                        $aDebug[$i]['string'] .= '<tr>';
+                        $aDebug[$i]['string'] .= '<td><span style="color:red;">';
+                        //$aDebug[$i]['string'] .= ((string)($i+1)).'. ';
+                        $aDebug[$i]['string'] .= 'Peptides Total Mass = '.$DMS[$IM[$i]["DMS"]]["mass"];
+                        $aDebug[$i]['string'] .= '</span></td>';
+                        $aDebug[$i]['string'] .= '<td width="50px;"></td>';
+                        $aDebug[$i]['string'] .= '<td><span style="color:red;">';
                         $massdifference = round(((double)$DMS[$IM[$i]["DMS"]]["mass"] - (double)substr($PML[$IM[$i]["PML"]],0,(strlen($PML[$IM[$i]["PML"]])-2))),2);
                         if($massdifference <0){
                             $massdifference *= -1;
                         }
-                        $debug .= 'Precursor Ion M+H = '.$PML[$IM[$i]["PML"]];
-                        $debug .= ' [Mass difference: '.$massdifference.']';
-                        $debug .= '</span></td>';
-                        $debug .= '</tr>';
-                        $debug .= '<tr>';
-                        $debug .= '<td><span style="color:red;">';
+                        $aDebug[$i]['string'] .= 'Precursor Ion M+H = '.$PML[$IM[$i]["PML"]];
+                        $aDebug[$i]['string'] .= ' [Mass difference: '.$massdifference.']';
+                        $aDebug[$i]['string'] .= '</span></td>';
+                        $aDebug[$i]['string'] .= '</tr>';
+                        $aDebug[$i]['string'] .= '<tr>';
+                        $aDebug[$i]['string'] .= '<td><span style="color:red;">';
                         $peps = $DMS[$IM[$i]["DMS"]]["peptides"];
                         for($p=0;$p<count($peps);$p++){
                             if($p < (count($peps)-1))
-                                $debug .= $peps[$p]."<br />";
+                                $aDebug[$i]['string'] .= $peps[$p]."<br />";
                             else
-                                $debug .= $peps[$p];
+                                $aDebug[$i]['string'] .= $peps[$p];
                         }
-                        $debug .= '</span></td>';
-                        $debug .= '<td width="50px;"></td>';
-                        $debug .= '<td><span style = "color:red;">';
-                        $debug .= 'DTA File: '.$PMLNames[$IM[$i]["PML"]].'   ['.$IM[$i]["PML"].']';
-                        $debug .= '</span></td>';
-                        $debug .= '</tr>';
+                        $aDebug[$i]['string'] .= '</span></td>';
+                        $aDebug[$i]['string'] .= '<td width="50px;"></td>';
+                        $aDebug[$i]['string'] .= '<td><span style = "color:red;">';
+                        $aDebug[$i]['DTA'] = $PMLNames[$IM[$i]["PML"]];
+                        $aDebug[$i]['string'] .= 'DTA File: '.$PMLNames[$IM[$i]["PML"]].'   ['.$IM[$i]["PML"].']';
+                        $aDebug[$i]['string'] .= '</span></td>';
+                        $aDebug[$i]['string'] .= '</tr>';
                         //end of outputting code
 
                         //construct TML
@@ -471,17 +474,17 @@
                                 if($totalCMs > 0){
 
                                     //Insert spectra into page
-                                    $debug .= '<tr><td colspan="3" align="center">';
+                                    $aDebug[$i]['string'] .= '<tr><td colspan="3" align="center">';
                                     $chart = new Chartingclass();
                                     $title = $PMLNames[$IM[$i]["PML"]].' ['.$IM[$i]["PML"].']';
                                     $chartData = $chart->prepareData($TML,$CM);
                                     $url = $chart->getChart($title, $chartData);
-                                    $debug .= '<img id="'.((string)($i+1)).((string)($k+1)).'" src="'.$url.'" />';
-                                    $debug .= '</td></tr>';
+                                    $aDebug[$i]['string'] .= '<img id="'.((string)($i+1)).((string)($k+1)).'" src="'.$url.'" />';
+                                    $aDebug[$i]['string'] .= '</td></tr>';
                                     /*
-                                    $debug .= '<tr><td colspan="3" align="left">';
-                                    $debug .= $url;
-                                    $debug .= '</td></tr>';
+                                    $aDebug[$i]['string'] .= '<tr><td colspan="3" align="left">';
+                                    $aDebug[$i]['string'] .= $url;
+                                    $aDebug[$i]['string'] .= '</td></tr>';
                                     */
                                     unset($title);
                                     unset($chartData);
@@ -601,45 +604,61 @@
                                         }
 
                                         //output for debugging
-                                        $debug .= '<tr>';
-                                        $debug .= '<td>';
-                                        $debug .= ((string)($i+1)).'.'.((string)($k+1)).'. ';
-                                        $debug .= 'Fragments Mass = '.$CM[$k]["mass"];
-                                        $debug .= '</td>';
-                                        $debug .= '<td width="50px;"></td>';
-                                        $debug .= '<td>';
-                                        $debug .= 'DTA Mass = ';
-                                        $debug .= $CM[$k]["matches"]["TML"];
-                                        $debug .= ', Intensity = ';
-                                        $debug .= $TML[$CM[$k]["debug"]["TML"]]["%highpeak"];
-                                        $debug .= ', M/Z = ';
-                                        $debug .= ($TML[$CM[$k]["debug"]["TML"]]["mass"]/$TML[$CM[$k]["debug"]["TML"]]["charge"]);
-                                        $debug .= ', Z = ';
-                                        $debug .= $TML[$CM[$k]["debug"]["TML"]]["charge"];
+                                        $intensity = (int)(str_ireplace('%','',$TML[$CM[$k]["debug"]["TML"]]["%highpeak"]));
+                                        if($intensity >= 50){
+                                            $aDebug[$i]['string'] .= '<tr style="color:green;">';
+                                        }
+                                        else{
+                                            $aDebug[$i]['string'] .= '<tr>';
+                                        }
+                                        $aDebug[$i]['string'] .= '<td>';
+                                        $aDebug[$i]['string'] .= ((string)($k+1)).'. ';
+                                        $aDebug[$i]['string'] .= 'Fragments Mass = '.$CM[$k]["mass"];
+                                        $aDebug[$i]['string'] .= '</td>';
+                                        $aDebug[$i]['string'] .= '<td width="50px;"></td>';
+                                        $aDebug[$i]['string'] .= '<td>';
+                                        $aDebug[$i]['string'] .= 'DTA Mass = ';
+                                        $aDebug[$i]['string'] .= $CM[$k]["matches"]["TML"];
+                                        $aDebug[$i]['string'] .= ', Intensity = ';
+                                        $aDebug[$i]['string'] .= $TML[$CM[$k]["debug"]["TML"]]["%highpeak"];
+                                        $aDebug[$i]['string'] .= ', M/Z = ';
+                                        $aDebug[$i]['string'] .= ($TML[$CM[$k]["debug"]["TML"]]["mass"]/$TML[$CM[$k]["debug"]["TML"]]["charge"]);
+                                        $aDebug[$i]['string'] .= ', Z = ';
+                                        $aDebug[$i]['string'] .= $TML[$CM[$k]["debug"]["TML"]]["charge"];
                                         $massdifference = round(((double)$CM[$k]["mass"] - (double)$CM[$k]["matches"]["TML"]),2);
                                         if($massdifference <0){
                                             $massdifference *= -1;
                                         }
-                                        $debug .= ', Delta = ';
-                                        $debug .= $massdifference;
-                                        $debug .= '</td>';
-                                        $debug .= '</tr>';
-                                        $debug .= '<tr>';
-                                        $debug .= '<td>';
+                                        $aDebug[$i]['string'] .= ', Delta = ';
+                                        $aDebug[$i]['string'] .= $massdifference;
+                                        $aDebug[$i]['string'] .= '</td>';
+                                        $aDebug[$i]['string'] .= '</tr>';
+                                        if($intensity >= 50){
+                                            $aDebug[$i]['string'] .= '<tr style="color:green;">';
+                                        }
+                                        else{
+                                            $aDebug[$i]['string'] .= '<tr>';
+                                        }
+                                        $aDebug[$i]['string'] .= '<td>';
                                         $frags = explode('<=>', $CM[$k]["fragment"]);
                                         $ions = explode('<=>', $CM[$k]["ion"]);
                                         for($p=0;$p<count($frags);$p++){
                                             if($p < (count($frags)-1))
-                                                $debug .= '<b>'.$ions[$p].'</b>   '.$frags[$p]."<br />";
+                                                $aDebug[$i]['string'] .= '<b>'.$ions[$p].'</b>   '.$frags[$p]."<br />";
                                             else
-                                                $debug .= '<b>'.$ions[$p].'</b>   '.$frags[$p];
+                                                $aDebug[$i]['string'] .= '<b>'.$ions[$p].'</b>   '.$frags[$p];
                                         }
-                                        $debug .= '</td>';
-                                        $debug .= '<td width="50px;"></td>';
-                                        $debug .= '<td><span style ="color:blue;">';
-                                        $debug .= 'Disulfide Bond: '.$tmpbond;
-                                        $debug .= '</span></td>';
-                                        $debug .= '</tr>';
+                                        $aDebug[$i]['string'] .= '</td>';
+                                        $aDebug[$i]['string'] .= '<td width="50px;"></td>';
+                                        if($intensity >= 50){
+                                            $aDebug[$i]['string'] .= '<td><span style ="color:green;">';
+                                        }
+                                        else{
+                                            $aDebug[$i]['string'] .= '<td><span style ="color:blue;">';
+                                        }
+                                        $aDebug[$i]['string'] .= 'Disulfide Bond: '.$tmpbond;
+                                        $aDebug[$i]['string'] .= '</span></td>';
+                                        $aDebug[$i]['string'] .= '</tr>';
                                         unset($tmpbond);
                                         //end of outputting code
                                     }
@@ -666,10 +685,11 @@
                                     }
 
                                     //output for debugging
-                                    $debug .= '<tr>';
-                                    $debug .= '<td align="left" colspan="3"><b>PARTIAL NUMBER OF MATCHES: ';
-                                    $debug .= count($CM).'</b></td>';
-                                    $debug .= '</tr>';
+                                    $aDebug[$i]['string'] .= '<tr>';
+                                    $aDebug[$i]['string'] .= '<td align="left" colspan="3"><b>PARTIAL NUMBER OF MATCHES: ';
+                                    $aDebug[$i]['string'] .= count($CM).'</b></td>';
+                                    $aDebug[$i]['string'] .= '</tr>';
+                                    $aDebug[$i]['string'] .= '<tr><td><br /><br /></td></tr>';
                                     //end of outputting code
 
                                 }//end if count(CM) > 0
@@ -857,6 +877,21 @@
                         $message .= "Disulfide Bonds not found!";
                     }
                     else{
+                        
+                        //form debug output just displaying data for the DTA files
+                        //that contains SS-bonds
+                        for($i=0;$i<count($bonds);$i++){
+                            $dtafile = $truebonds[$bonds[$i]]['DTA'];
+                            for($j=0;$j<count($aDebug);$j++){
+                                if(strtolower($aDebug[$j]['DTA']) == strtolower($dtafile)){
+                                    $debug .= '<tr><td colspan="3"><span style="color:red;"><b>';
+                                    $debug .= 'Disulfide Bond: '.$bonds[$i];
+                                    $debug .= '</b></span></td></tr>';
+                                    $debug .= $aDebug[$j]['string'];
+                                    break;
+                                }
+                            }
+                        }
 
                         //sensitivity, specificity, accuracy, and Mathew's coefficient
                         $SSbonds = count($bonds);
