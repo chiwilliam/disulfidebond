@@ -338,10 +338,12 @@
                     $numberBonds = array();
 
                     //consider:
-                    // by => only b and y ions
-                    // acxz => only a, c, x, and z ions
                     // all => all ion types
-                    $alliontypes = "all";
+                    // by => only b and y ions
+                    // aby+ => a,b,bo,b*,y,yo,y* ions
+                    // cxz => only c, x, and z ions
+                    $alliontypes = (string)$_POST["ions"];
+                    //$alliontypes = "all";
 
                     //calculate trimming parameter regression curve
                     //populates an array with all deltas for all IMs

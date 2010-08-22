@@ -330,7 +330,7 @@ class Commonclass {
             //peptide sequence
             $peptide = $peptides[$p];
 
-            if($alltypes == "all" || $alltypes == "by"){
+            if($alltypes == "all" || $alltypes == "by" || $alltypes == "aby+"){
                 //Y-ions
                 if($p%2 == 0){
                     $fragtype = 'Y';
@@ -376,7 +376,7 @@ class Commonclass {
                 }
             }
 
-            if($alltypes == "all" || $alltypes == "acxz"){
+            if($alltypes == "all" || $alltypes == "aby+"){
 
                 //Yo-ions (-H2O)
                 if($p%2 == 0){
@@ -542,6 +542,9 @@ class Commonclass {
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
                 */
+            }
+            
+            if($alltypes == "all" || $alltypes == "cxz"){
                 
                 //C-ions
                 if($p%2 == 0){
