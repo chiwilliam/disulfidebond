@@ -265,7 +265,7 @@ class InitialMatchclass {
         return $peps;
     }
 
-    public function polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor){
+    public function polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor, $epsilon){
         
         $counter=0;
         $counterDMS=0;
@@ -285,7 +285,12 @@ class InitialMatchclass {
 
         //get value used to trim lists
         //second parameter: average or median
-        $delta = $AAs->getDeltaRegression($disulfideBondedPeptides);
+        if($epsilon == 0){
+            $delta = $AAs->getDeltaRegression($disulfideBondedPeptides);
+        }
+        else{
+            $delta = $epsilon;
+        }
         //$delta = $AAs->getDelta($disulfideBondedPeptides,'median');
         //$delta = $AAs->getDelta($disulfideBondedPeptides,'average');
 

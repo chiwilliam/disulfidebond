@@ -459,7 +459,7 @@ class ConfirmedMatchclass {
 
     }
 
-    public function FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes){
+    public function FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes, $delta){
 
         $result = array();
 
@@ -475,7 +475,9 @@ class ConfirmedMatchclass {
         //get value used to trim lists
         //second parameter: average or median
         //$delta = $AAs->getDeltaCM($peptides,'average');
-        $delta = $AAs->getDeltaCMRegression($peptides);
+        if($delta == 0){
+            $delta = $AAs->getDeltaCMRegression($peptides);
+        }
         
         /*
         //calculate delta and implement regression analysis
