@@ -153,3 +153,10 @@ p.processing{
     color: red;
     text-transform: uppercase;
 }
+
+td.note{
+    text-align: justify;
+    padding-left:10px;
+    color:red;
+    font-size:12px;    
+}
