@@ -43,7 +43,7 @@
                                         <a href="#Lactoglobulin">Lactoglobulin</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Sialytransferase St8Sia IV">Sialytransferase St8Sia IV</a>
+                                        <a href="#Sialytransferase St8Sia IV">Sialyltransferase St8Sia IV</a>
                                     </li>
                                     <li class="spacing">
                                         <a href="#Fucosyltransferase 7">Fucosyltransferase 7</a>
@@ -132,7 +132,7 @@
                             <td class="justified">
                                 <ul>
                                     <li>
-                                        Function: Sialytransferase St8Sia IV catalyzes the polycondensation of alpha-2,8-linked sialic acid required for the synthesis of polysialic acid (PSA), which is present on the embryonic neural cell adhesion molecule (N-CAM), necessary for plasticity of neural cells.
+                                        Function: Sialyltransferase St8Sia IV catalyzes the polycondensation of alpha-2,8-linked sialic acid required for the synthesis of polysialic acid (PSA), which is present on the embryonic neural cell adhesion molecule (N-CAM), necessary for plasticity of neural cells.
                                     </li>
                                     <dd>&nbsp;</dd>
                                     <li>

@@ -96,7 +96,7 @@
                                 </tr>
                                 <tr class="input">
                                     <td class="inputleft">
-                                        <label>Multi-ion types:</label>
+                                        <label>Multi-ion types selection:</label>
                                     </td>
                                     <td class="inputright">
                                         <select id="ions" name="ions"
@@ -111,7 +111,7 @@
                                 </tr>
                                 <tr class="input">
                                     <td class="inputleft">
-                                        <label>Missing cleavages:</label>
+                                        <label>Number of missing cleavages:</label>
                                     </td>
                                     <td class="inputright">
                                         <select id="missingcleavages" name="missingcleavages"
@@ -137,13 +137,14 @@
                                         <input id="transmembraneto" name="transmembraneto" value=""
                                                onmouseover="Tip('Protein transmembrane region end')"
                                                onmouseout="UnTip()" size="4" maxlength="4"></input>
+                                        <span style="color:red;font-size:10px;">(optional)</span>
                                     </td>
                                 </tr>
                                 <tr class="input">
                                     <td colspan="2">
                                         <table class="advancedusers">
                                             <tr class="advancedusers">
-                                                <td class="advancedusersleft">Initial Match Threshold:</td>
+                                                <td class="advancedusersleft">Initial Matching threshold:</td>
                                                 <td class="advancedusersright">
                                                     <input type="text" id="IMthreshold" name="IMthreshold" size="5" value="<?php if (isset($IMthreshold)) {echo $IMthreshold;}else {echo '1.0';} ?>"
                                                            onmouseover="Tip('Threshold used during the matching between precursor ions and disulfide bonded structures')"
@@ -152,7 +153,7 @@
                                                 </td>
                                             </tr>
                                             <tr class="advancedusers">
-                                                <td class="advancedusersleft">MS/MS Intensity Limit:</td>
+                                                <td class="advancedusersleft">MS/MS Intensity limit:</td>
                                                 <td class="advancedusersright">
                                                     <input type="text" id="IntensityLimit" name="IntensityLimit" size="5" value="<?php if (isset($IntensityLimit)) {echo $IntensityLimit;}else {echo '0.10';} ?>"
                                                            onmouseover="Tip('Lowest m/z intensity limit. (IntensityLimit x Maximum Intensity)')"
@@ -161,12 +162,30 @@
                                                 </td>
                                             </tr>
                                             <tr class="advancedusers">
-                                                <td class="advancedusersleft">Confirmed Match Threshold:</td>
+                                                <td class="advancedusersleft">Confirmatory Matching threshold:</td>
                                                 <td class="advancedusersright">
                                                     <input type="text" id="CMthreshold" name="CMthreshold" size="5" value="<?php if (isset($CMthreshold)) {echo $CMthreshold;}else {echo '1.0';} ?>"
                                                            onmouseover="Tip('Threshold used while matching fragments from a DTA file with fragment ions from the matched precursor ion')"
                                                            onmouseout="UnTip()"></input>
                                                     * (default: +-1.0)
+                                                </td>
+                                            </tr>
+                                            <tr class="advancedusers">
+                                                <td class="advancedusersleft">&#949; value:</td>
+                                                <td class="advancedusersright">
+                                                    <input type="text" id="epsilon" name="epsilon" size="20" value="<?php if (isset($epsilon) && $epsilon > 0) {echo $epsilon;}else {echo '';} ?>"
+                                                           onmouseover="Tip('Initial Matching trimming parameter epsilon')"
+                                                           onmouseout="UnTip()"></input>
+                                                    (optional)
+                                                </td>
+                                            </tr>
+                                            <tr class="advancedusers">
+                                                <td class="advancedusersleft">&#948; value:</td>
+                                                <td class="advancedusersright">
+                                                    <input type="text" id="delta" name="delta" size="20" value="<?php if (isset($delta) && $delta > 0) {echo $delta;}else {echo '';} ?>"
+                                                           onmouseover="Tip('Confirmatory Matching trimming parameter delta')"
+                                                           onmouseout="UnTip()"></input>
+                                                    (optional)
                                                 </td>
                                             </tr>
                                         </table>

@@ -146,7 +146,17 @@
     if($missingcleavages == -1){
         $missingcleavages = 2;
     }
-
+    
+    //get trimming parameters epsilon and delta
+    $epsilon = (int)$_POST["epsilon"];
+    if($epsilon < 0){
+        $epsilon = 0;
+    }
+    $delta = (int)$_POST["delta"];
+    if($delta < 0){
+        $delta = 0;
+    }
+    
     if(strlen($_FILES["zipFile"]["name"]) > 0 && $_FILES["zipFile"][size] > 0 &&
        ($_FILES["zipFile"]["type"] == "application/zip" || $_FILES["zipFile"]["type"] == "application/x-zip-compressed") &&
        $fastaProtein != false &&
@@ -268,7 +278,7 @@
                 //$numDMS = count($DMS);
 
                 //First Stage matching. Generated DMS and Initial Matches (IM)
-                $result = $IMClass->polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor);
+                $result = $IMClass->polynomialSubsetSum($PML, $IMthreshold, $disulfideBondedPeptides, $minPrecursor, $maxPrecursor, $epsilon);
                 $DMS = $result['DMS'];
                 $IM = $result['IM'];
                 $newpeptides = $result['peptides'];
@@ -460,7 +470,7 @@
                                 //ksort(&$FMS);
 
                                 //Second Stage Matching. Forms FMS and Confirmed Matches (CMs)
-                                $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes);
+                                $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes, $delta);
 
                                 //$CM = $CMClass->Cmatch($FMS, $TML, $precursor, $CMthreshold);
 

@@ -56,7 +56,7 @@
                                     </tr>
                                     <tr class="input">
                                         <td class="inputleft">
-                                            <label>Upload ZIP with DTA files:</label>
+                                            <label>Upload ZIP file with DTA files:</label>
                                         </td>
                                         <td class="inputright">
                                             <input type="file" id="zipFile" name="zipFile" size="90"
@@ -66,7 +66,7 @@
                                     </tr>
                                     <tr class="input">
                                         <td class="inputleft">
-                                            <label>Enter FASTA protein sequence:</label>
+                                            <label>Enter protein's FASTA sequence:</label>
                                         </td>
                                         <td class="inputright">
                                             <textarea id="fastaProtein" name="fastaProtein" rows="5" cols="77"
@@ -92,7 +92,7 @@
                                     </tr>
                                     <tr class="input">
                                         <td class="inputleft">
-                                            <label>Multi-ion types:</label>
+                                            <label>Multi-ion types selection:</label>
                                         </td>
                                         <td class="inputright">
                                             <select id="ions" name="ions"
@@ -107,7 +107,7 @@
                                     </tr>
                                     <tr class="input">
                                         <td class="inputleft">
-                                            <label>Missing cleavages:</label>
+                                            <label>Number of missing cleavages:</label>
                                         </td>
                                         <td class="inputright">
                                             <select id="missingcleavages" name="missingcleavages"
@@ -135,6 +135,7 @@
                                                    value="<?php if(isset($transmembraneto)){echo $transmembraneto;}?>"
                                                    onmouseover="Tip('Protein transmembrane region end')"
                                                    onmouseout="UnTip()" size="4" maxlength="4"></input>
+                                            <span style="color:red;font-size:10px;">(optional)</span>
                                         </td>
                                     </tr>
                                     <tr class="input">
