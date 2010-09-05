@@ -48,8 +48,14 @@ body {
 	margin-right: 10px;
 	margin-left: 10px;
 	overflow: hidden;
-	padding: 2px;
+	padding: 2px;        
 }
+
+#footerbottom{
+    padding-left:10px;
+    width:980px;
+}
+
 /* Styles for Masthead */
 #masthead img {
 	float: left;
