@@ -153,7 +153,7 @@
                                                 </td>
                                             </tr>
                                             <tr class="advancedusers">
-                                                <td class="advancedusersleft">MS/MS Intensity limit:</td>
+                                                <td class="advancedusersleft">MS/MS intensity/abundance cutout:</td>
                                                 <td class="advancedusersright">
                                                     <input type="text" id="IntensityLimit" name="IntensityLimit" size="5" value="<?php if (isset($IntensityLimit)) {echo $IntensityLimit;}else {echo '0.10';} ?>"
                                                            onmouseover="Tip('Lowest m/z intensity limit. (IntensityLimit x Maximum Intensity)')"
