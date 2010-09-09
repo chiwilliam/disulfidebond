@@ -156,27 +156,31 @@
                                             </p>
                                         </td>
                                     </tr>
-                                    <tr id="bondsdiv">
-                                        <td class="inputleft">
-                                            <label style="visibility:hidden">Disulfide Bonds</label>
-                                        </td>
-                                        <td class="inputright">
-                                            <?php
-                                                if(strtoupper(substr($message, 0, 5)) == "ERROR"){
-                                                    echo '<font color="red">';
-                                                }
-                                                else{
-                                                    echo '<font color="blue">';
-                                                }
-
-                                                if(isset($message)){
-                                                    echo $message;
-                                                }
-                                                echo '</font>';
-                                            ?>
-                                        </td>
-                                    </tr>
                                 </table>
+                                <div id="bondsdiv">
+                                    <table class="input">
+                                        <tr id="trbondsdiv">
+                                            <td class="inputleft">
+                                                <label style="visibility:hidden">Disulfide Bonds</label>
+                                            </td>
+                                            <td class="inputright">
+                                                <?php
+                                                    if(strtoupper(substr($message, 0, 5)) == "ERROR"){
+                                                        echo '<font color="red">';
+                                                    }
+                                                    else{
+                                                        echo '<font color="blue">';
+                                                    }
+
+                                                    if(isset($message)){
+                                                        echo $message;
+                                                    }
+                                                    echo '</font>';
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </form>
                         <div id="graphdiv" class="graph">
