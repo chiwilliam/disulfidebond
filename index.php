@@ -71,7 +71,9 @@
 				</p>
                                 <p>
                                     If you are not familiar with <b><span style="color:blue;">MS2DB+</span></b>, check the demo video
-                                    below to get started. <i>(best video quality: 720p HD and full screen)<i/>
+                                    below to get started <i>(best video quality: 720p HD and full screen)<i/> or click 
+                                        <a target="_blank" href="videos/ms2db_demo.wmv">here</a>
+                                    to download/access the video directly.
 				</p>
                             </td>
                         </tr>
