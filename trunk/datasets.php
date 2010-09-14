@@ -43,7 +43,7 @@
                                         <a href="#Lactoglobulin">Lactoglobulin</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Sialytransferase St8Sia IV">Sialyltransferase St8Sia IV</a>
+                                        <a href="#Sialyltransferase St8Sia IV">Sialyltransferase St8Sia IV</a>
                                     </li>
                                     <li class="spacing">
                                         <a href="#Fucosyltransferase 7">Fucosyltransferase 7</a>
@@ -126,7 +126,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <h4><a name="Sialytransferase St8Sia IV"></a>Sialytransferase St8Sia IV</h4>
+                                            <h4><a name="Sialyltransferase St8Sia IV"></a>Sialyltransferase St8Sia IV</h4>
                                         </td>
                                         <td>
                                             (<a href="http://www.uniprot.org/uniprot/Q92187" target="_blank">Swiss-Prot ID Q92187</a>)
