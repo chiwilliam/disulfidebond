@@ -110,6 +110,18 @@
                                 </ul>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <p></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Next we show the key abbreviations and definitions used in MS2DB+ as well as in our latest publications</b><br/><br/>
+                                <img style="margin-left:50px;" id="definitions" name="definitions" title="Definitions" src="images/definitions.png" />
+                            </td>
+                            
+                        </tr>
                     </table>
                     <!-- #EndEditable "content" -->
                 </div>

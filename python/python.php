@@ -16,6 +16,8 @@ $var6 = 0;
 $var7 = 0;
 $var8 = 0;
 
+set_time_limit(0);
+
 echo "SVMGUIDE2<br/><br/>";
 
 $cmd1 = "python C:\\Users\\William\\Desktop\\SFSU\\SVM\\libsvm-2.91\\tools\\easy.py C:\\Users\\William\\Desktop\\SFSU\\SVM\\datasets\\svmguide2\\svmguide2";
