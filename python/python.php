@@ -30,6 +30,8 @@ $a1 = exec($cmd1,&$result1,&$var1);
 
 echo $result1[2].'<br/><br/>';
 
+exit;
+
 $a2 = exec($cmd2,&$result2,&$var2);
 $a3 = exec($cmd3,&$result3,&$var3);
 $a4 = exec($cmd4,&$result4,&$var4);
