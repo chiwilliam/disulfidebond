@@ -163,6 +163,10 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        Transmembrane region from <b>8</b>th AA until <b>20</b>th AA <i>(source UniProtKB)</i>.
+                                    </li>
                                 </ul>
                             </td>
                         </tr>
@@ -223,6 +227,10 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        Transmembrane region from <b>15</b>th AA until <b>36</b>th AA <i>(source UniProtKB)</i>.
+                                    </li>
                                 </ul>
                             </td>
                         </tr>
@@ -283,6 +291,10 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        Transmembrane region from <b>10</b>th AA until <b>32</b>th AA <i>(source UniProtKB)</i>.
+                                    </li>
                                 </ul>
                             </td>
                         </tr>
@@ -373,6 +385,10 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        Transmembrane region from <b>16</b>th AA until <b>34</b>th AA <i>(source UniProtKB)</i>.
+                                    </li>
                                 </ul>
                             </td>
                         </tr>
@@ -418,6 +434,10 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <dd>&nbsp;</dd>
+                                    <li>
+                                        Transmembrane region from <b>1</b>st AA until <b>44</b>th AA <i>(source UniProtKB)</i>.
+                                    </li>
                                 </ul>
                             </td>
                         </tr>
