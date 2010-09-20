@@ -40,13 +40,17 @@
                     <li><a href="datasets.php" onmouseover="Tip('MS2DB+ Datasets')" onmouseout="UnTip()">Datasets</a></li>
                     <li><a href="publications.php" onmouseover="Tip('MS2DB+ Publications')" onmouseout="UnTip()">Publications</a></li>
                     <li><a href="contactus.php" onmouseover="Tip('MS2DB+ Contact Us')" onmouseout="UnTip()">Contact Us</a></li>
-
+                    <li><a href="help.php" onmouseover="Tip('MS2DB+ Help')" onmouseout="UnTip()">Help</a></li>
                 </ul>
             </div>
             <!-- End Navigation -->
             <!-- Begin Page Content -->
             <div id="page_content">
                 <!-- Begin Left Column -->
+                <div id="readme">
+                    "Point the mouse over each input field or output result to read its description.
+                    For more details, please visit our <a class="alwaysblue" target="_blank" href="help.php"><b>HELP</b></a> section."
+                </div>
                 <div id="column_l">
                     <!-- #BeginEditable "content" -->
                     <form action="kernel.php?mode=advanced" name="submitForm" enctype="multipart/form-data" method="post">
@@ -153,7 +157,7 @@
                                                 </td>
                                             </tr>
                                             <tr class="advancedusers">
-                                                <td class="advancedusersleft">MS/MS intensity/abundance cutout:</td>
+                                                <td class="advancedusersleft">MS/MS intensity/abundance threshold:</td>
                                                 <td class="advancedusersright">
                                                     <input type="text" id="IntensityLimit" name="IntensityLimit" size="5" value="<?php if (isset($IntensityLimit)) {echo $IntensityLimit;}else {echo '0.10';} ?>"
                                                            onmouseover="Tip('Lowest m/z intensity limit. (IntensityLimit x Maximum Intensity)')"
@@ -186,6 +190,15 @@
                                                            onmouseover="Tip('Confirmatory Matching trimming parameter delta')"
                                                            onmouseout="UnTip()"></input>
                                                     (optional)
+                                                </td>
+                                            </tr>
+                                            <tr class="advancedusers">
+                                                <td class="advancedusersleft">Match Scoring threshold:</td>
+                                                <td class="advancedusersright">
+                                                    <input type="text" id="VSthreshold" name="VSthreshold" size="5" value="<?php if (isset($VSthreshold)) {echo $VSthreshold;}else {echo '80';} ?>"
+                                                           onmouseover="Tip('A disulfide bond is identified if its match score is greater than this threshold.')"
+                                                           onmouseout="UnTip()"></input>
+                                                    * (default: +-1.0)
                                                 </td>
                                             </tr>
                                         </table>

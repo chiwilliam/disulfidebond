@@ -126,7 +126,12 @@
     else{
         $IntensityLimit = 0.10;
     }
-
+    //Match Score threshold 80
+    $VSthreshold = 80;
+    if(isset($_POST["VSthreshold"])){
+        $VSthreshold = $_POST["VSthreshold"];
+    }
+    
     //Determine of the protein has any transmembrane region
     //If it does, remove the possible disulfide bonds in which one of the cysteines
     //is inside that region
@@ -757,9 +762,10 @@
                     $numbonds = count($numberBonds);
                     $truebonds = array();
                     //ionFactor = 1 if only b and y ions. Ion factor is X if all ion types
-                    $ionFactor = 1.00;
-                    $threshold = 0.78;
-                    $threshold2 = 0.65;
+                    $ionFactor = 0.01;
+                    $threshold = $VSthreshold;
+                    $threshold = $threshold-2;
+                    $threshold2 = $VSthreshold - 13;
                     $minmatches = 3;
                     $minmatches2 = 30;
                     //keep minimum score to create graph to be send to gabow routine
@@ -960,7 +966,7 @@
                             }
                             //if it does, color background
                             if($isBonded){
-                                $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\''.($i+1).'\')">'.$AAsarray[$i].'</td>';
+                                $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\'Cysteine at position '.($i+1).'\')">'.$AAsarray[$i].'</td>';
                             }
                             else{
                                 $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
