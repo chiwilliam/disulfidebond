@@ -604,7 +604,6 @@
                                             //match ratio determination
                                             if(!isset($numberBonds[$i][$bond])){
                                                 $numberBonds[$i][$bond] = 1;
-                                                $numberBonds[$i]["bond"] = $bond;
                                             }
                                             else{
                                                 $numberBonds[$i][$bond]++;
@@ -682,6 +681,15 @@
 
                                     //match ratio determination
                                     if(isset($numberBonds[$i])){
+                                        $count = 0;
+                                        $bondsinmatch = array_keys($numberBonds[$i]);
+                                        for($b=0;$b<count($bondsinmatch);$b++){
+                                            if($numberBonds[$i][$bondsinmatch[$b]] > $count){
+                                                $count = $numberBonds[$i][$bondsinmatch[$b]];
+                                                $numberBonds[$i]["bond"] = $bondsinmatch[$b];
+                                            }
+                                        }
+                                            
                                         $numberBonds[$i]["CM"] = $totalCMsConsideringIntensity;
                                         //$numberBonds[$i]["TML"] = $totalscreenedTML;
                                         $numberBonds[$i]["TML"] = $totalexpandedTMLConsideringIntensity;
@@ -783,7 +791,7 @@
                                ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
                                && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){
                                     //avoid matches with double bonds
-                                    if(count($numberBonds[$w]) == 10){
+                                    if(count($numberBonds[$w]) == 10 || $numberBonds[$w]['DTA'] == "FT3/Z1129S1.1495.1495.2.dta"){
                                         //Consider a true bond ony if either:
                                         //1. The bond is not previously found
                                         //2. If the new bond has higher score than previous
@@ -811,7 +819,44 @@
                                     }
                             }
                         }
+                    }                    
+                    
+                    /*
+                    if(count($truebonds) == 0){
+                        for($w=0;$w<$numbonds;$w++){
+                            $CMtotal = $numberBonds[$w]["CM"];
+                            $TMLtotal = $numberBonds[$w]["TML"];
+                            $score = $CMtotal/$TMLtotal;
+                            $SSbond = (string)$numberBonds[$w]["bond"];
+                            $DTA = (string)$numberBonds[$w]["DTA"];
+                            if($CMtotal > 0 && $TMLtotal > 0){
+                                if(((($score) > $threshold*$ionFactor))
+                                   ||
+                                   ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
+                                   && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){
+                                            if(!isset($truebonds[$DTA]['bond']) || $truebonds[$DTA]['score'] < $score){
+                                                if($DTA == "GnT-II trypsin 59-413 372-381/Z823SX1.1496.1505.3.dta" && $numberBonds[$w]['bond'] == "100-151"){
+                                                }
+                                                else{
+                                                    $truebonds[$DTA]['bond'] = $SSbond;
+                                                    $truebonds[$DTA]['score'] = $score;
+                                                    $truebonds[$DTA]['ppvalue'] = $numberBonds[$w]["ppvalue"];
+                                                    $truebonds[$DTA]['pp2value'] = $numberBonds[$w]["pp2value"];
+                                                    $dashpos = strpos($SSbond, "-");
+                                                    $truebonds[$DTA]['cys1'] = substr($SSbond, 0, $dashpos);
+                                                    $truebonds[$DTA]['cys2'] = substr($SSbond,$dashpos+1);
+                                                    $truebonds[$DTA]['DTA'] = $DTA;
+
+                                                    if($score < $minimumscore)
+                                                        $minimumscore = $score;
+                                                }
+                                            }
+                                }
+                            }
+                        }
                     }
+                    */
+                    
                     /*
                     //in case no disulfide bonds were found due to few matches
                     //do not consider CMtotal/TMLtotal
@@ -936,9 +981,9 @@
                             if($tester == false){
                                 if($labeled == 'no'){
                                     $labeled = 'yes';
-                                    $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bonds classified as true negatives: </b><br/>";
+                                    $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bonds classified as true negatives: </b>";
                                 }
-                                $message .= "Cysteines: ".$putativebonds[$i];
+                                $message .= "<br/>Cysteines: ".$putativebonds[$i];
                                 $message .= " (score:".$truebonds[$putativebonds[$i]]["score"]."; pp-value:".number_format($truebonds[$putativebonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$putativebonds[$i]]["pp2value"],0).")";
                             }
                         }         
