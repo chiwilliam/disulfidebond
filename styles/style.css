@@ -160,3 +160,19 @@ td.note{
     color:red;
     font-size:12px;    
 }
+
+#readme{
+    margin-left:0px;
+    margin-top:10px;
+    margin-bottom:-10px;
+    margin-right:30px;
+    text-align:center;
+    font-size:13px;
+    color:blue;
+    font-style:italic;
+    font-variant:small-caps;
+}
+
+a.alwaysblue{
+    color:blue;
+}

@@ -18,7 +18,10 @@
             <?php include "header.php" ?>
             <!-- End Header -->
             <!-- Begin Navigation -->
-            <?php include "menu.php" ?>
+            <?php 
+                $page = "index";
+                include "menu.php";
+            ?>
             <!-- End Navigation -->
             <!-- Begin Page Content -->
             <div id="page_content">
