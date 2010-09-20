@@ -858,7 +858,7 @@
                         $score = $truebonds[$SS[$w]][score];
                         $truebonds[$SS[$w]]['score'] = ((int)(($score/$minimumscore)*100));
                     }
-
+                    
                     $newgraph = array();
                     $SS = array_keys($truebonds);
                     for($w=0;$w<count($SS);$w++){
@@ -884,9 +884,9 @@
 
                         if(strlen(trim($bonds[$i])) > 3){
                             //$message .= "<b>Disulfide Bond found(".$numberBonds[$bonds[$i]].")  on positions: ".$bonds[$i]."</b><br><br>";
-                            $message .= "<b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
+                            $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
                             $message .= "(score:".$truebonds[$bonds[$i]]["score"]."; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
-                            $message .= ")<br><br>";
+                            $message .= ")</span><br><br>";
                         }
                     }
 
@@ -922,7 +922,28 @@
                             }
                         }
                         $nonExistingBonds = count($possiblebonds);
-                        $message .= "<b>Non-existing Bonds : ".$nonExistingBonds."</b><br><br>";
+                        
+                        $putativebonds = array();
+                        $putativebonds = array_keys($truebonds);
+                        $labeled = 'no';
+                        for($i=0;$i<count($putativebonds);$i++){
+                            $tester = false;
+                            for($j=0;$j<count($bonds);$j++){
+                                if($putativebonds[$i] == $bonds[$j]){
+                                    $tester = true;
+                                }
+                            }
+                            if($tester == false){
+                                if($labeled == 'no'){
+                                    $labeled = 'yes';
+                                    $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bonds classified as true negatives: </b><br/>";
+                                }
+                                $message .= "Cysteines: ".$putativebonds[$i];
+                                $message .= " (score:".$truebonds[$putativebonds[$i]]["score"]."; pp-value:".number_format($truebonds[$putativebonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$putativebonds[$i]]["pp2value"],0).")";
+                            }
+                        }         
+                        
+                        $message .= "</span><br/><br/>";
 
                         $debug .= "</table>";
 
