@@ -64,3 +64,9 @@ body {
 li.selected {
         background-color:white;
 }
+
+#copyright{
+    margin-left:50px;
+    text-align:justify;
+    margin-right:50px;
+}
