@@ -1,5 +1,6 @@
 <?php
     ini_set("memory_limit", "2000M");
+    set_time_limit(0);
 
     $filename = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot.dat";
     $filename2 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot2.dat";
@@ -100,9 +101,11 @@
     //Also remove some missed bad bonds. i.e. similarity, interchain
     //copy the disulfide bonds and the FASTA sequence
     for($i=0;$i<count($filearray);$i++){
-        if(substr_count($filearray[$i], "**") < 4 
+        if(substr_count($filearray[$i], "**") < 5 
                 && strpos($filearray[$i], "SIMILARITY") == 0
-                && strpos($filearray[$i], "INTERCHAIN") == 0){            
+                && strpos($filearray[$i], "INTERCHAIN") == 0
+                && strpos($filearray[$i], "OXIDIZED") == 0
+                && strpos($filearray[$i], "?") == 0){            
             $results[] = $filearray[$i];
         }
     }
@@ -140,6 +143,7 @@
             $str2 = substr($str2,0,strlen($str2)-2);
             $str2 = str_replace(" ", "", $str2);
             $tmp = similar_text($str, $str2, &$percent);
+            
             if($percent > 30){
                 $unique = false;
                 break;
