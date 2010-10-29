@@ -84,7 +84,6 @@
             $command = substr($command, 0, strlen($command)-4);
         }
         $command .= " -b 1 ".$svmfilename." ".$model." ".$svmfilenamepredict;
-        echo $command;
         exec($command);
         
         $tmp = file_get_contents($svmfilenamepredict);
