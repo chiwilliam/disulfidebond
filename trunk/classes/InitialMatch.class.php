@@ -432,7 +432,8 @@ class InitialMatchclass {
 
                             //populate array
                             $list2[$index] = array('peptides' => $list1peptides, 'cysteines' => $list1cysteines);
-
+                            $list2[$index]['mass'] = $list1mass;
+                            
                             if($list1mass >= ((double)($precursorMass) - (double)($IMthreshold))){
 
                                 //remove impossible bond combinations
@@ -447,11 +448,10 @@ class InitialMatchclass {
                                     $pepDMS = $this->convertIndextoAAs($pepMatch);
 
                                     if(count($pepDMS) > 0){
-
-                                        $IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
-
+                                        $list2[$index]['IM'] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+                                        //debug
+                                        //$IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
                                         $DMS = array_merge($DMS,$pepDMS);
-
                                     }
                                 }
                             }
@@ -475,6 +475,23 @@ class InitialMatchclass {
                     //$list1 = array_merge($list1alpha, $list1beta);
                 }
             }
+            
+            end(&$list1);
+            $key = key(&$list1);
+            $lowerbond = ((double)($precursorMass) - (double)($IMthreshold));
+            $matchvalue = $list1[$key]['mass'];
+            if($matchvalue >= $lowerbond && isset($list1[$key]['IM'])){
+                $IM[] = array("DMS" => $list1[$key]['IM']['DMS'], "PML" => $list1[$key]['IM']['PML']);
+            }
+            //accounts for possible IMs that would be trimmed
+            array_pop(&$list1);
+            end(&$list1);
+            $key = key(&$list1);
+            $lowerbond = ((double)($precursorMass) - (double)($IMthreshold));
+            $matchvalue = $list1[$key]['mass'];
+            if($matchvalue >= $lowerbond && isset($list1[$key]['IM'])){
+                $IM[] = array("DMS" => $list1[$key]['IM']['DMS'], "PML" => $list1[$key]['IM']['PML']);
+            }
         }
 
         $counterDMS = count($completelist);
@@ -493,7 +510,7 @@ class InitialMatchclass {
 
         return $result;
     }
-
+    
     public function digestProtein($fastaProtein, $protease){
 
         //array to store digested peptides with cysteine-residues

@@ -759,5 +759,30 @@ class Commonclass {
 
         return $beta;
     }
+    
+    public function removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto){
+        
+        $bonds = array();
+        
+        $transmembranefrom = (int)$transmembranefrom;
+        $transmembraneto = (int)$transmembraneto;
+        
+        if($transmembranefrom > 0 and $transmembraneto > 0){
+            $keys = array_keys($pbonds);
+            for($i=0;$i<count($keys);$i++){
+                $cys1 = (int)substr($keys[$i], 0, strpos($keys[$i], "-"));
+                $cys2 = (int)substr($keys[$i], strpos($keys[$i], "-")+1);
+                if($cys1 > $transmembraneto || $cys2 < $transmembranefrom){
+                    $bonds[$keys[$i]] = $pbonds[$keys[$i]];
+                }
+            }
+        }   
+        else{
+            $bonds = $pbonds;
+        }
+        
+        return $bonds;
+        
+    }
 }
 ?>
