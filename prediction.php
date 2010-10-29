@@ -10,7 +10,7 @@
     include $root."/disulfidebond/prediction/functionsDAT.php";
     include $root."/disulfidebond/prediction/functionsCSP.php";
     
-    function getBondsByPredictiveTechniques($bonds,$FASTA){
+    function getBondsByPredictiveTechniques($bonds,$FASTA,$root){
         
         //$bonds is the array holding all bonds found by the MS/MS method
         //the structure is
@@ -31,12 +31,12 @@
         
         //This is the function that changes according to the SVMs used!
         //Level-1 SVM
-        $result = runSVM($protein);
+        $result = runSVM($protein,$root);
         
         $pbonds = getTruebonds($protein,$result,$bonds);
         
         //Level-2 SVM
-        $CSPmatch = confirmBondsViaSVM2(&$protein, &$pbonds, $bonds);
+        $CSPmatch = confirmBondsViaSVM2(&$protein, &$pbonds, $bonds, $root);
         
         unset($bonds);
         unset($protein);
@@ -64,7 +64,7 @@
         return $prot;
     }
     
-    function runSVM($protein){
+    function runSVM($protein,$root){
         
         $result = array();
         $SVMdata = array();
@@ -74,13 +74,13 @@
         $filename = generateRandomString();
         
         $folder = "SVM";
-        $svmfilename = getFileName($folder,$filename);
+        $svmfilename = getFileName($folder,$filename,$root);
         $svmfilenamepredict = $svmfilename.".predict";
         $save = file_put_contents($svmfilename, $SVMdata);
         
-        $model = getFileName("prediction", "allsvm.model");
-        $command = getFileName("prediction", "svm-predict.exe");
-        if(substr($command,0,8) == "/var/www"){
+        $model = getFileName("prediction", "allsvm.model",$root);
+        $command = getFileName("prediction", "svm-predict.exe",$root);
+        if(substr($command,0,2) != "C:"){
             $command = substr($command, 0, strlen($command)-4);
         }
         $command .= " -b 1 ".$svmfilename." ".$model." ".$svmfilenamepredict;
@@ -145,17 +145,14 @@
         return $SVMdata;
     }
     
-    function getFileName($folder,$filename){
+    function getFileName($folder,$filename,$root){
         
         $path = "";
-        
-        //build root path (i.e.: C:\xampp\htdocs\)
-        $root = $_SERVER['DOCUMENT_ROOT'];
-        //fix for tintin root path
-        if(trim($root) == "/var/www/html/bioinformatics"){
-            $root = "/home/whemurad/public_html";
-        }
         $path = $root."/disulfidebond/".$folder."/".$filename;
+        
+        if($_ENV['OS'] == "Windows_NT"){
+            $command = str_replace("/", "\\", $command);
+        }
         
         return $path;
     }
@@ -233,9 +230,9 @@
         return $pbonds;
     }
     
-    function confirmBondsViaSVM2(&$protein, &$pbonds, $msbonds){
+    function confirmBondsViaSVM2(&$protein, &$pbonds, $msbonds, $root){
         
-        $filenameDB = getFileName("prediction", "uniprotDB.dat");
+        $filenameDB = getFileName("prediction", "uniprotDB.dat",$root);
         $proteinDB = getProtein($filenameDB);
         $maxProteinLengthDB = getMaxProteinLength(&$proteinDB);
         

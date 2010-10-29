@@ -939,10 +939,10 @@
                     $pbonds = array();
                     if($predictive == 'Y'){
                         if(count($bonds) == 0){
-                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein);
+                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root);
                         }
                         else{
-                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein);
+                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root);
                         }                        
                     }
                     
