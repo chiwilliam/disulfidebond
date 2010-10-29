@@ -145,6 +145,20 @@
                                     </td>
                                 </tr>
                                 <tr class="input">
+                                    <td class="inputleft">
+                                        <label>Also use predictive techniques?</label>
+                                    </td>
+                                    <td class="inputright">
+                                        <select id="predictive" name="predictive"
+                                                onmouseover="Tip('Use predictive techniques (SVMs) as a complementary toolset to improve results')"
+                                                onmouseout="UnTip()">
+                                            <option <?php if(!isset($predictive)){$predictive = "Y";} if($predictive == "Y"){echo "selected";} ?> value="Y">Yes</option>
+                                            <option <?php if(!isset($predictive)){$predictive = "Y";} if($predictive == "N"){echo "selected";} ?> value="N">No</option>                                                
+                                        </select>
+                                        <span style="color:red;font-size:10px;">(default: yes)</span>
+                                    </td>
+                                </tr>
+                                <tr class="input">
                                     <td colspan="2">
                                         <table class="advancedusers">
                                             <tr class="advancedusers">

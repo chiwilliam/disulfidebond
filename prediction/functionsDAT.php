@@ -1,5 +1,30 @@
 <?php
 
+    function getProtein($filename){
+        
+        $filearray = array();
+    
+        $filestr = file_get_contents($filename);
+        $filearray = explode("//", $filestr);
+
+        unset($filestr);
+
+        $protein = array();
+
+        $count = count($filearray);
+        for($i=0;$i<$count;$i++){
+
+            //read Protein into array, separating S-S bonds, length and sequence
+            if(strlen(trim($filearray[$i])) > 0){
+                $protein[] = readProtein($filearray[$i]);
+            }
+        }
+        
+        unset($filearray);
+        
+        return $protein;
+    }
+
     function readProtein($sequence){
         
         $protein = array();

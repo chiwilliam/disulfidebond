@@ -271,7 +271,9 @@ class AAclass {
 
         for($i=($index-1); $i>=0;$i--){
             $current = (int)(substr($keys[$i],0,4));
-            if($last > ((1+$delta)*$current)){
+            //isset($list[$keys[$i]]['IM']) accounts for IMs that would be trimmed
+            //In this case, if more than one IM is found the peptides involved are not trimmed
+            if($last > ((1+$delta)*$current) || isset($list[$keys[$i]]['IM'])){
                 $trimmed[$keys[$i]] = $list[$keys[$i]];
                 $last = $current;
             }

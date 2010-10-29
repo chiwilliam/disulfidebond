@@ -19,7 +19,8 @@
     require_once $root."/disulfidebond/classes/Common.class.php";
     require_once $root."/disulfidebond/classes/ConfirmedMatch.class.php";
     require_once $root."/disulfidebond/classes/Charting.class.php";
-
+    require_once $root."/disulfidebond/prediction.php";
+    
     //initialize objects
     $Users = new Usersclass();
     $IMClass = new InitialMatchclass();
@@ -78,7 +79,8 @@
     //clear results string
     //message displayed on screen
     $message = "";
-
+    $debug = "";
+    
     //set User Type
     if(isset($_REQUEST['mode'])){
         $mode = $_REQUEST['mode'];
@@ -87,43 +89,38 @@
         $mode = "standard";
     }
     
+    //Use machine learning techniques to improve results
+    $predictive = 'Y';
+    if(isset($_POST["predictive"])){
+        $predictive = $_POST["predictive"];
+    }
     //THRESHOLDS
     //InitialMatch threshold +-1.0
+    $IMthreshold = 1.0;
     if(isset($_POST["IMthreshold"])){
         $IMthreshold = $_POST["IMthreshold"];
     }
-    else{
-        $IMthreshold = 1.0;
-    }
     //default commented -- too technical for users to change
     //Threshold used to expand TML: new_fragment < precursor_mass+TMLthreshold
+    $TMLthreshold = 2.0;
     if(isset($_POST["TMLthreshold"])){
         $TMLthreshold = $_POST["TMLthreshold"];
     }
-    else{
-        $TMLthreshold = 2.0;
-    }
     //Confirmed Match threshold +-1
+    $CMthreshold = 1.0;
     if(isset($_POST["CMthreshold"])){
         $CMthreshold = $_POST["CMthreshold"];
     }
-    else{
-        $CMthreshold = 1.0;
-    }
     //same as Confirmed Match threshold
     //Screening threshold: separate close picks, so the median can be calculated
+    $ScreeningThreshold = $CMthreshold;
     if(isset($_POST["ScreeningThreshold"])){
         $ScreeningThreshold = $_POST["ScreeningThreshold"];
     }
-    else{
-        $ScreeningThreshold = $CMthreshold;
-    }
     //Screening Intensity Limit
+    $IntensityLimit = 0.10;
     if(isset($_POST["IntensityLimit"])){
         //$IntensityLimit = $_POST["IntensityLimit"];
-        $IntensityLimit = 0.10;
-    }
-    else{
         $IntensityLimit = 0.10;
     }
     //Match Score threshold 80
@@ -171,6 +168,7 @@
         $debug = '<table>';
         $debug .= '<tr><td colspan ="3" align="center"><h3>';
         $debug .= 'Protease: ';
+        $prot = "";
         switch($protease){
             case 'T':
                 $prot = 'Trypsin';
@@ -209,6 +207,13 @@
             //expected amino acid mass
             $me = 111.17;
 
+            //initialize variables
+            $PML = array();
+            $PMLNames = array();
+            $dirPath = "";
+            $k=0;
+            $graph = array();
+                    
             //read DTA files
             $zip = zip_open($zipFile["tmp_name"]);
             if($zip){
@@ -565,6 +570,9 @@
 
                                             $fragment = $CM[$k]["fragment"];
                                             $peptide = $CM[$k]["peptide"];
+                                            $intrabondpos1 = 0;
+                                            $intrabondpos2 = 0;
+                                            $intrabondpepInProt1 = 0;
 
                                             if($CM[$k][cysteines] >= 2){
 
@@ -598,6 +606,8 @@
                                             unset($fragment);
                                             unset($peptide);
                                         }
+                                        
+                                        $tmpbond = "";
 
                                         if(isset($bond)){
 
@@ -924,20 +934,69 @@
                     if(count($bonds) > 0){
                         $bonds = $Func->executeGabow($newgraph, $root);
                     }
+                    
+                    //PREDICTIVE TECHNIQUE
+                    $pbonds = array();
+                    if($predictive == 'Y'){
+                        if(count($bonds) == 0){
+                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein);
+                        }
+                        else{
+                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein);
+                        }                        
+                    }
+                    
+                    $predictedbonds = array();
+                    
+                    //remove Bonds according to the transmembrane region set by the user
+                    $pbonds = $Func->removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto);
+                    
+                    if(count($pbonds) > 0){
 
+                        unset($newgraph);
+                        $newgraph = array();
+                        $SS = array_keys($pbonds);
+                        for($w=0;$w<count($SS);$w++){
+
+                            $cys1 = (string)$pbonds[$SS[$w]]['cys1'];
+                            $cys2 = (string)$pbonds[$SS[$w]]['cys2'];
+
+                            $counttmp = $pbonds[$SS[$w]]['scoreexp'];
+                            for($z=0;$z<$counttmp;$z++){
+                                $newgraph[$cys1][] = $cys2;
+                                $newgraph[$cys2][] = $cys1;
+                            }
+                        }
+                        $predictedbonds = $Func->executeGabow($newgraph, $root);
+                    }
+                    
                     for($i=0;$i<count($bonds);$i++){
 
                         if(strlen(trim($bonds[$i])) > 3){
-                            //$message .= "<b>Disulfide Bond found(".$numberBonds[$bonds[$i]].")  on positions: ".$bonds[$i]."</b><br><br>";
                             $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
                             $message .= "(score:".$truebonds[$bonds[$i]]["score"]."; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
                             $message .= ")</span><br><br>";
                         }
                     }
+                    
+                    if(count($predictedbonds) > 0){
+                        for($i=0;$i<count($predictedbonds);$i++){
+                            if(strlen(trim($predictedbonds[$i])) > 3){
+                                $message .= "<span style=\"margin-left:-100px; margin-right:50px;\"><b>Disulfide Bond found on positions: ".$predictedbonds[$i]."</b> ";
+                                $message .= "(score&#39;:".$pbonds[$predictedbonds[$i]]["scoreexp"]."; Similarity:".$pbonds[$predictedbonds[$i]]["similarity"].") [by SVMs]</span><br><br>";
+                            }
+                        }
+                    }
 
                     if(count($bonds) == 0){
-                        unset($debug);
-                        $message .= "Disulfide Bonds not found!";
+                        if(count($predictedbonds) == 0){
+                            unset($debug);
+                            $message .= "Disulfide Bonds not found!";
+                        }
+                        else{
+                            unset($debug);
+                            $message .= "Disulfide Bonds found ONLY by SVMs, without using MS/MS data.";
+                        }
                     }
                     else{
                         
@@ -995,12 +1054,14 @@
                         //populate disulfide bonds graph
                         $AAsarray = str_split($fastaProtein,1);
                         $totalAAs = count($AAsarray);
-                        $totalbonds = count($bonds);
+                        $combinedbonds = array();
+                        $combinedbonds = array_merge($bonds,$predictedbonds);
+                        $totalbonds = count($combinedbonds);
                         $allbonds = array();
 
                         //define AAs to have colored background
                         for($i=0;$i<$totalbonds;$i++){
-                            $cys = explode('-', $bonds[$i]);
+                            $cys = explode('-', $combinedbonds[$i]);
                             $allbonds[] = $cys[0];
                             $allbonds[] = $cys[1];
                         }
@@ -1053,7 +1114,7 @@
                         //Javascript to draw S-S bonds
                         $SSgraphJS = '<script type="text/javascript">';
                         for($j=0;$j<$totalbonds;$j++){
-                            $cysteines = explode('-', $bonds[$j]);
+                            $cysteines = explode('-', $combinedbonds[$j]);
                             $SSgraphJS .= "myDrawFunction(".($cysteines[0]-1).",".($cysteines[1]-1).",20,20,30,'yellow',3);";
                         }
                         $SSgraphJS .= '</script>';
