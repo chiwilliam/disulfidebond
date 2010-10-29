@@ -80,6 +80,9 @@
         
         $model = getFileName("prediction", "allsvm.model");
         $command = getFileName("prediction", "svm-predict.exe");
+        if(substr($command,0,8) == "/var/www"){
+            $command = substr($command, 0, strlen($command)-4);
+        }
         $command .= " -b 1 ".$svmfilename." ".$model." ".$svmfilenamepredict;
         exec($command);
         
