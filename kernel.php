@@ -90,9 +90,9 @@
     }
     
     //Use machine learning techniques to improve results
-    $predictive = 'Y';
-    if(isset($_POST["predictive"])){
-        $predictive = $_POST["predictive"];
+    $predictive = 'N';
+    if(isset($_REQUEST["predictive"])){
+        //$predictive = $_POST["predictive"];
     }
     //THRESHOLDS
     //InitialMatch threshold +-1.0
@@ -943,16 +943,17 @@
                         }
                         else{
                             $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root);
-                        }                        
+                        }
+                        
                     }
                     
                     $predictedbonds = array();
                     
-                    //remove Bonds according to the transmembrane region set by the user
-                    $pbonds = $Func->removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto);
-                    
                     if(count($pbonds) > 0){
 
+                        //remove Bonds according to the transmembrane region set by the user
+                        $pbonds = $Func->removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto);
+                    
                         unset($newgraph);
                         $newgraph = array();
                         $SS = array_keys($pbonds);
