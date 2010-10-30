@@ -90,7 +90,7 @@
     }
     
     //Use machine learning techniques to improve results
-    $predictive = 'Y';
+    $predictive = 'N';
     if(isset($_REQUEST["predictive"])){
         //$predictive = $_POST["predictive"];
     }
