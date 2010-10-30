@@ -89,10 +89,18 @@
         $mode = "standard";
     }
     
+    /*
+     * TO ENABLE PREDICTIVE TECHNIQUES
+     * 1. change line 98 to Y
+     * 2. uncomment line 101
+     * 3. remove style="visibility:hidden;" from stdanalysis @ line 145
+     * 4. remove style="visibility:hidden;" from advanalysis @ line 147
+     */
+    
     //Use machine learning techniques to improve results
-    $predictive = 'N';
+    $predictive = 'Y';
     if(isset($_REQUEST["predictive"])){
-        //$predictive = $_POST["predictive"];
+        $predictive = $_POST["predictive"];
     }
     //THRESHOLDS
     //InitialMatch threshold +-1.0

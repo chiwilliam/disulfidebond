@@ -142,7 +142,7 @@
                                             <span style="color:red;font-size:10px;">(optional)</span>
                                         </td>
                                     </tr>
-                                    <tr style="visibility:hidden;" class="input">
+                                    <tr class="input">
                                         <td class="inputleft">
                                             <label>Also use predictive techniques?</label>
                                         </td>
