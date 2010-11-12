@@ -62,7 +62,7 @@
     $errors["emptyfile"]["code"] = "02";
     $errors["emptyfile"]["message"] = "File uploaded is empty.";
     $errors["invalidfile"]["code"] = "03";
-    $errors["invalidfile"]["message"] = "File uploaded is invalid. Please upload a ZIP file containing DTA files inside.";
+    $errors["invalidfile"]["message"] = "File uploaded is invalid. Please upload a ZIP file containing either DTA or mzXML files.";
     $errors["noprotein"]["code"] = "04";
     $errors["noprotein"]["message"] = "No FASTA protein sequence was entered.";
     $errors["invalidprotein"]["code"] = "05";
@@ -90,11 +90,11 @@
     }
     
     /*
-     * TO ENABLE PREDICTIVE TECHNIQUES
-     * 1. change line 98 to Y
-     * 2. uncomment line 101
-     * 3. remove style="visibility:hidden;" from stdanalysis @ line 145
-     * 4. remove style="visibility:hidden;" from advanalysis @ line 147
+     * TO ENABLE/DISABLE PREDICTIVE TECHNIQUES
+     * 1. change line 98 to Y/N
+     * 2. uncomment/comment line 101
+     * 3. remove/add style="visibility:hidden;" from/to stdanalysis @ line 145
+     * 4. remove/add style="visibility:hidden;" from/to advanalysis @ line 147
      */
     
     //Use machine learning techniques to improve results
@@ -213,56 +213,21 @@
             $Func->sortByCysteines(&$disulfideBondedPeptides);
 
             //expected amino acid mass
-            $me = 111.17;
+            //$me = 111.17;
 
             //initialize variables
+            $aPML = array();
             $PML = array();
             $PMLNames = array();
             $dirPath = "";
             $k=0;
             $graph = array();
                     
-            //read DTA files
-            $zip = zip_open($zipFile["tmp_name"]);
-            if($zip){
-                $dirPath = $root."/disulfidebond/DTA/".$zipFile["name"];
-            
-                if(!is_dir($dirPath)){
-                    mkdir($dirPath);
-                }
-                $iterations = 0;
-                while($zip_entry = zip_read($zip)){
-                    if(zip_entry_open($zip, $zip_entry)){
-
-                        $filename = zip_entry_name($zip_entry);
-                        $extension = strtoupper(substr($filename, strlen($filename)-3));
-
-                        if($extension == "DTA"){
-
-                            $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
-
-                            //subtract one due to DTA format for precursor ions mass Mr
-                            //index is number of AA - number of charges - calculated mass
-                            $index = (string)((int)((substr($data,0,strpos($data," "))-1.0) / $me))."-".
-                                     substr($data,(strpos($data," ")+1),1)."-".
-                                     substr($data,0,strpos($data,"."))."-".(string)$iterations;
-                            $index = substr($data,0,strpos($data,"."))."-".
-                                     substr($data,(strpos($data," ")+1),1)."-".(string)$iterations;
-                            $iterations++;
-
-                            if(strlen($data) > 0){
-
-                                $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
-                                $PMLNames[$index] = $filename;
-
-                                //store data in a local file
-                                $path = $root."/disulfidebond/DTA/".$zipFile["name"]."/".$index.".txt";
-                                file_put_contents($path, $data);
-                            }
-                        }
-                    }
-                }
-            }
+            $aPML = $Func->readMSMSFiles($root, $zipFile["tmp_name"], $zipFile["name"]);
+            $PML = $aPML["PML"];
+            $PMLNames = $aPML["PMLNames"];
+            unset($aPML);
+            $dirPath = $root."/disulfidebond/DTA/".$zipFile["name"];
 
             //If DTA files are present
             if(count($PML) > 0){
