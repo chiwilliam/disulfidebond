@@ -784,5 +784,123 @@ class Commonclass {
         return $bonds;
         
     }
+    
+    //$zipFile["tmp_name"]
+    //$zipFile["name"]
+    public function readMSMSFiles($root, $tmp_name, $name){
+        
+        $PML = array();
+        $PMLNames = array();
+        
+        $zip = zip_open($tmp_name);
+        if($zip){
+            $dirPath = $root."/disulfidebond/DTA/".$name;
+
+            if(!is_dir($dirPath)){
+                mkdir($dirPath);
+            }
+            $mzIteration = 0;
+            $iterations = 0;
+            while($zip_entry = zip_read($zip)){
+                if(zip_entry_open($zip, $zip_entry)){
+
+                    $filename = zip_entry_name($zip_entry);
+                    $extension = strtoupper(substr(strrchr($filename,"."),1));
+
+                    if($extension == "MZXML"){
+                        
+                        //load MZXML data
+                        $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
+                        $mzIteration++;
+                        
+                        //save to File
+                        $path = $root."/disulfidebond/DTA/".$name."/".$mzIteration.".mzXML";
+                        file_put_contents($path, $data);
+                        
+                        //convert File to DTA file(s)
+                        $DTApath = $root."/disulfidebond/DTA/".$name."/".$mzIteration."/";
+                        $this->convertMZXMLtoDTA($root, $path);
+                                                
+                        //process each DTA file
+                        $listFiles = array();
+                        
+                        $handle = opendir($DTApath);
+                        while (false !== ($file = readdir($handle))) {
+                            if(strlen($file) > 3){
+                                $listFiles[] = $file;
+                            }                            
+                        }
+                        
+                        $numFiles = count($listFiles);
+                        for($i=0;$i<$numFiles;$i++)
+                        {
+                            $data = file_get_contents($DTApath.$listFiles[$i]);
+
+                            //subtract one due to DTA format for precursor ions mass Mr
+                            //index is number of AA - number of charges - calculated mass
+                            $index = substr($data,0,strpos($data,"."))."-".
+                                     substr($data,(strpos($data," ")+1),1)."-".(string)$iterations;
+                            $iterations++;
+
+                            if(strlen($data) > 0){
+
+                                $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
+                                $PMLNames[$index] = $listFiles[$i];
+
+                                //store data in a local file
+                                $path = $root."/disulfidebond/DTA/".$name."/".$index.".txt";
+                                file_put_contents($path, $data);
+                            }                        
+                        }
+                    }
+                    
+                    if($extension == "DTA"){
+
+                        $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
+
+                        //subtract one due to DTA format for precursor ions mass Mr
+                        //index is number of AA - number of charges - calculated mass
+                        /*
+                        $index = (string)((int)((substr($data,0,strpos($data," "))-1.0) / $me))."-".
+                                 substr($data,(strpos($data," ")+1),1)."-".
+                                 substr($data,0,strpos($data,"."))."-".(string)$iterations;
+                        */
+                        $index = substr($data,0,strpos($data,"."))."-".
+                                 substr($data,(strpos($data," ")+1),1)."-".(string)$iterations;
+                        $iterations++;
+
+                        if(strlen($data) > 0){
+
+                            $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
+                            $PMLNames[$index] = $filename;
+
+                            //store data in a local file
+                            $path = $root."/disulfidebond/DTA/".$name."/".$index.".txt";
+                            file_put_contents($path, $data);
+                        }
+                    }
+                }
+            }
+        }
+        
+        return array("PML" => $PML, "PMLNames" => $PMLNames);
+    }
+    
+    public function convertMZXMLtoDTA($root, $mzXMLpath){
+        
+        //generate files
+        $pathtoexec = "";
+        if($_ENV['OS'] == "Windows_NT"){
+            $pathtoexec = $root."/disulfidebond/MSMSconversion/MzXML2Search.exe ";
+            $pathtoexec = str_replace("/", "\\", $pathtoexec);
+        }
+        else{
+            $pathtoexec = $root."/disulfidebond/MSMSconversion/./MzXML2Search ";
+        }
+        
+        $cmd = $pathtoexec." -dta ".$mzXMLpath;
+        exec($cmd);
+        
+    }
 }
 ?>
