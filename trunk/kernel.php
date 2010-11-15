@@ -1029,6 +1029,9 @@
                         $AAsarray = str_split($fastaProtein,1);
                         $totalAAs = count($AAsarray);
                         $combinedbonds = array();
+                        if(!isset($predictedbonds)){
+                            $predictedbonds = array();
+                        }
                         $combinedbonds = array_merge($bonds,$predictedbonds);
                         $totalbonds = count($combinedbonds);
                         $allbonds = array();
