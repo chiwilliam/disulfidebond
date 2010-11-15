@@ -449,6 +449,7 @@ class InitialMatchclass {
 
                                     if(count($pepDMS) > 0){
                                         $list2[$index]['IM'] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
+                                        $counterIM++;
                                         //debug
                                         //$IM[] = array("DMS" => key(&$pepDMS),"PML" => $PMLkeys[$k]);
                                         $DMS = array_merge($DMS,$pepDMS);
@@ -476,21 +477,18 @@ class InitialMatchclass {
                 }
             }
             
-            end(&$list1);
-            $key = key(&$list1);
-            $lowerbond = ((double)($precursorMass) - (double)($IMthreshold));
-            $matchvalue = $list1[$key]['mass'];
-            if($matchvalue >= $lowerbond && isset($list1[$key]['IM'])){
-                $IM[] = array("DMS" => $list1[$key]['IM']['DMS'], "PML" => $list1[$key]['IM']['PML']);
-            }
             //accounts for possible IMs that would be trimmed
-            array_pop(&$list1);
-            end(&$list1);
-            $key = key(&$list1);
-            $lowerbond = ((double)($precursorMass) - (double)($IMthreshold));
-            $matchvalue = $list1[$key]['mass'];
-            if($matchvalue >= $lowerbond && isset($list1[$key]['IM'])){
-                $IM[] = array("DMS" => $list1[$key]['IM']['DMS'], "PML" => $list1[$key]['IM']['PML']);
+            for($i=0;$i<$counterIM;$i++){
+                if($i > 0){
+                    array_pop(&$list1);
+                }
+                end(&$list1);
+                $key = key(&$list1);
+                $lowerbond = ((double)($precursorMass) - (double)($IMthreshold));
+                $matchvalue = $list1[$key]['mass'];
+                if($matchvalue >= $lowerbond && isset($list1[$key]['IM'])){
+                    $IM[] = array("DMS" => $list1[$key]['IM']['DMS'], "PML" => $list1[$key]['IM']['PML']);
+                }
             }
         }
 
