@@ -957,7 +957,7 @@
                         for($i=0;$i<count($predictedbonds);$i++){
                             if(strlen(trim($predictedbonds[$i])) > 3){
                                 $message .= "<span style=\"margin-left:-100px; margin-right:50px;\"><b>Disulfide Bond found on positions: ".$predictedbonds[$i]."</b> ";
-                                $message .= "(score&#39;:".$pbonds[$predictedbonds[$i]]["scoreexp"]."; Similarity:".$pbonds[$predictedbonds[$i]]["similarity"].") [by SVMs]</span><br><br>";
+                                $message .= "(SVM score:".$pbonds[$predictedbonds[$i]]["scoreexp"]."; CSP similarity:".$pbonds[$predictedbonds[$i]]["similarity"].") [<i>predicted</i>]</span><br><br>";
                             }
                         }
                     }
