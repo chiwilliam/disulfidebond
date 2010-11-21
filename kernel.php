@@ -623,13 +623,13 @@
                                         $aDebug[$i]['string'] .= ', M/Z = ';
                                         $aDebug[$i]['string'] .= number_format(($TML[$CM[$k]["debug"]["TML"]]["mass"]/$TML[$CM[$k]["debug"]["TML"]]["charge"]),3);
                                         $aDebug[$i]['string'] .= ', Z = ';
-                                        $aDebug[$i]['string'] .= number_format($TML[$CM[$k]["debug"]["TML"]]["charge"],3);
+                                        $aDebug[$i]['string'] .= $TML[$CM[$k]["debug"]["TML"]]["charge"];
                                         $massdifference = round(((double)$CM[$k]["mass"] - (double)$CM[$k]["matches"]["TML"]),2);
                                         if($massdifference <0){
                                             $massdifference *= -1;
                                         }
                                         $aDebug[$i]['string'] .= ', Delta = ';
-                                        $aDebug[$i]['string'] .= $massdifference;
+                                        $aDebug[$i]['string'] .= number_format($massdifference,3);
                                         $aDebug[$i]['string'] .= '</td>';
                                         $aDebug[$i]['string'] .= '</tr>';
                                         if($intensity >= 50){
