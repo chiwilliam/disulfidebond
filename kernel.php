@@ -62,7 +62,7 @@
     $errors["emptyfile"]["code"] = "02";
     $errors["emptyfile"]["message"] = "File uploaded is empty.";
     $errors["invalidfile"]["code"] = "03";
-    $errors["invalidfile"]["message"] = "File uploaded is invalid. Please upload a ZIP file containing either DTA or mzXML files.";
+    $errors["invalidfile"]["message"] = "File uploaded is invalid. Please upload a ZIP file containing either DTA or XML-based files.";
     $errors["noprotein"]["code"] = "04";
     $errors["noprotein"]["message"] = "No FASTA protein sequence was entered.";
     $errors["invalidprotein"]["code"] = "05";
@@ -70,7 +70,7 @@
     $errors["digestion"]["code"] = "06";
     $errors["digestion"]["message"] = "Protein could not be digested. Make sure you entered a valid FASTA protein sequence and selected a protease.";
     $errors["PMLformation"]["code"] = "07";
-    $errors["PMLformation"]["message"] = "The ZIP file did not contain any DTA file.";
+    $errors["PMLformation"]["message"] = "The ZIP file did not contain any valid MS/MS file.";
     /*
     $errors[""]["code"] = "08";
     $errors[""]["message"] = "";
@@ -381,7 +381,7 @@
                         $aDebug[$i]['string'] .= '<td width="50px;"></td>';
                         $aDebug[$i]['string'] .= '<td><span style = "color:red;">';
                         $aDebug[$i]['DTA'] = $PMLNames[$IM[$i]["PML"]];
-                        $aDebug[$i]['string'] .= 'DTA File: '.$PMLNames[$IM[$i]["PML"]].'   ['.$IM[$i]["PML"].']';
+                        $aDebug[$i]['string'] .= 'MS/MS File: '.$PMLNames[$IM[$i]["PML"]].'   ['.$IM[$i]["PML"].']';
                         $aDebug[$i]['string'] .= '</span></td>';
                         $aDebug[$i]['string'] .= '</tr>';
                         //end of outputting code
@@ -616,7 +616,7 @@
                                         $aDebug[$i]['string'] .= '</td>';
                                         $aDebug[$i]['string'] .= '<td width="50px;"></td>';
                                         $aDebug[$i]['string'] .= '<td>';
-                                        $aDebug[$i]['string'] .= 'DTA Mass = ';
+                                        $aDebug[$i]['string'] .= 'MS/MS Mass = ';
                                         $aDebug[$i]['string'] .= $CM[$k]["matches"]["TML"];
                                         $aDebug[$i]['string'] .= ', Intensity = ';
                                         $aDebug[$i]['string'] .= $TML[$CM[$k]["debug"]["TML"]]["%highpeak"];
