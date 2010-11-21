@@ -612,18 +612,18 @@
                                         }
                                         $aDebug[$i]['string'] .= '<td>';
                                         $aDebug[$i]['string'] .= ((string)($k+1)).'. ';
-                                        $aDebug[$i]['string'] .= 'Fragments Mass = '.$CM[$k]["mass"];
+                                        $aDebug[$i]['string'] .= 'Fragments Mass = '.number_format($CM[$k]["mass"],3);
                                         $aDebug[$i]['string'] .= '</td>';
                                         $aDebug[$i]['string'] .= '<td width="50px;"></td>';
                                         $aDebug[$i]['string'] .= '<td>';
                                         $aDebug[$i]['string'] .= 'MS/MS Mass = ';
-                                        $aDebug[$i]['string'] .= $CM[$k]["matches"]["TML"];
+                                        $aDebug[$i]['string'] .= number_format($CM[$k]["matches"]["TML"],3);
                                         $aDebug[$i]['string'] .= ', Intensity = ';
                                         $aDebug[$i]['string'] .= $TML[$CM[$k]["debug"]["TML"]]["%highpeak"];
                                         $aDebug[$i]['string'] .= ', M/Z = ';
-                                        $aDebug[$i]['string'] .= ($TML[$CM[$k]["debug"]["TML"]]["mass"]/$TML[$CM[$k]["debug"]["TML"]]["charge"]);
+                                        $aDebug[$i]['string'] .= number_format(($TML[$CM[$k]["debug"]["TML"]]["mass"]/$TML[$CM[$k]["debug"]["TML"]]["charge"]),3);
                                         $aDebug[$i]['string'] .= ', Z = ';
-                                        $aDebug[$i]['string'] .= $TML[$CM[$k]["debug"]["TML"]]["charge"];
+                                        $aDebug[$i]['string'] .= number_format($TML[$CM[$k]["debug"]["TML"]]["charge"],3);
                                         $massdifference = round(((double)$CM[$k]["mass"] - (double)$CM[$k]["matches"]["TML"]),2);
                                         if($massdifference <0){
                                             $massdifference *= -1;
