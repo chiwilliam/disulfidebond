@@ -356,7 +356,7 @@
                         $aDebug[$i]['string'] .= '<tr>';
                         $aDebug[$i]['string'] .= '<td><span style="color:red;">';
                         //$aDebug[$i]['string'] .= ((string)($i+1)).'. ';
-                        $aDebug[$i]['string'] .= 'Peptides Total Mass = '.$DMS[$IM[$i]["DMS"]]["mass"];
+                        $aDebug[$i]['string'] .= 'Peptides Total Mass = '.number_format($DMS[$IM[$i]["DMS"]]["mass"],3);
                         $aDebug[$i]['string'] .= '</span></td>';
                         $aDebug[$i]['string'] .= '<td width="50px;"></td>';
                         $aDebug[$i]['string'] .= '<td><span style="color:red;">';
@@ -364,7 +364,7 @@
                         if($massdifference <0){
                             $massdifference *= -1;
                         }
-                        $aDebug[$i]['string'] .= 'Precursor Ion M+H = '.$PML[$IM[$i]["PML"]];
+                        $aDebug[$i]['string'] .= 'Precursor Ion M+H = '.number_format($PML[$IM[$i]["PML"]],3);
                         $aDebug[$i]['string'] .= ' [Mass difference: '.$massdifference.']';
                         $aDebug[$i]['string'] .= '</span></td>';
                         $aDebug[$i]['string'] .= '</tr>';
