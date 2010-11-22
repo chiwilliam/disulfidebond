@@ -148,7 +148,7 @@
                                         </td>
                                         <td class="inputright">
                                             <select id="predictive" name="predictive"
-                                                    onmouseover="Tip('Use predictive techniques (SVMs) as a complementary toolset to improve results')"
+                                                    onmouseover="Tip('Include the predictive framework (SVM-models and CSPs) in the analysis of the disulfide connectivity to improve results accuracy')"
                                                     onmouseout="UnTip()">
                                                 <option <?php if(!isset($predictive)){$predictive = "Y";} if($predictive == "Y"){echo "selected";} ?> value="Y">Yes</option>
                                                 <option <?php if(!isset($predictive)){$predictive = "Y";} if($predictive == "N"){echo "selected";} ?> value="N">No</option>                                                

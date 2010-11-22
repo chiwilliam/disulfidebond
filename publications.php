@@ -45,11 +45,20 @@
                             <td>
                                 <ul>
                                     <li>
+                                        <font face="Times New Roman" size="3">W. Murad
+                                        &quot;Disulfide Bond Determination by Combining Efficient Search and Machine Learning&quot;,
+                                        <i> Master Thesis, San Francisco State University, San Francisco</i>, December 2010</font>
+                                        <a href="./papers/thesis.pdf">
+                                            <img alt="[ZIP]" border="0" height="16" src="./images/pdf.gif" width="16" />
+                                        </a>
+                                    </li>
+                                    <dd>&nbsp;</dd>
+                                    <li>
                                         <font face="Times New Roman" size="3">W. Murad, R. Singh, and R. Yen
                                         &quot;An efficient algorithmic approach for mass spectrometry-based disulfide connectivity determination using multi-ion analysis&quot;,
-                                        <i>BMRL Technical Report 2010-09-01</i></font>
-                                        <a href="./papers/bmrl2010.pdf">
-                                            <img alt="[PDF]" border="0" height="16" src="./images/pdf.gif" width="16" />
+                                        <i>APBC 2011, BMC Bioinformatics Journal</i>, 2011</font>
+                                        <a href="./papers/apbc2011.zip">
+                                            <img alt="[ZIP]" border="0" height="16" src="./images/pdf.gif" width="16" />
                                         </a>
                                     </li>
                                     <dd>&nbsp;</dd>
