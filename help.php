@@ -101,7 +101,7 @@
                         <tr>
                             <td class="justified">
                                 The Initial Matching threshold is a threshold used to 
-                                define a mass window centered on a experimental precursor ion mass value (from a DTA file) within 
+                                define a mass window centered on a experimental precursor ion mass value (from a MS/MS file) within 
                                 which a correspondence between this ion mass value and a theoretical precursor ion mass value may 
                                 be found. The correspondence is defined as an Initial Match (IM).
                                 <br/><br/>
@@ -118,7 +118,7 @@
                         <tr>
                             <td class="justified">
                                 The MS/MS Intensity/Abundance threshold is used to remove the fragment peaks 
-                                (m/z data points) with low intensity in an experimental spectrum (or DTA file). 
+                                (m/z data points) with low intensity in an experimental spectrum (or MS/MS file). 
                                 These peaks represent noisy unreliable data, which do not contribute to the 
                                 method's accuracy and efficiency. This lower bound limit allows MS2DB+ to account 
                                 only for the meaningful m/z values in the entire spectra being analyzed.
