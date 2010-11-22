@@ -65,11 +65,6 @@
                                 The software can account for multiple ions (a, b, bo, b*, c, x, y, yo, y*, and z) in determining the 
                                 disulfide bonds, yet ensuring that the solution is found in polynomial time. Predictive techniques are 
                                 concomitantly applied to identify S-S bonds when the MS/MS data is limited.
-                            <!--
-                                Our research group has been developing a web application that addresses these problems and
-                                forms the basis of an end-to-end system that requires minimal expert intervention and
-                                yet can determine complex disulfide bonding topologies with high efficacy.
-                            -->
                             </td>
                         </tr>
                         <tr>
@@ -81,13 +76,6 @@
                                     At the same time, expert users are provided with an opportunity to “tune” crucial parameters required in the 
                                     disulfide bond determination process.
                                 </p>
-                                <!--
-                                <p>
-                                Our methodology uses an approximation algorithm and data driven strategies to
-				efficiently address the search and matching problem and find the best disulfide-linked
-				structural configuration that can match a given spectra.
-				</p>
-                                -->
                                 <p>
                                     If you are not familiar with <b>MS2DB+</b>, check the demo video
                                     below to get started <i>(best video quality: 720p HD and full screen)</i> or click 
