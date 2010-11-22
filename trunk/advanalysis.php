@@ -64,11 +64,11 @@
                                 </tr>
                                 <tr class="input">
                                     <td class="inputleft">
-                                        <label>Upload ZIP with DTA files:</label>
+                                        <label>Upload a MS/MS data file:</label>
                                     </td>
                                     <td class="inputright">
                                         <input type="file" id="zipFile" name="zipFile" size="90"
-                                               onmouseover="Tip('Select a ZIP file containing DTA files from a MS/MS experiment')"
+                                               onmouseover="Tip('Upload one of the following formats: mzXML, mzData, mzML or a ZIP containing DTA files')"
                                                onmouseout="UnTip()" />
                                     </td>
                                 </tr>
