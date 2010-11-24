@@ -71,7 +71,7 @@
                         </tr>
                         <tr>
                             <td class="note">
-                                File formats other than the mzXML, mzData, mzML and DTA formats can be converted to a supported 
+                                File formats other than the mzXML, mzData, mzML and DTA can be converted to a supported 
                                 MS/MS data file using one of the following applications:
                                 <a target="_blank" href="http://sourceforge.net/projects/sashimi/files/Trans-Proteomic%20Pipeline%20%28TPP%29/">TPP</a>,
                                 <a target="_blank" href="http://proteowizard.sourceforge.net/download.html">ProteoWizard</a> or
