@@ -256,6 +256,8 @@
                             </table>
                             <?php
                                 if(isset($debug)){echo $debug;}
+                                //Displays the time taken to process different steps of the method: MS/MS, SVM and CSP
+                                //echo $timestr;
                             ?>
                         </div>
                     </div>

@@ -1,5 +1,9 @@
 <?php
 
+    //measure computational time
+    $time = array();
+    $time["start"] = microtime(true);
+
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
    
@@ -27,6 +31,71 @@
     $Func = new Commonclass();
     $AAs = new AAclass();
     $CMClass = new ConfirmedMatchclass();
+        
+    /*
+    $title = "Beta-LG MS/MS spectrum";
+    $chartData = array();
+    $chartData[0]['mass'] = 156;
+    $chartData[0]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[1]['mass'] = 163;
+    $chartData[1]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[2]['mass'] = 255;
+    $chartData[2]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[3]['mass'] = 276;
+    $chartData[3]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[4]['mass'] = 368;
+    $chartData[4]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[5]['mass'] = 389;
+    $chartData[5]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[6]['mass'] = 471;
+    $chartData[6]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[7]['mass'] = 536;
+    $chartData[7]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[8]['mass'] = 599;
+    $chartData[8]['intensity'] = mt_rand(10, 40)/100;
+    $chartData[9]['mass'] = 1491;
+    $chartData[9]['intensity'] = 1.0;
+    $chartData[10]['mass'] = 1647;
+    $chartData[10]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[11]['mass'] = 1654;
+    $chartData[11]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[12]['mass'] = 1746;
+    $chartData[12]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[13]['mass'] = 1767;
+    $chartData[13]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[14]['mass'] = 1859;
+    $chartData[14]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[15]['mass'] = 1880;
+    $chartData[15]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[16]['mass'] = 1962;
+    $chartData[16]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[17]['mass'] = 2027;
+    $chartData[17]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[18]['mass'] = 2090;
+    $chartData[18]['intensity'] = mt_rand(10, 100)/100;
+    $chartData[19]['mass'] = 700;
+    $chartData[29]['intensity'] = mt_rand(10, 20)/100;
+    $chartData[20]['mass'] = 850;
+    $chartData[20]['intensity'] = mt_rand(10, 20)/100;
+    $chartData[21]['mass'] = 950;
+    $chartData[21]['intensity'] = mt_rand(10, 20)/100;
+    $chartData[22]['mass'] = 1050;
+    $chartData[22]['intensity'] = mt_rand(10, 20)/100;
+    $chartData[23]['mass'] = 1100;
+    $chartData[23]['intensity'] = mt_rand(10, 20)/100;
+    $chartData[24]['mass'] = 1250;
+    $chartData[24]['intensity'] = mt_rand(10, 20)/100;
+    $chartData[25]['mass'] = 1300;
+    $chartData[25]['intensity'] = mt_rand(10, 20)/100;
+    $chartData[26]['mass'] = 1450;
+    $chartData[26]['intensity'] = mt_rand(10, 20)/100;
+    $chart = new Chartingclass();
+    $url = $chart->getChart($title, $chartData);
+    unset($title);
+    unset($chartData);
+    unset($chart);
+    exit;
+    */
     
     /*
     $data = array();
@@ -912,10 +981,10 @@
                     $pbonds = array();
                     if($predictive == 'Y'){
                         if(count($bonds) == 0){
-                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root);
+                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time);
                         }
                         else{
-                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root);
+                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root, &$time);
                         }
                         
                     }
@@ -935,7 +1004,8 @@
                             $cys1 = (string)$pbonds[$SS[$w]]['cys1'];
                             $cys2 = (string)$pbonds[$SS[$w]]['cys2'];
 
-                            $counttmp = $pbonds[$SS[$w]]['scoreexp'];
+                            $counttmp = $pbonds[$SS[$w]]['scoreexp'] + exp(exp($pbonds[$SS[$w]]['similarity']));
+                            //$counttmp = $pbonds[$SS[$w]]['scoreexp'];
                             for($z=0;$z<$counttmp;$z++){
                                 $newgraph[$cys1][] = $cys2;
                                 $newgraph[$cys2][] = $cys1;
@@ -945,7 +1015,7 @@
                     }
                     
                     for($i=0;$i<count($bonds);$i++){
-
+                        
                         if(strlen(trim($bonds[$i])) > 3){
                             $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
                             $message .= "(score:".$truebonds[$bonds[$i]]["score"]."; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
@@ -957,7 +1027,7 @@
                         for($i=0;$i<count($predictedbonds);$i++){
                             if(strlen(trim($predictedbonds[$i])) > 3){
                                 $message .= "<span style=\"margin-left:-100px; margin-right:50px;\"><b>Disulfide Bond found on positions: ".$predictedbonds[$i]."</b> ";
-                                $message .= "(SVM score:".$pbonds[$predictedbonds[$i]]["scoreexp"]."; CSP similarity:".$pbonds[$predictedbonds[$i]]["similarity"].") [<i>predicted</i>]</span><br><br>";
+                                $message .= "(SVM score:".$pbonds[$predictedbonds[$i]]["scoreexp"]."; CSP similarity:".number_format(exp(exp($pbonds[$predictedbonds[$i]]["similarity"])),3).") [<i>predicted</i>]</span><br><br>";
                             }
                         }
                     }
@@ -1100,6 +1170,8 @@
                         $SSgraph .= "</table>";
 
                     }
+                    $time["method"] = microtime(true) - $time["start"];
+                    $timestr = "Method:".number_format($time["method"],2)."; SVM:".number_format($time["SVM"],2)."; CSP:".number_format($time["CSP"],2);
 
                 }
                 else{

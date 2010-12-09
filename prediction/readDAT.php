@@ -1,5 +1,5 @@
 <?php
-    ini_set("memory_limit", "2000M");
+    ini_set("memory_limit", "1000M");
     set_time_limit(0);
 
     $filename = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot.dat";
@@ -8,6 +8,8 @@
     $filename4 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot4.dat";
     $filename5 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot5.dat";
     $filearray = array();
+    
+    $countSequences = array("1" => 0,"2" => 0,"3" => 0,"4" => 0,"5" => 0);
     
     $filestr = file_get_contents($filename);
     $filearray = explode("//", $filestr);
@@ -129,8 +131,10 @@
     }
     
     $filearray[] = $results[0];
+    
     $range = count($results);
     for($i=1;$i<$range;$i++){
+        
         $start = strpos($results[$i],"AA;");
         $str = trim(substr($results[$i],$start+3));
         $str = substr($str,0,strlen($str)-2);
@@ -155,6 +159,13 @@
     }
     
     unset($results);
+    
+    $range = count($filearray);
+    for($i=0;$i<$range;$i++){
+        //count sequences according to number of S-S bonds
+        $sequenceBonds = substr_count($filearray[$i], "**");
+        $countSequences[$sequenceBonds+1]++;
+    }
     
     //Count Newly filtered array
     echo '<br/>Array containing only unique proteins with 4 or less valid S-S bonds: '.count($filearray).'<br/>';    

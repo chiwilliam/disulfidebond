@@ -291,6 +291,12 @@ class InitialMatchclass {
         else{
             $delta = $epsilon;
         }
+        
+        $deltainfo = array();
+        $deltainfo = $AAs->getDeltaInfo($disulfideBondedPeptides);
+        
+        //exit;
+        
         //$delta = $AAs->getDelta($disulfideBondedPeptides,'median');
         //$delta = $AAs->getDelta($disulfideBondedPeptides,'average');
 

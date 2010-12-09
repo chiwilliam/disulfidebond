@@ -1,5 +1,4 @@
 <?php
-    
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
     //fix for tintin root path
@@ -10,7 +9,7 @@
     include $root."/disulfidebond/prediction/functionsDAT.php";
     include $root."/disulfidebond/prediction/functionsCSP.php";
     
-    function getBondsByPredictiveTechniques($bonds,$FASTA,$root){
+    function getBondsByPredictiveTechniques($bonds,$FASTA,$root,&$time){
         
         //$bonds is the array holding all bonds found by the MS/MS method
         //the structure is
@@ -31,12 +30,16 @@
         
         //This is the function that changes according to the SVMs used!
         //Level-1 SVM
+        $start = microtime(true);
         $result = runSVM($protein,$root);
-        
+        $time["SVM"] = microtime(true) - $start;
+        //Filtering process using disulfide connectivity from MS-based framework
         $pbonds = getTruebonds($protein,$result,$bonds);
         
         //Level-2 SVM
+        $start = microtime(true);
         $CSPmatch = confirmBondsViaSVM2(&$protein, &$pbonds, $bonds, $root);
+        $time["CSP"] = microtime(true) - $start;
         
         unset($bonds);
         unset($protein);
