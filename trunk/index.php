@@ -80,7 +80,10 @@
                                     If you are not familiar with <b>MS2DB+</b>, check the demo video
                                     below to get started <i>(best video quality: 720p HD and full screen)</i> or click 
                                         <a target="_blank" href="videos/ms2db_demo.wmv"><span style="color:blue;">here</span></a>
-                                    to download/access the video directly.
+                                    to download/access the video directly. The most up-to-date source code is available 
+                                        <a target="_blank" href="http://code.google.com/p/disulfidebond/source/checkout"><span style="color:blue;">here</span></a>.
+                                    The source code can also be requested by
+                                    <a href="contactus.php"><span style="color:blue;">authors</span></a>.
 				</p>
                             </td>
                         </tr>

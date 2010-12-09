@@ -590,6 +590,31 @@ class AAclass {
 
         return $max;
     }
+    
+    public function getDeltaInfo($CCP){
+        
+        $result = array();
+        $avg = 0;
+        
+        $keys = array_keys($CCP);
+        $count = count($keys);
+        
+        for($i=0;$i<$count;$i++){
+            $keys[$i] = ((int)(str_replace("-", ".", substr($keys[$i], 0, 6))));
+        }
+        
+        for($i=0;$i<$count;$i++){
+            $avg += $keys[$i];
+        }
+        $avg = $avg/$count;
+        
+        $result['min'] = $keys[0];
+        $result['max'] = $keys[$count-1];
+        $result['avg'] = $avg;
+        $result['count'] = $count;
+        
+        return $result;
+    }
 
 }
 ?>
