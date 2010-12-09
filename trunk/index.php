@@ -64,7 +64,9 @@
                                 the disulfide linkage in proteins based on mass spectrometry data and machine learning techniques. 
                                 The software can account for multiple ions (a, b, bo, b*, c, x, y, yo, y*, and z) in determining the 
                                 disulfide bonds, yet ensuring that the solution is found in polynomial time. Predictive techniques are 
-                                concomitantly applied to identify S-S bonds when the MS/MS data is limited.
+                                applied to identify S-S bonds when the MS/MS data provides insufficient resolution. A predictive framework is 
+                                formed by a SVM-classifier, cysteine separations profiles (CSPs) and smart filtering techniques to enhance 
+                                MS2DB+ accuracy, sensitivity and specificity.
                             </td>
                         </tr>
                         <tr>
