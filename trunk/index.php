@@ -84,8 +84,8 @@
                                         <a target="_blank" href="videos/ms2db_demo.wmv"><span style="color:blue;">here</span></a>
                                     to download/access the video directly. The most up-to-date source code is available 
                                         <a target="_blank" href="http://code.google.com/p/disulfidebond/source/checkout"><span style="color:blue;">here</span></a>.
-                                    The source code can also be requested by
-                                    <a href="contactus.php"><span style="color:blue;">authors</span></a>.
+                                    A compressed file (ZIP) with the source code is available for download 
+                                    <a href="papers/ms2db+.zip"><span style="color:blue;">here</span></a>.
 				</p>
                             </td>
                         </tr>
