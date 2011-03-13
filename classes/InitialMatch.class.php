@@ -1203,5 +1203,27 @@ class InitialMatchclass {
         return $matches;
     }
     
+    public function removePeptidesInTransmembraneRegion($disulfideBondedPeptides,$transmembranefrom,$transmembraneto){
+        
+        $peptides = array();
+        
+        $keys = array_keys($disulfideBondedPeptides);
+        
+        for($i=0;$i<count($keys);$i++){
+            $pep = $disulfideBondedPeptides[$keys[$i]];
+            $remove = true;
+            for($j=0;$j<count($pep['cysteines']);$j++){
+                if((($pep['cysteines'][$i]+$pep['start']) < (int)$transmembranefrom) || (($pep['cysteines'][$i]+$pep['start']) > (int)$transmembraneto)){
+                    $remove = false;
+                }
+            }
+            if($remove == false){
+                $peptides[$keys[$i]] = $disulfideBondedPeptides[$keys[$i]];
+            }
+        }
+        
+        return $peptides;
+    }
+    
 }
 ?>

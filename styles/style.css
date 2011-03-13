@@ -40,10 +40,18 @@ td.graphtd{
     margin: 0px 0px 0px 0px;
 }
 
+td.graphtdnum{
+    width:20px;
+    height:20px;
+    background-color:white;
+    vertical-align:top;
+    font-size:xx-small;
+}
+
 td.graphselectedtd{
     width:20px;
     height:20px;
-    background-color:yellow;
+    background-color:blue;
     color:red;
     font-size:14px;
     font-weight:bold;

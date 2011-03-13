@@ -902,5 +902,72 @@ class Commonclass {
         exec($cmd);
         
     }
+    
+    public function getMinMaxScorePredictive($bonds){
+        $minmax = array();
+        
+        $minmax['min'] = 1000;
+        $minmax['max'] = 0;
+        
+        $keys = array_keys($bonds);
+        $count = count($keys);
+        for($i=0;$i<$count;$i++){
+            $score = $bonds[$keys[$i]]['score'] + $bonds[$keys[$i]]['similarity'];
+            if($score > $minmax['max']){
+                $minmax['max'] = $score;
+            }
+            if($score < $minmax['min']){
+                $minmax['min'] = $score;
+            }            
+        }
+        
+        return $minmax;
+    }
+    
+    public function getMinMaxScoreMSMS($bonds){
+        $minmax = array();
+        
+        $minmax['min'] = 1000;
+        $minmax['max'] = 0;
+        $minmax['ppmin'] = 1000;
+        $minmax['ppmax'] = 0;
+        $minmax['pp2min'] = 1000;
+        $minmax['pp2max'] = 0;
+        
+        $keys = array_keys($bonds);
+        $count = count($keys);
+        for($i=0;$i<$count;$i++){
+            
+            //score
+            if($bonds[$keys[$i]]['score'] > $minmax['max']){
+                $minmax['max'] = $bonds[$keys[$i]]['score'];
+            }
+            if($bonds[$keys[$i]]['score'] < $minmax['min']){
+                $minmax['min'] = $bonds[$keys[$i]]['score'];
+            }
+            
+            //ppvalue
+            if(!is_infinite($bonds[$keys[$i]]['ppvalue'])){
+                if($bonds[$keys[$i]]['ppvalue'] > $minmax['ppmax']){
+                    $minmax['ppmax'] = $bonds[$keys[$i]]['ppvalue'];
+                }
+                if($bonds[$keys[$i]]['ppvalue'] < $minmax['ppmin']){
+                    $minmax['ppmin'] = $bonds[$keys[$i]]['ppvalue'];
+                }
+            }
+            
+            //pp2value
+            if(!is_infinite($bonds[$keys[$i]]['pp2value'])){
+                if($bonds[$keys[$i]]['pp2value'] > $minmax['pp2max']){
+                    $minmax['pp2max'] = $bonds[$keys[$i]]['pp2value'];
+                }
+                if($bonds[$keys[$i]]['pp2value'] < $minmax['pp2min']){
+                    $minmax['pp2min'] = $bonds[$keys[$i]]['pp2value'];
+                }
+            }
+        }        
+        
+        return $minmax;
+    }
 }
 ?>
