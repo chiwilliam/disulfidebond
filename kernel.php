@@ -19,6 +19,9 @@
     //remove time limit when executing a script
     set_time_limit(0);
     
+    echo $root;
+    exit;
+    
     //include necessary classes
     require_once $root."/disulfidebond/classes/Users.class.php";
     require_once $root."/disulfidebond/classes/AA.class.php";
@@ -27,9 +30,6 @@
     require_once $root."/disulfidebond/classes/ConfirmedMatch.class.php";
     require_once $root."/disulfidebond/classes/Charting.class.php";
     require_once $root."/disulfidebond/prediction.php";
-    
-    echo $root;
-    exit;
     
     //initialize objects
     $Users = new Usersclass();
