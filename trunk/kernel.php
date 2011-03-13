@@ -18,7 +18,10 @@
 
     //remove time limit when executing a script
     set_time_limit(0);
-
+    
+    echo 'test';
+    exit;
+    
     //include necessary classes
     require_once $root."/disulfidebond/classes/Users.class.php";
     require_once $root."/disulfidebond/classes/AA.class.php";
@@ -244,9 +247,6 @@
     if($delta < 0){
         $delta = 0;
     }
-    
-    echo 'test';
-    exit;
     
     if(strlen($_FILES["zipFile"]["name"]) > 0 && $_FILES["zipFile"][size] > 0 &&
        ($_FILES["zipFile"]["type"] == "application/zip" || $_FILES["zipFile"]["type"] == "application/x-zip-compressed" || $_FILES["zipFile"]["type"] == "application/octet-stream") &&
