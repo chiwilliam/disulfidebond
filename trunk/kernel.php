@@ -28,7 +28,7 @@
     require_once $root."/disulfidebond/classes/Charting.class.php";
     require_once $root."/disulfidebond/prediction.php";
     
-    echo 'test';
+    echo $root;
     exit;
     
     //initialize objects
