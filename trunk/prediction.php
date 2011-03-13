@@ -2,7 +2,7 @@
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
     //fix for tintin root path
-    if(trim($root) == "/var/www/html/bioinformatics"){
+    if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
         //for tintin
         $root = "/home/whemurad/public_html";
         //for haddock2
