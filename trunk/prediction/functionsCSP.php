@@ -21,10 +21,9 @@
                 $cysteines[] = $cys2;
             }
         }
-        sort(&$cysteines,SORT_NUMERIC);
         
         for($i=1;$i<count($cysteines);$i++){
-            $CSP[] = $cysteines[$i]-$cysteines[$i-1];
+            $CSP[] = abs($cysteines[$i]-$cysteines[$i-1]);
         }
         
         return $CSP;
@@ -47,10 +46,9 @@
                 $cysteines[] = $cys2;
             }
         }
-        sort(&$cysteines,SORT_NUMERIC);
         
         for($i=1;$i<count($cysteines);$i++){
-            $CSP[] = $cysteines[$i]-$cysteines[$i-1];
+            $CSP[] = abs($cysteines[$i]-$cysteines[$i-1]);
         }
         
         return $CSP;
@@ -124,6 +122,56 @@
         
         return $length;
     }
+    
+    function getCSPMatches(&$CSPs,&$proteinDB){
+        
+        $CSPmatches = array();
+        
+        for($k=2;$k<=count($CSPs);$k++){
+
+            $count = count($CSPs[$k]);
+            $countDB = count($proteinDB);
+
+            for($i=0;$i<$count;$i++){
+                $CSPmin = 100000;
+                for($j=0;$j<$countDB;$j++){
+                    if(count($CSPs[$k][$i]['CSP']) == count($proteinDB[$j]['CSP'])){
+                        $CSPd = getCSPDivergence($CSPs[$k][$i]['CSP'],$proteinDB[$j]['CSP'],$CSPmin);
+                        if($CSPd < $CSPmin){
+                            $CSPmin = $CSPd;
+                            $CSPmatches[$k][$i] = array("match" => $j, "CSPdelta" => $CSPd, "BONDS" => $CSPs[$k][$i], "DB" => $proteinDB[$j]);
+                        }
+                    }            
+                }
+            }
+        }
+        
+        $CSPmatches = filterCSPMatches($CSPmatches);
+        
+        return $CSPmatches;
+    }
+    
+    function filterCSPMatches($CSPmatches){
+        
+        $matches = array();
+        
+        for($k=2;$k<=count($CSPmatches)+1;$k++){
+            $count = count($CSPmatches[$k]);
+            $index = -1;
+            $CSPmin = 100000;
+            for($i=0;$i<$count;$i++){
+                if($CSPmatches[$k][$i]['CSPdelta'] < $CSPmin){
+                    $CSPmin = $CSPmatches[$k][$i]['CSPdelta'];
+                    $index = $i;
+                }
+            }
+            $matches[$k][] = $CSPmatches[$k][$index];
+        }
+        
+        return $matches;
+        
+    }
+    
     
     
 ?>

@@ -9,7 +9,10 @@
    
     //fix for tintin root path
     if(trim($root) == "/var/www/html/bioinformatics"){
+        //for tintin
         $root = "/home/whemurad/public_html";
+        //for haddock2
+        $root = "/home/ms2db/public_html";
         $istintin = "yes";
     }
 
@@ -211,6 +214,12 @@
     //is inside that region
     $transmembranefrom = trim($_POST["transmembranefrom"]);
     $transmembraneto = trim($_POST["transmembraneto"]);
+    if(strlen(trim($transmembranefrom)) == 0){
+        $transmembranefrom = 0;
+    }
+    if(strlen(trim($transmembraneto)) == 0){
+        $transmembraneto = 0;
+    }
 
     //Check File uploaded
     $zipFile = $_FILES["zipFile"];
@@ -265,10 +274,14 @@
         $debug .= '</h3></td></tr>';
 
         //Digest protein
-        $possiblebonds = $AAs->possibleBonds($fastaProtein);
+        $possiblebonds = $AAs->possibleBonds($fastaProtein,$transmembranefrom,$transmembraneto);
 
         //Form possible cysteine containing peptides
         $disulfideBondedPeptides = $IMClass->digestProtein($fastaProtein, $protease);
+        
+        if($transmembranefrom > 0 && $transmembraneto > 0){
+            $disulfideBondedPeptides = $IMClass->removePeptidesInTransmembraneRegion($disulfideBondedPeptides,$transmembranefrom,$transmembraneto);
+        }
 
         if(count($disulfideBondedPeptides) > 0)
         {
@@ -830,6 +843,8 @@
                     $minmatches2 = 30;
                     //keep minimum score to create graph to be send to gabow routine
                     $minimumscore = 100;
+                    //keep minimum score to create graph to be send to gabow routine
+                    $maxscore = 0;
                     for($w=0;$w<$numbonds;$w++){
                         $CMtotal = $numberBonds[$w]["CM"];
                         $TMLtotal = $numberBonds[$w]["TML"];
@@ -866,6 +881,8 @@
 
                                                 if($score < $minimumscore)
                                                     $minimumscore = $score;
+                                                if($score > $maxscore)
+                                                    $maxscore = $score;
                                             }
                                         }
                                     }
@@ -936,16 +953,30 @@
                         }
                     }
                     */
-
+                    
                     //convert array indexes to disulfide bonds
                     $filteredbonds = array();
                     $keys = array_keys($truebonds);
                     for($w=0;$w<count($keys);$w++){
-                        $filteredbonds[$truebonds[$keys[$w]]['bond']] = $truebonds[$keys[$w]];
+                        //get the match with maximum score in case there are two matches for the same bond
+                        if(!isset($filteredbonds[$truebonds[$keys[$w]]['bond']])){
+                            $filteredbonds[$truebonds[$keys[$w]]['bond']] = $truebonds[$keys[$w]];
+                        }
+                        else{
+                            if($truebonds[$keys[$w]]['score'] > $filteredbonds[$truebonds[$keys[$w]]['bond']]['score'])
+                            $filteredbonds[$truebonds[$keys[$w]]['bond']] = $truebonds[$keys[$w]];
+                        }
                     }
                     unset($truebonds);
                     $truebonds = $filteredbonds;
                     unset($filteredbonds);
+
+                    
+                    //get minimum and maximum scores for bonds found by both frameworks
+                    //in case one single graph is used for all the bonds, all scores need to be normalized
+                    $minmaxMSMS = array();
+                    $truebonds2 = $truebonds;
+                    $minmaxMSMS = $Func->getMinMaxScoreMSMS($truebonds2);
 
                     //normalize the bond scores in order to properly mount the graph to
                     //send to the gabow routine.
@@ -981,21 +1012,28 @@
                     $pbonds = array();
                     if($predictive == 'Y'){
                         if(count($bonds) == 0){
-                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time);
+                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time, $transmembranefrom, $transmembraneto);
                         }
                         else{
-                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root, &$time);
+                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root, &$time, $transmembranefrom, $transmembraneto);
+                            //$pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time);
                         }
                         
                     }
                     
                     $predictedbonds = array();
                     
+                    //get minimum and maximum scores for bonds found by both frameworks
+                    //in case one single graph is used for all the bonds, all scores need to be normalized
+                    $minmaxPredictive = array();
+                        
                     if(count($pbonds) > 0){
 
                         //remove Bonds according to the transmembrane region set by the user
                         $pbonds = $Func->removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto);
                     
+                        $minmaxPredictive = $Func->getMinMaxScorePredictive($pbonds);
+                        
                         unset($newgraph);
                         $newgraph = array();
                         $SS = array_keys($pbonds);
@@ -1004,8 +1042,9 @@
                             $cys1 = (string)$pbonds[$SS[$w]]['cys1'];
                             $cys2 = (string)$pbonds[$SS[$w]]['cys2'];
 
-                            $counttmp = $pbonds[$SS[$w]]['scoreexp'] + exp(exp($pbonds[$SS[$w]]['similarity']));
-                            //$counttmp = $pbonds[$SS[$w]]['scoreexp'];
+                            
+                            //$counttmp = $pbonds[$SS[$w]]['scoreexp'] + $pbonds[$SS[$w]]['similarityexp'];
+                            $counttmp = $pbonds[$SS[$w]]['score'] + $pbonds[$SS[$w]]['similarity'];
                             for($z=0;$z<$counttmp;$z++){
                                 $newgraph[$cys1][] = $cys2;
                                 $newgraph[$cys2][] = $cys1;
@@ -1014,11 +1053,82 @@
                         $predictedbonds = $Func->executeGabow($newgraph, $root);
                     }
                     
+                    
+                    //global graph, including all bonds for both frameworks
+                    //normalized gabow
+                    unset($newgraph);
+                    $newgraph = array();
+                    
+                    if(count($truebonds2) > 0){
+                        $SS = array_keys($truebonds2);
+                        for($w=0;$w<count($SS);$w++){
+
+                            $cys1 = (string)$truebonds2[$SS[$w]]['cys1'];
+                            $cys2 = (string)$truebonds2[$SS[$w]]['cys2'];
+
+                            $counttmp = $truebonds2[$SS[$w]]['score']/$minmaxMSMS['max'];
+                            if(!is_infinite($truebonds2[$SS[$w]]['ppvalue'])){
+                                $counttmp += $truebonds2[$SS[$w]]['ppvalue']/$minmaxMSMS['ppmax'];
+                            }
+                            else{
+                                $counttmp++;
+                            }
+                            if(!is_infinite($truebonds2[$SS[$w]]['pp2value'])){
+                                $counttmp += $truebonds2[$SS[$w]]['pp2value']/$minmaxMSMS['pp2max'];
+                            }
+                            else{
+                                $counttmp++;
+                            }
+                            $counttmp/3;
+                            $counttmp = number_format($counttmp*100,0);                        
+
+                            for($z=0;$z<$counttmp;$z++){
+                                $newgraph[$cys1][] = $cys2;
+                                $newgraph[$cys2][] = $cys1;
+                            }
+                        }
+                    }
+                    if(count($pbonds) > 0){
+                        $SS = array_keys($pbonds);
+                        for($w=0;$w<count($SS);$w++){
+
+                            $cys1 = (string)$pbonds[$SS[$w]]['cys1'];
+                            $cys2 = (string)$pbonds[$SS[$w]]['cys2'];
+
+                            $counttmp = ($pbonds[$SS[$w]]['score'] + $pbonds[$SS[$w]]['similarity'])/$minmaxPredictive['max'];
+                            $counttmp = number_format($counttmp*100,0);                        
+
+                            for($z=0;$z<$counttmp;$z++){
+                                $newgraph[$cys1][] = $cys2;
+                                $newgraph[$cys2][] = $cys1;
+                            }
+                        }
+                    }
+                    if(count($newgraph) > 0){
+                        $globalbonds = $Func->executeGabow($newgraph, $root);
+                    }
+                    
                     for($i=0;$i<count($bonds);$i++){
                         
                         if(strlen(trim($bonds[$i])) > 3){
+                            
                             $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
-                            $message .= "(score:".$truebonds[$bonds[$i]]["score"]."; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
+                            $message .= "(score:".$truebonds[$bonds[$i]]["score"];
+                            
+                            if(!is_infinite($truebonds[$bonds[$i]]["ppvalue"])){
+                                $message .= "; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0);
+                            }
+                            else{
+                                $message .= "; pp-value:".number_format($minmaxMSMS['ppmax'],0);
+                            }
+                            
+                            if(!is_infinite($truebonds[$bonds[$i]]["pp2value"])){
+                                $message .= "; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
+                            }
+                            else{
+                                $message .= "; pp2-value:".number_format($minmaxMSMS['pp2max'],0);
+                            }
+                            
                             $message .= ")</span><br><br>";
                         }
                     }
@@ -1027,7 +1137,7 @@
                         for($i=0;$i<count($predictedbonds);$i++){
                             if(strlen(trim($predictedbonds[$i])) > 3){
                                 $message .= "<span style=\"margin-left:-100px; margin-right:50px;\"><b>Disulfide Bond found on positions: ".$predictedbonds[$i]."</b> ";
-                                $message .= "(SVM score:".$pbonds[$predictedbonds[$i]]["scoreexp"]."; CSP similarity:".number_format(exp(exp($pbonds[$predictedbonds[$i]]["similarity"])),3).") [<i>predicted</i>]</span><br><br>";
+                                $message .= "(SVM score:".$pbonds[$predictedbonds[$i]]["score"]."; CSP similarity:".number_format($pbonds[$predictedbonds[$i]]["similarity"],3).") [<i>predicted</i>]</span><br><br>";
                             }
                         }
                     }
@@ -1138,6 +1248,12 @@
                                     break;
                                 }
                             }
+                            
+                            //add indexes to each lines (beginning)
+                            if($i%$numColumns == 0){
+                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;vertical-align:top;">'.($i+1).'</span></td>';
+                            }
+                            
                             //if it does, color background
                             if($isBonded){
                                 $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\'Cysteine at position '.($i+1).'\')">'.$AAsarray[$i].'</td>';
@@ -1145,6 +1261,11 @@
                             else{
                                 $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
                             }
+                            
+                            //add indexes to each lines (end)
+                            if(($i+1)%$numColumns == 0){
+                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;vertical-align:top;">'.($i+1).'</span></td>';
+                            }                            
 
                             //end row
                             if($i == ($totalAAs-1)){
@@ -1162,7 +1283,7 @@
                         $SSgraphJS = '<script type="text/javascript">';
                         for($j=0;$j<$totalbonds;$j++){
                             $cysteines = explode('-', $combinedbonds[$j]);
-                            $SSgraphJS .= "myDrawFunction(".($cysteines[0]-1).",".($cysteines[1]-1).",20,20,30,'yellow',3);";
+                            $SSgraphJS .= "myDrawFunction(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
                         }
                         $SSgraphJS .= '</script>';
 
@@ -1216,6 +1337,12 @@
     }
 
     //Load UI
+    if($transmembranefrom == 0 ){
+        $transmembranefrom = "";
+    }
+    if($transmembraneto == 0 ){
+        $transmembraneto = "";
+    }
     if($_REQUEST["mode"] == "advanced"){
         include $root."/disulfidebond/advanalysis.php";
     }

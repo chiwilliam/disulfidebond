@@ -553,7 +553,7 @@ class AAclass {
         return $result;
     }
 
-    public function possibleBonds($sequence){
+    public function possibleBonds($sequence,$transmembranefrom,$transmembraneto){
         
         $cysteines = array();
         $bonds = array();
@@ -561,7 +561,7 @@ class AAclass {
 
         for($i=1;$i<=$length;$i++){
             $AA = substr($sequence, $i-1,1);
-            if($AA == "C"){
+            if($AA == "C" && ($i < (int)$transmembranefrom || $i > (int)$transmembraneto)){
                 $cysteines[] = $i;
             }
         }
