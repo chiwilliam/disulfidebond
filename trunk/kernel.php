@@ -19,9 +19,6 @@
     //remove time limit when executing a script
     set_time_limit(0);
     
-    echo $root;
-    exit;
-    
     //include necessary classes
     require_once $root."/disulfidebond/classes/Users.class.php";
     require_once $root."/disulfidebond/classes/AA.class.php";
