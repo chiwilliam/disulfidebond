@@ -58,7 +58,7 @@
                                 <img alt="" height="300" src="./images/ms2dbp%20picture.jpg" width="464" />
                             </td>
                         </tr>
-                        <!-- For MS2DB+ -->
+                        <!-- For MS2DB+
                         <tr>
                             <td colspan="2" class="justified">
                                 <b>MS2DB+</b> is an open-source platform-independent web application that efficiently determines 
@@ -67,7 +67,8 @@
                                 disulfide bonds, yet ensuring that the solution is found in polynomial time.
                             </td>
                         </tr>
-                        <!-- For MS2DB++
+                        -->
+                        <!-- For MS2DB++ -->
                         <tr>
                             <td colspan="2" class="justified">
                                 <b>MS2DB+</b> is an open-source platform-independent web application that efficiently determines 
@@ -79,7 +80,6 @@
                                 MS2DB+ accuracy, sensitivity and specificity.
                             </td>
                         </tr>
-                        -->
                         <tr>
                             <td colspan="2" class="justified">
                                 <p>
