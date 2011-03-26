@@ -58,6 +58,16 @@
                                 <img alt="" height="300" src="./images/ms2dbp%20picture.jpg" width="464" />
                             </td>
                         </tr>
+                        <!-- For MS2DB+ -->
+                        <tr>
+                            <td colspan="2" class="justified">
+                                <b>MS2DB+</b> is an open-source platform-independent web application that efficiently determines 
+                                the disulfide linkage in proteins based on mass spectrometry data. 
+                                The software can account for multiple ions (a, b, bo, b*, c, x, y, yo, y*, and z) in determining the 
+                                disulfide bonds, yet ensuring that the solution is found in polynomial time.
+                            </td>
+                        </tr>
+                        <!-- For MS2DB++
                         <tr>
                             <td colspan="2" class="justified">
                                 <b>MS2DB+</b> is an open-source platform-independent web application that efficiently determines 
@@ -69,6 +79,7 @@
                                 MS2DB+ accuracy, sensitivity and specificity.
                             </td>
                         </tr>
+                        -->
                         <tr>
                             <td colspan="2" class="justified">
                                 <p>

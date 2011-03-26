@@ -18,6 +18,7 @@ function myDrawFunction(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
     var rowC2 = parseInt(C2/totalperrow);
     var colC1 = C1%30;
     var colC2 = C2%30;
+    var correction = 0;
 
     if (rowC1 == rowC2){
         //they are in the same row
@@ -36,12 +37,12 @@ function myDrawFunction(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
             }
             else{
                 if(colC2 > colC1){
-                    jg_doc.drawLine((colC1*Hspacing)+(Hspacing),(rowC1*Vspacing)+(Vspacing-Vspacing/4),
-                        (colC2*Hspacing),(rowC2*Vspacing)+(Vspacing-3*Vspacing/4));
+                    jg_doc.drawLine(((colC1*Hspacing)+(Hspacing))-correction,((rowC1*Vspacing)+(Vspacing-Vspacing/4))-correction,
+                        (colC2*Hspacing)+correction,((rowC2*Vspacing)+(Vspacing-3*Vspacing/4))+correction);
                 }
                 else{
-                    jg_doc.drawLine((colC1*Hspacing),(rowC1*Vspacing)+(Vspacing-Vspacing/4),
-                        (colC2*Hspacing)+(Hspacing-Hspacing/4),(rowC2*Vspacing)+5);
+                    jg_doc.drawLine((colC1*Hspacing)+correction,((rowC1*Vspacing)+(Vspacing-Vspacing/4))+correction,
+                        ((colC2*Hspacing)+(Hspacing-Hspacing/4))-correction,(rowC2*Vspacing)-correction);
                 }
             }
         }
@@ -52,12 +53,12 @@ function myDrawFunction(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
             }
             else{
                 if(colC1 > colC2){
-                    jg_doc.drawLine((colC2*Hspacing)+(Hspacing),(rowC2*Vspacing)+(Vspacing-Vspacing/4),
-                        (colC1*Hspacing),(rowC1*Vspacing)+5);
+                    jg_doc.drawLine(((colC2*Hspacing)+(Hspacing))-correction,((rowC2*Vspacing)+(Vspacing-Vspacing/4))-correction,
+                        (colC1*Hspacing)+correction,(rowC1*Vspacing)+correction);
                 }
                 else{
-                    jg_doc.drawLine((colC2*Hspacing),(rowC2*Vspacing)+(Vspacing-Vspacing/4),
-                        (colC1*Hspacing)+(Hspacing-Hspacing/4),(rowC1*Vspacing)+5);
+                    jg_doc.drawLine((colC2*Hspacing)+correction,((rowC2*Vspacing)+(Vspacing-Vspacing/4))+correction,
+                        ((colC1*Hspacing)+(Hspacing-Hspacing/4))-correction,(rowC1*Vspacing)-correction);
                 }
             }
         }
