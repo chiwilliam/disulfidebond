@@ -9,10 +9,15 @@
    
     //fix for tintin root path
     if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
+        //MS2DB+
         //for tintin
         $root = "/home/whemurad/public_html";
+        $predictive = 'N';
+        //MS2DB++
         //for haddock2
         $root = "/home/ms2db/public_html";
+        $predictive = 'Y';    
+    
         $istintin = "yes";
     }
 
@@ -170,10 +175,6 @@
      */
     
     //Use machine learning techniques to improve results
-    //MS2DB+
-    $predictive = 'N';
-    //MS2DB++
-    //$predictive = 'Y';    
     if(isset($_REQUEST["predictive"])){
         $predictive = $_POST["predictive"];
     }
