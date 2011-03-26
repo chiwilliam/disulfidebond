@@ -170,7 +170,10 @@
      */
     
     //Use machine learning techniques to improve results
-    $predictive = 'Y';
+    //MS2DB+
+    $predictive = 'N';
+    //MS2DB++
+    //$predictive = 'Y';    
     if(isset($_REQUEST["predictive"])){
         $predictive = $_POST["predictive"];
     }
@@ -1251,7 +1254,7 @@
                             
                             //add indexes to each lines (beginning)
                             if($i%$numColumns == 0){
-                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;vertical-align:top;">'.($i+1).'</span></td>';
+                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
                             }
                             
                             //if it does, color background
@@ -1264,7 +1267,7 @@
                             
                             //add indexes to each lines (end)
                             if(($i+1)%$numColumns == 0){
-                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;vertical-align:top;">'.($i+1).'</span></td>';
+                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
                             }                            
 
                             //end row

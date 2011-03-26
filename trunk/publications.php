@@ -44,6 +44,7 @@
                         <tr>
                             <td>
                                 <ul>
+                                    <!-- Thesis
                                     <li>
                                         <font face="Times New Roman" size="3">W. Murad
                                         &quot;Disulfide Bond Determination by Combining Efficient Search and Machine Learning&quot;,
@@ -53,6 +54,7 @@
                                         </a>
                                     </li>
                                     <dd>&nbsp;</dd>
+                                    -->
                                     <li>
                                         <font face="Times New Roman" size="3">W. Murad, R. Singh, and R. Yen
                                         &quot;An efficient algorithmic approach for mass spectrometry-based disulfide connectivity determination using multi-ion analysis&quot;,

@@ -144,6 +144,7 @@
                                         <span style="color:red;font-size:10px;">(optional)</span>
                                     </td>
                                 </tr>
+                                <!-- Commented for MS2DB+
                                 <tr class="input">
                                     <td class="inputleft">
                                         <label>Also use predictive techniques?</label>
@@ -158,6 +159,7 @@
                                         <span style="color:red;font-size:10px;">(default: yes)</span>
                                     </td>
                                 </tr>
+                                -->
                                 <tr class="input">
                                     <td colspan="2">
                                         <table class="advancedusers">

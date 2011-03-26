@@ -45,7 +45,30 @@
                             <td>
                                 <table width="100%" border="0">
                                     <tr>
-                                        <td valign="top" width="240"><img src="images/rahul_singh.jpg" height="194" name="image" width="185" alt="Portrait of Rahul Singh" border="0" /></td>
+                                        <td valign="top" width="200"><img src="images/william_murad.jpg" height="180" name="image" width="115" alt="Portrait of William Murad" border="0" /></td>
+                                        <td valign="top">
+                                            <h2><a name="William_Murad"> </a> William Murad </h2>
+                                            <p />
+                                            Graduate Student, Department of Computer Science<br />
+
+                                                San Francisco State University, CA 94132
+                                                <p />
+                                                <ul>
+                                                    <li> E-mail: whemurad @ sfsu.edu
+                                                </li>
+                                                <li> Phone: +1 415 827 2979
+                                                </li>
+                                            </ul>
+                                            <p />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" width="200"><img src="images/rahul_singh.jpg" height="180" name="image" width="115" alt="Portrait of Rahul Singh" border="0" /></td>
                                         <td valign="top">
                                             <h2><a name="Rahul_Singh"> </a> Rahul Singh </h2>
                                             <p />
@@ -59,29 +82,6 @@
                                                 <li> Phone: +1 415 338 2307
                                                 </li>
                                                 <li> Fax: 415 338 6826
-                                                </li>
-                                            </ul>
-                                            <p />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p></p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign="top" width="240"><img src="images/william_murad.jpg" height="194" name="image" width="185" alt="Portrait of William Murad" border="0" /></td>
-                                        <td valign="top">
-                                            <h2><a name="William_Murad"> </a> William Murad </h2>
-                                            <p />
-                                            Graduate Student, Department of Computer Science<br />
-
-                                                San Francisco State University, CA 94132
-                                                <p />
-                                                <ul>
-                                                    <li> E-mail: whemurad @ sfsu.edu
-                                                </li>
-                                                <li> Phone: +1 415 827 2979
                                                 </li>
                                             </ul>
                                             <p />
