@@ -1230,7 +1230,9 @@
                         //start table
                         $numColumns = 30;
                         $SSgraph = '<table class="graphtable">';
-
+                        
+                        //add last index at the last column
+                        
                         for($i=0;$i<$totalAAs;$i++){
                             //start row
                             if($i%$numColumns == 0){
@@ -1277,6 +1279,7 @@
                                 for($j=0;$j<$missingcolumns;$j++){
                                     $SSgraph .= '<td class="graphtd"></td>';
                                 }
+                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+$missingcolumns+1).'</span></td>';
 
                                 $SSgraph .= '</tr>';
                             }
