@@ -10,7 +10,7 @@ div.graph{
 }
 
 div.listofbonds{
-    padding: 10px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
 }
 
 table.graphtable{
@@ -18,8 +18,8 @@ table.graphtable{
     border-color:black;
     border-width:1px;
     border-collapse:collapse;
-    padding: 0px 0px 0px 0px;
-    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 5px 0px;
+    margin: 0px 0px 5px 0px;
 }
 
 tr.graphtr{
