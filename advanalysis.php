@@ -214,7 +214,7 @@
                                                     <input type="text" id="VSthreshold" name="VSthreshold" size="5" value="<?php if (isset($VSthreshold)) {echo $VSthreshold;}else {echo '80';} ?>"
                                                            onmouseover="Tip('A disulfide bond is identified if its match score is greater than this threshold.')"
                                                            onmouseout="UnTip()"></input>
-                                                    * (default: +-1.0)
+                                                    * (default: 80 <i>%</i>)
                                                 </td>
                                             </tr>
                                         </table>
