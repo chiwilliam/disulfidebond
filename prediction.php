@@ -6,7 +6,7 @@
         //for tintin
         $root = "/home/whemurad/public_html";
         //for haddock2
-        $root = "/home/ms2db/public_html";
+        //$root = "/home/ms2db/public_html";
         $istintin = "yes";
     }
     include $root."/disulfidebond/prediction/functionsDAT.php";
