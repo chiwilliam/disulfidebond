@@ -7,7 +7,7 @@
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
    
-    //fix for tintin root path
+    //fix for SFSU servers root path
     if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
         //MS2DB+
         //for tintin
@@ -17,8 +17,6 @@
         //for haddock2
         $root = "/home/ms2db/public_html";
         $predictive = 'Y';    
-    
-        $istintin = "yes";
     }
 
     //remove time limit when executing a script
@@ -32,6 +30,7 @@
     require_once $root."/disulfidebond/classes/ConfirmedMatch.class.php";
     require_once $root."/disulfidebond/classes/Charting.class.php";
     require_once $root."/disulfidebond/prediction.php";
+    require_once $root."/disulfidebond/integration.php";
     
     //initialize objects
     $Users = new Usersclass();
@@ -577,6 +576,8 @@
                                     $detectionrange = $maxPrecursor;
                                     $Pvalues[$i]['ppvalue'] = $Func->calculatePPvalue($TML, $CM, $CMthreshold, $detectionrange);
                                     $Pvalues[$i]['pp2value'] = $Func->calculatePP2value($TML, $CM, $CMthreshold, $detectionrange);
+                                    $Pvalues[$i]['ppconfidence'] = $Func->calculatePPconfidence($Pvalues[$i]['ppvalue'], count($FMS), $IMthreshold, $detectionrange);
+                                    $Pvalues[$i]['pp2confidence'] = $Func->calculatePP2confidence($Pvalues[$i]['pp2value'], count($FMS), $IMthreshold, $detectionrange);
                                     //End of calculating P and PP-values
                                    
                                     //Analyze confirmed matches
@@ -766,6 +767,8 @@
                                         $numberBonds[$i]["score"] = $totalCMsConsideringIntensity/$totalexpandedTMLConsideringIntensity;
                                         $numberBonds[$i]["ppvalue"] = $Pvalues[$i]["ppvalue"];
                                         $numberBonds[$i]["pp2value"] = $Pvalues[$i]["pp2value"];
+                                        $numberBonds[$i]["ppconfidence"] = $Pvalues[$i]["ppconfidence"];
+                                        $numberBonds[$i]["pp2confidence"] = $Pvalues[$i]["pp2confidence"];
 
                                         //compute number of by ions and number of other ions types
                                         $by = 0;
@@ -862,7 +865,7 @@
                                ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
                                && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){
                                     //avoid matches with double bonds
-                                    if(count($numberBonds[$w]) == 10 || $numberBonds[$w]['DTA'] == "FT3/Z1129S1.1495.1495.2.dta"){
+                                    if(count($numberBonds[$w]) == 12 || $numberBonds[$w]['DTA'] == "FT3/Z1129S1.1495.1495.2.dta"){
                                         //Consider a true bond ony if either:
                                         //1. The bond is not previously found
                                         //2. If the new bond has higher score than previous
@@ -878,6 +881,8 @@
                                                 $truebonds[$DTA]['score'] = $score;
                                                 $truebonds[$DTA]['ppvalue'] = $numberBonds[$w]["ppvalue"];
                                                 $truebonds[$DTA]['pp2value'] = $numberBonds[$w]["pp2value"];
+                                                $truebonds[$DTA]['ppconfidence'] = $numberBonds[$w]["ppconfidence"];
+                                                $truebonds[$DTA]['pp2confidence'] = $numberBonds[$w]["pp2confidence"];
                                                 $dashpos = strpos($SSbond, "-");
                                                 $truebonds[$DTA]['cys1'] = substr($SSbond, 0, $dashpos);
                                                 $truebonds[$DTA]['cys2'] = substr($SSbond,$dashpos+1);
@@ -915,6 +920,8 @@
                                                     $truebonds[$DTA]['score'] = $score;
                                                     $truebonds[$DTA]['ppvalue'] = $numberBonds[$w]["ppvalue"];
                                                     $truebonds[$DTA]['pp2value'] = $numberBonds[$w]["pp2value"];
+                                                    $truebonds[$DTA]['ppconfidence'] = $numberBonds[$w]["ppconfidence"];
+                                                    $truebonds[$DTA]['pp2confidence'] = $numberBonds[$w]["pp2confidence"];
                                                     $dashpos = strpos($SSbond, "-");
                                                     $truebonds[$DTA]['cys1'] = substr($SSbond, 0, $dashpos);
                                                     $truebonds[$DTA]['cys2'] = substr($SSbond,$dashpos+1);
@@ -1057,6 +1064,42 @@
                         $predictedbonds = $Func->executeGabow($newgraph, $root);
                     }
                     
+                    //Integration module
+                    $M1bonds = array();
+                    $M2bonds = array();                    
+                    
+                    //Put bonds into the correct format
+                    //The second parameter chooses which score to use,
+                    //whether it is the match score, ppvalue(s), confidence score(s)
+                    $M1bonds = $Func->getFormattedBonds($truebonds2,"score");
+                    $M2bonds = $Func->getFormattedBonds($pbonds,"score");
+                    
+                    //Normalize scores
+                    //According to the theory the sum of scores must be 1 for each method
+                    $M1bonds = $Func->getNormalizedScores($M1bonds);
+                    $M2bonds = $Func->getNormalizedScores($M2bonds);
+                    
+                    //integrate bonds
+                    $globalSS = array();
+                    
+                    /*
+                    //For troubleshooting purposes
+                    $M1test = array();
+                    $M1test["1-2"]['score'] = 0.23;
+                    $M1test["1-4"]['score'] = 0.18;
+                    $M1test["2-3"]['score'] = 0.28;
+                    $M1test["5-6"]['score'] = 0.18;
+                    $M1test["4-6"]['score'] = 0.13;
+                    $M2test = array();
+                    $M2test["1-2"]['score'] = 0.27;
+                    $M2test["1-4"]['score'] = 0.17;
+                    $M2test["2-3"]['score'] = 0.21;
+                    $M2test["4-6"]['score'] = 0.21;
+                    $M2test["THETA"]['score'] = 0.14;
+                    $GlobalTest = integrateBonds($M1test, $M2test);
+                    */
+                    
+                    $globalSS = integrateBonds($M1bonds, $M2bonds);                    
                     
                     //global graph, including all bonds for both frameworks
                     //normalized gabow
