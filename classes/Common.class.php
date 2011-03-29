@@ -680,7 +680,7 @@ class Commonclass {
         $varianceI = $varianceI*$tmp;
 
         $variance = $ions*$p2*(1.0-$p2)*pow($mean,2);
-        $variance += $ions*$p2*$varianceI;
+        $variance += $ions*$p2*pow($varianceI,2);
         
         return $variance;
     }
@@ -758,6 +758,20 @@ class Commonclass {
         $beta = -1*log10($alfa);
 
         return $beta;
+    }
+    
+    public function calculatePPconfidence($ppvalue, $countFMS, $IMthreshold, $detectionrange)
+    {
+        $p1 = (2*$IMthreshold)/$detectionrange;
+        $confidence = $ppvalue - log10($countFMS) - log10($p1);
+        return $confidence;
+    }
+    
+    public function calculatePP2confidence($pp2value, $countFMS, $IMthreshold, $detectionrange)
+    {
+        $p1 = (2*$IMthreshold)/$detectionrange;
+        $confidence = $pp2value - log10($countFMS) - log10($p1);
+        return $confidence;        
     }
     
     public function removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto){
@@ -968,6 +982,26 @@ class Commonclass {
         }        
         
         return $minmax;
+    }
+    
+    public function getFormattedBonds($bonds,$label){
+        
+        $newbonds = array();
+        
+        $keybonds = array_keys($bonds);
+        $count = count($keybonds);
+        for($i=0;$i<$count;$i++){
+            $newbonds[$keybonds[$i]]['score'] = $bonds[$keybonds[$i]][$label];
+        }
+        
+        return $newbonds;
+    }
+    
+    public function getNormalizedScores($bonds){
+        
+        $bonds['THETA']['score'] = 0;
+        
+        return $bonds;
     }
 }
 ?>

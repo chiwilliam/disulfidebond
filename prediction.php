@@ -1,13 +1,12 @@
 <?php
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
-    //fix for tintin root path
+    //fix for SFSU servers root path
     if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
         //for tintin
         $root = "/home/whemurad/public_html";
         //for haddock2
         $root = "/home/ms2db/public_html";
-        $istintin = "yes";
     }
     include $root."/disulfidebond/prediction/functionsDAT.php";
     include $root."/disulfidebond/prediction/functionsCSP.php";
