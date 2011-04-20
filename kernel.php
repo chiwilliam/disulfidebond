@@ -8,6 +8,7 @@
     $root = $_SERVER['DOCUMENT_ROOT'];
    
     //fix for SFSU servers root path
+    $predictive = 'Y';
     if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
         //MS2DB+
         //for tintin
@@ -22,15 +23,17 @@
     //remove time limit when executing a script
     set_time_limit(0);
     
+    $projectname = "/disulfidebond";
+    
     //include necessary classes
-    require_once $root."/disulfidebond/classes/Users.class.php";
-    require_once $root."/disulfidebond/classes/AA.class.php";
-    require_once $root."/disulfidebond/classes/InitialMatch.class.php";
-    require_once $root."/disulfidebond/classes/Common.class.php";
-    require_once $root."/disulfidebond/classes/ConfirmedMatch.class.php";
-    require_once $root."/disulfidebond/classes/Charting.class.php";
-    require_once $root."/disulfidebond/prediction.php";
-    require_once $root."/disulfidebond/integration.php";
+    require_once $root.$projectname."/classes/Users.class.php";
+    require_once $root.$projectname."/classes/AA.class.php";
+    require_once $root.$projectname."/classes/InitialMatch.class.php";
+    require_once $root.$projectname."/classes/Common.class.php";
+    require_once $root.$projectname."/classes/ConfirmedMatch.class.php";
+    require_once $root.$projectname."/classes/Charting.class.php";
+    require_once $root.$projectname."/prediction.php";
+    require_once $root.$projectname."/integration.php";
     
     //initialize objects
     $Users = new Usersclass();
@@ -157,6 +160,11 @@
     $message = "";
     $debug = "";
     
+    $MSMStheta = array();
+    $SVMtheta = 0;
+    $MSMSTransmembraneBonds = array();
+    $SVMTransmembraneBonds = array();
+    
     //set User Type
     if(isset($_REQUEST['mode'])){
         $mode = $_REQUEST['mode'];
@@ -215,10 +223,11 @@
     //Determine of the protein has any transmembrane region
     //If it does, remove the possible disulfide bonds in which one of the cysteines
     //is inside that region
+    
     $transmembranefrom = trim($_POST["transmembranefrom"]);
     $transmembraneto = trim($_POST["transmembraneto"]);
     if(strlen(trim($transmembranefrom)) == 0){
-        $transmembranefrom = 0;
+        $transmembranefrom = 0;        
     }
     if(strlen(trim($transmembraneto)) == 0){
         $transmembraneto = 0;
@@ -283,7 +292,7 @@
         $disulfideBondedPeptides = $IMClass->digestProtein($fastaProtein, $protease);
         
         if($transmembranefrom > 0 && $transmembraneto > 0){
-            $disulfideBondedPeptides = $IMClass->removePeptidesInTransmembraneRegion($disulfideBondedPeptides,$transmembranefrom,$transmembraneto);
+            //$disulfideBondedPeptides = $IMClass->removePeptidesInTransmembraneRegion($disulfideBondedPeptides,$transmembranefrom,$transmembraneto);
         }
 
         if(count($disulfideBondedPeptides) > 0)
@@ -312,7 +321,7 @@
             $PML = $aPML["PML"];
             $PMLNames = $aPML["PMLNames"];
             unset($aPML);
-            $dirPath = $root."/disulfidebond/DTA/".$zipFile["name"];
+            $dirPath = $root.$projectname."/DTA/".$zipFile["name"];
 
             //If DTA files are present
             if(count($PML) > 0){
@@ -834,7 +843,10 @@
                     //remove disulfide bonds which contains a cysteine within
                     //the transmembrane region
                     if(strlen($transmembranefrom) > 0 && strlen($transmembraneto) > 0){
-                        $numberBonds = $Func->removeBondsWithinTransmembraneRegion($numberBonds,$transmembranefrom,$transmembraneto);
+                         $removeResults = $Func->removeBondsWithinTransmembraneRegion($numberBonds,$transmembranefrom,$transmembraneto);
+                         $numberBonds = $removeResults["BONDS"];
+                         $MSMStheta = $removeResults["THETA"];
+                         $MSMSTransmembraneBonds = $removeResults["THETABONDS"];
                     }
 
                     //remove disulfide bonds using match ratio
@@ -986,16 +998,18 @@
                     //get minimum and maximum scores for bonds found by both frameworks
                     //in case one single graph is used for all the bonds, all scores need to be normalized
                     $minmaxMSMS = array();
-                    $truebonds2 = $truebonds;
-                    $minmaxMSMS = $Func->getMinMaxScoreMSMS($truebonds2);
+                    $minmaxMSMS = $Func->getMinMaxScoreMSMS($truebonds);
 
                     //normalize the bond scores in order to properly mount the graph to
                     //send to the gabow routine.
-                    //divide all scores by minimum score
+                    //divide all scores by maximum score
+                    //multiplies by 100 to facilitate the creation of the graph
+                    //scoretmp stores the original score that will again be used after Gabow
                     $SS = array_keys($truebonds);
                     for($w=0;$w<count($SS);$w++){
                         $score = $truebonds[$SS[$w]][score];
-                        $truebonds[$SS[$w]]['score'] = ((int)(($score/$minimumscore)*100));
+                        $truebonds[$SS[$w]]['scoretmp'] = $truebonds[$SS[$w]]['score'];
+                        $truebonds[$SS[$w]]['score'] = ((int)(($score/$minmaxMSMS['max'])*100));                       
                     }
                     
                     $newgraph = array();
@@ -1005,7 +1019,7 @@
                         $cys1 = (string)$truebonds[$SS[$w]]['cys1'];
                         $cys2 = (string)$truebonds[$SS[$w]]['cys2'];
 
-                        $counttmp = $truebonds[$SS[$w]]['score'];
+                        $counttmp = $truebonds[$SS[$w]]['score']*100;
                         for($z=0;$z<$counttmp;$z++){
                             $newgraph[$cys1][] = $cys2;
                             $newgraph[$cys2][] = $cys1;
@@ -1015,18 +1029,32 @@
                     unset($graph);
 
                     //Using Gabow algorithm to solve maximum weighted matching problem
-                    if(count($bonds) > 0){
+                    if(count($truebonds) > 0){
                         $bonds = $Func->executeGabow($newgraph, $root);
+                    }
+                    
+                    //Divide score by 100 after Gabow is executed
+                    //Scores back to [0, 1] range
+                    $SS = array_keys($truebonds);
+                    for($w=0;$w<count($SS);$w++){
+                        $truebonds[$SS[$w]]['score'] = $truebonds[$SS[$w]]['scoretmp']/$minmaxMSMS['max'];
+                        unset($truebonds[$SS[$w]]['scoretmp']);
                     }
                     
                     //PREDICTIVE TECHNIQUE
                     $pbonds = array();
                     if($predictive == 'Y'){
+                        
+                        $regionfrom = $transmembranefrom;
+                        $regionto = $transmembraneto;
+                        $regionfrom = 0;
+                        $regionto = 0;
+                        
                         if(count($bonds) == 0){
-                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time, $transmembranefrom, $transmembraneto);
+                            $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time, $regionfrom, $regionto);
                         }
                         else{
-                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root, &$time, $transmembranefrom, $transmembraneto);
+                            $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root, &$time, $regionfrom, $regionto);
                             //$pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time);
                         }
                         
@@ -1041,7 +1069,10 @@
                     if(count($pbonds) > 0){
 
                         //remove Bonds according to the transmembrane region set by the user
-                        $pbonds = $Func->removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto);
+                        $removeResults = $Func->removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto);
+                        $pbonds = $removeResults["BONDS"];
+                        $SVMtheta = $removeResults["THETA"];
+                        $SVMTransmembraneBonds = $removeResults["THETABONDS"];
                     
                         $minmaxPredictive = $Func->getMinMaxScorePredictive($pbonds);
                         
@@ -1055,7 +1086,7 @@
 
                             
                             //$counttmp = $pbonds[$SS[$w]]['scoreexp'] + $pbonds[$SS[$w]]['similarityexp'];
-                            $counttmp = $pbonds[$SS[$w]]['score'] + $pbonds[$SS[$w]]['similarity'];
+                            $counttmp = $pbonds[$SS[$w]]['score']*100 + $pbonds[$SS[$w]]['similarity']*100;
                             for($z=0;$z<$counttmp;$z++){
                                 $newgraph[$cys1][] = $cys2;
                                 $newgraph[$cys2][] = $cys1;
@@ -1064,286 +1095,475 @@
                         $predictedbonds = $Func->executeGabow($newgraph, $root);
                     }
                     
+                    //filter predicted bonds based on minimum threshold
+                    /*
+                    $tmpPbonds = array();
+                    $countPB = count($predictedbonds);
+                    for($w=0;$w<$countPB;$w++){
+                        if($pbonds[$predictedbonds[$w]]['score'] >= 0.25){
+                            $tmpPbonds[] = $predictedbonds[$w];
+                        }
+                    }
+                    $predictedbonds = $tmpPbonds;
+                    unset($tmpPbonds);
+                    */
+                    
                     //Integration module
+                    //M1bonds is for MSMS method
                     $M1bonds = array();
-                    $M2bonds = array();                    
+                    //M2bonds is for SVM method
+                    $M2bonds = array();     
+                    
+                    /*
+                     * Set of Bonds
+                     *  MSMS:
+                     *      $bonds => disulfide bonds after Gabow
+                     *      $truebonds => all disulfide bonds found
+                     *  SVM:
+                     *      $predictedbonds => disulfide bonds after Gabow
+                     *      $pbonds => all disulfide bonds found
+                     */
                     
                     //Put bonds into the correct format
                     //The second parameter chooses which score to use,
                     //whether it is the match score, ppvalue(s), confidence score(s)
-                    $M1bonds = $Func->getFormattedBonds($truebonds2,"score");
+                    
+                    $MSMSscoreSelection = 'ppvalue';
+                    $M1bonds = $Func->getFormattedBonds($truebonds,$MSMSscoreSelection);
                     $M2bonds = $Func->getFormattedBonds($pbonds,"score");
                     
                     //Normalize scores
                     //According to the theory the sum of scores must be 1 for each method
-                    $M1bonds = $Func->getNormalizedScores($M1bonds);
-                    $M2bonds = $Func->getNormalizedScores($M2bonds);
+                    
+                    $M1bondsTheta = $Func->getNormalizedScores("THETA!=0",$M1bonds,$bonds,$MSMStheta[$MSMSscoreSelection]);
+                    $M2bondsTheta = $Func->getNormalizedScores("THETA!=0",$M2bonds,$predictedbonds,$SVMtheta);
+                    
+                    for($i=0;$i<count($MSMSTransmembraneBonds);$i++){
+                        $M1bondsTheta['THETA']['bonds'][$MSMSTransmembraneBonds[$i]['bond']]['score'] = number_format($MSMSTransmembraneBonds[$i][$MSMSscoreSelection]/$M1bondsTheta['THETA']['factor'],4);
+                    }
+                    for($i=0;$i<count($SVMTransmembraneBonds);$i++){
+                        $M2bondsTheta['THETA']['bonds'][$SVMTransmembraneBonds[$i]['bond']]['score'] = number_format($SVMTransmembraneBonds[$i]['score']/$M2bondsTheta['THETA']['factor'],4);
+                    }
+                    
+                    $M1bondsPower = $Func->getBondsForPowerSet($M1bonds,$bonds);
+                    $M2bondsPower = $Func->getBondsForPowerSet($M2bonds,$predictedbonds);
+                    
+                    //$M1bondsPower = $Func->getBondsForPowerSet($M1bonds,array());
+                    //$M2bondsPower = $Func->getBondsForPowerSet($M2bonds,array());
+                                        
+                    $GlobalSSTheta = integrateBonds($M1bondsTheta, $M2bondsTheta);
+                    
+                    $GlobalSSPower = integrateBondsPowerSet($M1bondsPower, $M2bondsPower);
+                    
+                    //W1 is William's method considering the filtered bonds as the theta value
+                    //the scores of the bonds are the m() values
+                    $method = "W1";
+                    //R1 is Rahul's method considering the power set of bonds
+                    //the scores of the bonds are used to calculated m(), by a probability assignment function
+                    $method = "R1";
                     
                     //integrate bonds
-                    $globalSS = array();
+                    $GlobalSS = array();
                     
-                    /*
-                    //For troubleshooting purposes
-                    $M1test = array();
-                    $M1test["1-2"]['score'] = 0.23;
-                    $M1test["1-4"]['score'] = 0.18;
-                    $M1test["2-3"]['score'] = 0.28;
-                    $M1test["5-6"]['score'] = 0.18;
-                    $M1test["4-6"]['score'] = 0.13;
-                    $M2test = array();
-                    $M2test["1-2"]['score'] = 0.27;
-                    $M2test["1-4"]['score'] = 0.17;
-                    $M2test["2-3"]['score'] = 0.21;
-                    $M2test["4-6"]['score'] = 0.21;
-                    $M2test["THETA"]['score'] = 0.14;
-                    $GlobalTest = integrateBonds($M1test, $M2test);
-                    */
+                    switch ($method) {
+                        case "W1":
+                            $GlobalSS = $GlobalSSTheta;
+                            break;
+
+                        case "R1":
+                            $GlobalSS = $GlobalSSPower;
+                            break;
+                    }                                        
                     
-                    $globalSS = integrateBonds($M1bonds, $M2bonds);                    
-                    
-                    //global graph, including all bonds for both frameworks
-                    //normalized gabow
-                    unset($newgraph);
-                    $newgraph = array();
-                    
-                    if(count($truebonds2) > 0){
-                        $SS = array_keys($truebonds2);
-                        for($w=0;$w<count($SS);$w++){
+                    $integration = true;
+                    if($integration)
+                    {
+                        //global graph, including all bonds for both frameworks
+                        //normalized gabow
+                        unset($newgraph);
+                        $newgraph = array();
 
-                            $cys1 = (string)$truebonds2[$SS[$w]]['cys1'];
-                            $cys2 = (string)$truebonds2[$SS[$w]]['cys2'];
-
-                            $counttmp = $truebonds2[$SS[$w]]['score']/$minmaxMSMS['max'];
-                            if(!is_infinite($truebonds2[$SS[$w]]['ppvalue'])){
-                                $counttmp += $truebonds2[$SS[$w]]['ppvalue']/$minmaxMSMS['ppmax'];
-                            }
-                            else{
-                                $counttmp++;
-                            }
-                            if(!is_infinite($truebonds2[$SS[$w]]['pp2value'])){
-                                $counttmp += $truebonds2[$SS[$w]]['pp2value']/$minmaxMSMS['pp2max'];
-                            }
-                            else{
-                                $counttmp++;
-                            }
-                            $counttmp/3;
-                            $counttmp = number_format($counttmp*100,0);                        
-
-                            for($z=0;$z<$counttmp;$z++){
-                                $newgraph[$cys1][] = $cys2;
-                                $newgraph[$cys2][] = $cys1;
-                            }
-                        }
-                    }
-                    if(count($pbonds) > 0){
-                        $SS = array_keys($pbonds);
-                        for($w=0;$w<count($SS);$w++){
-
-                            $cys1 = (string)$pbonds[$SS[$w]]['cys1'];
-                            $cys2 = (string)$pbonds[$SS[$w]]['cys2'];
-
-                            $counttmp = ($pbonds[$SS[$w]]['score'] + $pbonds[$SS[$w]]['similarity'])/$minmaxPredictive['max'];
-                            $counttmp = number_format($counttmp*100,0);                        
-
-                            for($z=0;$z<$counttmp;$z++){
-                                $newgraph[$cys1][] = $cys2;
-                                $newgraph[$cys2][] = $cys1;
-                            }
-                        }
-                    }
-                    if(count($newgraph) > 0){
-                        $globalbonds = $Func->executeGabow($newgraph, $root);
-                    }
-                    
-                    for($i=0;$i<count($bonds);$i++){
-                        
-                        if(strlen(trim($bonds[$i])) > 3){
+                        if(count($GlobalSS) > 0){
                             
-                            $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
-                            $message .= "(score:".$truebonds[$bonds[$i]]["score"];
-                            
-                            if(!is_infinite($truebonds[$bonds[$i]]["ppvalue"])){
-                                $message .= "; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0);
-                            }
-                            else{
-                                $message .= "; pp-value:".number_format($minmaxMSMS['ppmax'],0);
-                            }
-                            
-                            if(!is_infinite($truebonds[$bonds[$i]]["pp2value"])){
-                                $message .= "; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
-                            }
-                            else{
-                                $message .= "; pp2-value:".number_format($minmaxMSMS['pp2max'],0);
-                            }
-                            
-                            $message .= ")</span><br><br>";
-                        }
-                    }
-                    
-                    if(count($predictedbonds) > 0){
-                        for($i=0;$i<count($predictedbonds);$i++){
-                            if(strlen(trim($predictedbonds[$i])) > 3){
-                                $message .= "<span style=\"margin-left:-100px; margin-right:50px;\"><b>Disulfide Bond found on positions: ".$predictedbonds[$i]."</b> ";
-                                $message .= "(SVM score:".$pbonds[$predictedbonds[$i]]["score"]."; CSP similarity:".number_format($pbonds[$predictedbonds[$i]]["similarity"],3).") [<i>predicted</i>]</span><br><br>";
-                            }
-                        }
-                    }
+                            //Get global connectivity
+                            $SS = array_keys($GlobalSS);
+                            for($w=0;$w<count($SS);$w++){
 
-                    if(count($bonds) == 0){
-                        if(count($predictedbonds) == 0){
-                            unset($debug);
-                            $message .= "Disulfide Bonds not found!";
-                        }
-                        else{
-                            unset($debug);
-                            $message .= "Disulfide Bonds found ONLY by SVMs, without using MS/MS data.";
-                        }
-                    }
-                    else{
-                        
-                        //form debug output just displaying data for the DTA files
-                        //that contains SS-bonds
-                        for($i=0;$i<count($bonds);$i++){
-                            $dtafile = $truebonds[$bonds[$i]]['DTA'];
-                            for($j=0;$j<count($aDebug);$j++){
-                                if(strtolower($aDebug[$j]['DTA']) == strtolower($dtafile)){
-                                    $debug .= '<tr><td colspan="3"><span style="color:red;"><b>';
-                                    $debug .= 'Disulfide Bond: '.$bonds[$i];
-                                    $debug .= '</b></span></td></tr>';
-                                    $debug .= $aDebug[$j]['string'];
-                                    break;
+                                $cysteines = explode('-', $SS[$w]);
+                                $cys1 = (string)$cysteines[0];
+                                $cys2 = (string)$cysteines[1];
+
+                                $count = number_format($GlobalSS[$SS[$w]]['score']*100,0);                        
+
+                                for($z=0;$z<$count;$z++){
+                                    $newgraph[$cys1][] = $cys2;
+                                    $newgraph[$cys2][] = $cys1;
                                 }
                             }
-                        }
+                            
+                            //Execute Gabow
+                            $GlobalIntegration = array();
+                            if(count($newgraph) > 0){
+                                $GlobalIntegration = $Func->executeGabow($newgraph, $root);
+                            }
+                            
+                            //List disulfide bonds found
+                            for($i=0;$i<count($GlobalIntegration);$i++){
 
-                        //sensitivity, specificity, accuracy, and Mathew's coefficient
-                        $SSbonds = count($bonds);
-                        $countpossiblebonds = count($possiblebonds);
-                        for($i=0;$i<$SSbonds;$i++){
-                            for($j=0;$j<$countpossiblebonds;$j++){
-                                if($bonds[$i] == $possiblebonds[$j]){
-                                    unset($possiblebonds[$j]);
+                                $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bond found on positions: ".$GlobalIntegration[$i]."</b> ";
+                                $message .= "(score:".number_format($GlobalSS[$GlobalIntegration[$i]]["score"],3);
+                                $message .= ")</span><br><br>";
+                            }
+                            
+                            //form debug output just displaying data for the DTA files
+                            //that contains SS-bonds
+                            $bonds = $GlobalIntegration;
+                            for($i=0;$i<count($bonds);$i++){
+                                $dtafile = $truebonds[$bonds[$i]]['DTA'];
+                                for($j=0;$j<count($aDebug);$j++){
+                                    if(strtolower($aDebug[$j]['DTA']) == strtolower($dtafile)){
+                                        $debug .= '<tr><td colspan="3"><span style="color:red;"><b>';
+                                        $debug .= 'Disulfide Bond: '.$bonds[$i];
+                                        $debug .= '</b></span></td></tr>';
+                                        $debug .= $aDebug[$j]['string'];
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        $nonExistingBonds = count($possiblebonds);
-                        
-                        $putativebonds = array();
-                        $putativebonds = array_keys($truebonds);
-                        $labeled = 'no';
-                        for($i=0;$i<count($putativebonds);$i++){
-                            $tester = false;
-                            for($j=0;$j<count($bonds);$j++){
-                                if($putativebonds[$i] == $bonds[$j]){
-                                    $tester = true;
-                                }
+                            $debug .= "</table>";
+
+                            //populate disulfide bonds graph
+                            $AAsarray = str_split($fastaProtein,1);
+                            $totalAAs = count($AAsarray);
+                            $combinedbonds = $bonds;
+                            $totalbonds = count($combinedbonds);
+                            $allbonds = array();
+
+                            //define AAs to have colored background
+                            for($i=0;$i<$totalbonds;$i++){
+                                $cys = explode('-', $combinedbonds[$i]);
+                                $allbonds[] = $cys[0];
+                                $allbonds[] = $cys[1];
                             }
-                            if($tester == false){
-                                if($labeled == 'no'){
-                                    $labeled = 'yes';
-                                    $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bonds classified as true negatives: </b>";
+
+                            //DISULFIDE BOND VISUALIZATION GRAPH
+                            //start table
+                            $numColumns = 30;
+                            $SSgraph = '<table class="graphtable">';
+
+                            //add last index at the last column
+
+                            for($i=0;$i<$totalAAs;$i++){
+                                //start row
+                                if($i%$numColumns == 0){
+                                    if($i == 0){
+                                        $SSgraph .= '<tr align="center">';
+                                    }
+                                    else{
+                                        $SSgraph .= '</tr><tr align="center">';
+                                    }
                                 }
-                                $message .= "<br/>Cysteines: ".$putativebonds[$i];
-                                $message .= " (score:".$truebonds[$putativebonds[$i]]["score"]."; pp-value:".number_format($truebonds[$putativebonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$putativebonds[$i]]["pp2value"],0).")";
-                            }
-                        }         
-                        
-                        $message .= "</span><br/><br/>";
 
-                        $debug .= "</table>";
+                                //fill columns
+                                //check if columns participates in any disulfide bond
+                                $isBonded = false;
+                                for($j=0;$j<count($allbonds);$j++){
+                                    if($allbonds[$j] == ($i+1)){
+                                        $isBonded = true;
+                                        break;
+                                    }
+                                }
 
-                        //populate disulfide bonds graph
-                        $AAsarray = str_split($fastaProtein,1);
-                        $totalAAs = count($AAsarray);
-                        $combinedbonds = array();
-                        if(!isset($predictedbonds)){
-                            $predictedbonds = array();
-                        }
-                        $combinedbonds = array_merge($bonds,$predictedbonds);
-                        $totalbonds = count($combinedbonds);
-                        $allbonds = array();
+                                //add indexes to each lines (beginning)
+                                if($i%$numColumns == 0){
+                                    $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
+                                }
 
-                        //define AAs to have colored background
-                        for($i=0;$i<$totalbonds;$i++){
-                            $cys = explode('-', $combinedbonds[$i]);
-                            $allbonds[] = $cys[0];
-                            $allbonds[] = $cys[1];
-                        }
-
-                        //DISULFIDE BOND VISUALIZATION GRAPH
-                        //start table
-                        $numColumns = 30;
-                        $SSgraph = '<table class="graphtable">';
-                        
-                        //add last index at the last column
-                        
-                        for($i=0;$i<$totalAAs;$i++){
-                            //start row
-                            if($i%$numColumns == 0){
-                                if($i == 0){
-                                    $SSgraph .= '<tr align="center">';
+                                //if it does, color background
+                                if($isBonded){
+                                    $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\'Cysteine at position '.($i+1).'\')">'.$AAsarray[$i].'</td>';
                                 }
                                 else{
-                                    $SSgraph .= '</tr><tr align="center">';
+                                    $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
+                                }
+
+                                //add indexes to each lines (end)
+                                if(($i+1)%$numColumns == 0){
+                                    $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
+                                }                            
+
+                                //end row
+                                if($i == ($totalAAs-1)){
+
+                                    $missingcolumns = $numColumns-($totalAAs%$numColumns);
+                                    for($j=0;$j<$missingcolumns;$j++){
+                                        $SSgraph .= '<td class="graphtd"></td>';
+                                    }
+                                    $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+$missingcolumns+1).'</span></td>';
+
+                                    $SSgraph .= '</tr>';
                                 }
                             }
 
-                            //fill columns
-                            //check if columns participates in any disulfide bond
-                            $isBonded = false;
-                            for($j=0;$j<count($allbonds);$j++){
-                                if($allbonds[$j] == ($i+1)){
-                                    $isBonded = true;
-                                    break;
+                            //Javascript to draw S-S bonds
+                            $SSgraphJS = '<script type="text/javascript">';
+                            for($j=0;$j<$totalbonds;$j++){
+                                $cysteines = explode('-', $combinedbonds[$j]);
+                                $SSgraphJS .= "myDrawFunction(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
+                            }
+                            $SSgraphJS .= '</script>';
+
+                            //close table
+                            $SSgraph .= "</table>";
+                            
+                        }
+                        else{
+                            $message .= "Disulfide Bonds not found!";
+                            $debug = "";
+                        }
+                    }
+                    else{                    
+                        unset($newgraph);
+                        $newgraph = array();
+
+                        if(count($truebonds) > 0){
+                            $SS = array_keys($truebonds);
+                            for($w=0;$w<count($SS);$w++){
+
+                                $cys1 = (string)$truebonds[$SS[$w]]['cys1'];
+                                $cys2 = (string)$truebonds[$SS[$w]]['cys2'];
+
+                                $counttmp = $truebonds[$SS[$w]]['score']/$minmaxMSMS['max'];
+                                if(!is_infinite($truebonds[$SS[$w]]['ppvalue'])){
+                                    $counttmp += $truebonds[$SS[$w]]['ppvalue']/$minmaxMSMS['ppmax'];
+                                }
+                                else{
+                                    $counttmp++;
+                                }
+                                if(!is_infinite($truebonds[$SS[$w]]['pp2value'])){
+                                    $counttmp += $truebonds[$SS[$w]]['pp2value']/$minmaxMSMS['pp2max'];
+                                }
+                                else{
+                                    $counttmp++;
+                                }
+                                $counttmp/3;
+                                $counttmp = number_format($counttmp*100,0);                        
+
+                                for($z=0;$z<$counttmp;$z++){
+                                    $newgraph[$cys1][] = $cys2;
+                                    $newgraph[$cys2][] = $cys1;
                                 }
                             }
-                            
-                            //add indexes to each lines (beginning)
-                            if($i%$numColumns == 0){
-                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
+                        }
+                        if(count($pbonds) > 0){
+                            $SS = array_keys($pbonds);
+                            for($w=0;$w<count($SS);$w++){
+
+                                $cys1 = (string)$pbonds[$SS[$w]]['cys1'];
+                                $cys2 = (string)$pbonds[$SS[$w]]['cys2'];
+
+                                $counttmp = ($pbonds[$SS[$w]]['score'] + $pbonds[$SS[$w]]['similarity'])/$minmaxPredictive['max'];
+                                $counttmp = number_format($counttmp*100,0);                        
+
+                                for($z=0;$z<$counttmp;$z++){
+                                    $newgraph[$cys1][] = $cys2;
+                                    $newgraph[$cys2][] = $cys1;
+                                }
                             }
-                            
-                            //if it does, color background
-                            if($isBonded){
-                                $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\'Cysteine at position '.($i+1).'\')">'.$AAsarray[$i].'</td>';
+                        }
+                        if(count($newgraph) > 0){
+                            $globalbonds = $Func->executeGabow($newgraph, $root);
+                        }
+
+                        for($i=0;$i<count($bonds);$i++){
+
+                            if(strlen(trim($bonds[$i])) > 3){
+
+                                $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bond found on positions: ".$bonds[$i]."</b> ";
+                                $message .= "(score:".$truebonds[$bonds[$i]]["score"];
+
+                                if(!is_infinite($truebonds[$bonds[$i]]["ppvalue"])){
+                                    $message .= "; pp-value:".number_format($truebonds[$bonds[$i]]["ppvalue"],0);
+                                }
+                                else{
+                                    $message .= "; pp-value:".number_format($minmaxMSMS['ppmax'],0);
+                                }
+
+                                if(!is_infinite($truebonds[$bonds[$i]]["pp2value"])){
+                                    $message .= "; pp2-value:".number_format($truebonds[$bonds[$i]]["pp2value"],0);
+                                }
+                                else{
+                                    $message .= "; pp2-value:".number_format($minmaxMSMS['pp2max'],0);
+                                }
+
+                                $message .= ")</span><br><br>";
+                            }
+                        }
+
+                        if(count($predictedbonds) > 0){
+                            for($i=0;$i<count($predictedbonds);$i++){
+                                if(strlen(trim($predictedbonds[$i])) > 3){
+                                    $message .= "<span style=\"margin-left:-100px; margin-right:50px;\"><b>Disulfide Bond found on positions: ".$predictedbonds[$i]."</b> ";
+                                    $message .= "(SVM score:".$pbonds[$predictedbonds[$i]]["score"]."; CSP similarity:".number_format($pbonds[$predictedbonds[$i]]["similarity"],3).") [<i>predicted</i>]</span><br><br>";
+                                }
+                            }
+                        }
+
+                        if(count($bonds) == 0){
+                            if(count($predictedbonds) == 0){
+                                unset($debug);
+                                $message .= "Disulfide Bonds not found!";
                             }
                             else{
-                                $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
+                                unset($debug);
+                                $message .= "Disulfide Bonds found ONLY by SVMs, without using MS/MS data.";
                             }
-                            
-                            //add indexes to each lines (end)
-                            if(($i+1)%$numColumns == 0){
-                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
-                            }                            
+                        }
+                        else{
 
-                            //end row
-                            if($i == ($totalAAs-1)){
-
-                                $missingcolumns = $numColumns-($totalAAs%$numColumns);
-                                for($j=0;$j<$missingcolumns;$j++){
-                                    $SSgraph .= '<td class="graphtd"></td>';
+                            //form debug output just displaying data for the DTA files
+                            //that contains SS-bonds
+                            for($i=0;$i<count($bonds);$i++){
+                                $dtafile = $truebonds[$bonds[$i]]['DTA'];
+                                for($j=0;$j<count($aDebug);$j++){
+                                    if(strtolower($aDebug[$j]['DTA']) == strtolower($dtafile)){
+                                        $debug .= '<tr><td colspan="3"><span style="color:red;"><b>';
+                                        $debug .= 'Disulfide Bond: '.$bonds[$i];
+                                        $debug .= '</b></span></td></tr>';
+                                        $debug .= $aDebug[$j]['string'];
+                                        break;
+                                    }
                                 }
-                                $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+$missingcolumns+1).'</span></td>';
-
-                                $SSgraph .= '</tr>';
                             }
+
+                            //sensitivity, specificity, accuracy, and Mathew's coefficient
+                            $SSbonds = count($bonds);
+                            $countpossiblebonds = count($possiblebonds);
+                            for($i=0;$i<$SSbonds;$i++){
+                                for($j=0;$j<$countpossiblebonds;$j++){
+                                    if($bonds[$i] == $possiblebonds[$j]){
+                                        unset($possiblebonds[$j]);
+                                    }
+                                }
+                            }
+                            $nonExistingBonds = count($possiblebonds);
+
+                            $putativebonds = array();
+                            $putativebonds = array_keys($truebonds);
+                            $labeled = 'no';
+                            for($i=0;$i<count($putativebonds);$i++){
+                                $tester = false;
+                                for($j=0;$j<count($bonds);$j++){
+                                    if($putativebonds[$i] == $bonds[$j]){
+                                        $tester = true;
+                                    }
+                                }
+                                if($tester == false){
+                                    if($labeled == 'no'){
+                                        $labeled = 'yes';
+                                        $message .= "<span style=\"margin-left:-100px;\"><b>Disulfide Bonds classified as true negatives: </b>";
+                                    }
+                                    $message .= "<br/>Cysteines: ".$putativebonds[$i];
+                                    $message .= " (score:".$truebonds[$putativebonds[$i]]["score"]."; pp-value:".number_format($truebonds[$putativebonds[$i]]["ppvalue"],0)."; pp2-value:".number_format($truebonds[$putativebonds[$i]]["pp2value"],0).")";
+                                }
+                            }         
+
+                            $message .= "</span><br/><br/>";
+
+                            $debug .= "</table>";
+
+                            //populate disulfide bonds graph
+                            $AAsarray = str_split($fastaProtein,1);
+                            $totalAAs = count($AAsarray);
+                            $combinedbonds = array();
+                            if(!isset($predictedbonds)){
+                                $predictedbonds = array();
+                            }
+                            $combinedbonds = array_merge($bonds,$predictedbonds);
+                            $totalbonds = count($combinedbonds);
+                            $allbonds = array();
+
+                            //define AAs to have colored background
+                            for($i=0;$i<$totalbonds;$i++){
+                                $cys = explode('-', $combinedbonds[$i]);
+                                $allbonds[] = $cys[0];
+                                $allbonds[] = $cys[1];
+                            }
+
+                            //DISULFIDE BOND VISUALIZATION GRAPH
+                            //start table
+                            $numColumns = 30;
+                            $SSgraph = '<table class="graphtable">';
+
+                            //add last index at the last column
+
+                            for($i=0;$i<$totalAAs;$i++){
+                                //start row
+                                if($i%$numColumns == 0){
+                                    if($i == 0){
+                                        $SSgraph .= '<tr align="center">';
+                                    }
+                                    else{
+                                        $SSgraph .= '</tr><tr align="center">';
+                                    }
+                                }
+
+                                //fill columns
+                                //check if columns participates in any disulfide bond
+                                $isBonded = false;
+                                for($j=0;$j<count($allbonds);$j++){
+                                    if($allbonds[$j] == ($i+1)){
+                                        $isBonded = true;
+                                        break;
+                                    }
+                                }
+
+                                //add indexes to each lines (beginning)
+                                if($i%$numColumns == 0){
+                                    $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
+                                }
+
+                                //if it does, color background
+                                if($isBonded){
+                                    $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\'Cysteine at position '.($i+1).'\')">'.$AAsarray[$i].'</td>';
+                                }
+                                else{
+                                    $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
+                                }
+
+                                //add indexes to each lines (end)
+                                if(($i+1)%$numColumns == 0){
+                                    $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
+                                }                            
+
+                                //end row
+                                if($i == ($totalAAs-1)){
+
+                                    $missingcolumns = $numColumns-($totalAAs%$numColumns);
+                                    for($j=0;$j<$missingcolumns;$j++){
+                                        $SSgraph .= '<td class="graphtd"></td>';
+                                    }
+                                    $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+$missingcolumns+1).'</span></td>';
+
+                                    $SSgraph .= '</tr>';
+                                }
+                            }
+
+                            //Javascript to draw S-S bonds
+                            $SSgraphJS = '<script type="text/javascript">';
+                            for($j=0;$j<$totalbonds;$j++){
+                                $cysteines = explode('-', $combinedbonds[$j]);
+                                $SSgraphJS .= "myDrawFunction(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
+                            }
+                            $SSgraphJS .= '</script>';
+
+                            //close table
+                            $SSgraph .= "</table>";
+
                         }
-
-                        //Javascript to draw S-S bonds
-                        $SSgraphJS = '<script type="text/javascript">';
-                        for($j=0;$j<$totalbonds;$j++){
-                            $cysteines = explode('-', $combinedbonds[$j]);
-                            $SSgraphJS .= "myDrawFunction(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
-                        }
-                        $SSgraphJS .= '</script>';
-
-                        //close table
-                        $SSgraph .= "</table>";
-
+                        $time["method"] = microtime(true) - $time["start"];
+                        $timestr = "Method:".number_format($time["method"],2)."; SVM:".number_format($time["SVM"],2)."; CSP:".number_format($time["CSP"],2);
                     }
-                    $time["method"] = microtime(true) - $time["start"];
-                    $timestr = "Method:".number_format($time["method"],2)."; SVM:".number_format($time["SVM"],2)."; CSP:".number_format($time["CSP"],2);
-
                 }
                 else{
                     $message = "No Initial Matches between precursor ions and disulfide-bonded structures were found.";
@@ -1394,9 +1614,9 @@
         $transmembraneto = "";
     }
     if($_REQUEST["mode"] == "advanced"){
-        include $root."/disulfidebond/advanalysis.php";
+        include $root.$projectname."/advanalysis.php";
     }
     else{
-        include $root."/disulfidebond/stdanalysis.php";
+        include $root.$projectname."/stdanalysis.php";
     }
 ?>

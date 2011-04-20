@@ -279,6 +279,7 @@ class Commonclass {
             unlink($path.$extensionOUT);
         }
 
+        /*OLD CODE
         //extract maximum weighted match results
         $results = array();
         if($_ENV['OS'] == "Windows_NT"){
@@ -293,6 +294,13 @@ class Commonclass {
                 }
             }
         }
+        */
+        
+        //extract results
+        $output = trim($output);
+        $output = str_replace("\r\n", " ", $output);
+        $output = str_replace("\t", " ", $output);
+        $results = explode(" ", $output);
 
         //create an array with all chosen V-E-V (vertex-edge-vertex) combinations
         for($i=0;$i<count($results);$i+=2){
@@ -620,19 +628,32 @@ class Commonclass {
     public function removeBondsWithinTransmembraneRegion($bonds,$from,$to){
 
         $newbonds = array();
+        $testedbonds = array();
+        $thetabonds = array();
+        $thetaScore = 0;
+        $thetaPPvalue = 0;        
 
         for($i=0;$i<count($bonds);$i++){
             $cysteines = explode('-', $bonds[$i]['bond']);
             if(($cysteines[0] > $from && $cysteines[0] < $to) ||
                ($cysteines[1] > $from && $cysteines[1] < $to)){
                 //bond is not possible
+                if(count($bonds[$i]) == 12){
+                    if(!in_array($bonds[$i]['bond'], $testedbonds)){
+                        $testedbonds[] = $bonds[$i]['bond'];
+                        $thetaScore += $bonds[$i]['score'];
+                        $thetaPPvalue += $bonds[$i]['ppvalue'];
+                        $thetabonds[] = $bonds[$i];
+                    }                    
+                }
             }
             else{
                 $newbonds[] = $bonds[$i];
             }
         }
 
-        return $newbonds;
+        $theta = array("score" => $thetaScore, "ppvalue" => $thetaPPvalue);
+        return array("BONDS" => $newbonds,"THETA" => $theta, "THETABONDS" => $thetabonds);
     }
 
     private function calculatep2($totalIons, $CMthreshold, $detectionrange){
@@ -777,6 +798,9 @@ class Commonclass {
     public function removeBondsInTransmembraneRegion($pbonds,$transmembranefrom,$transmembraneto){
         
         $bonds = array();
+        $testedbonds = array();
+        $theta = 0;
+        $thetabonds = array();
         
         $transmembranefrom = (int)$transmembranefrom;
         $transmembraneto = (int)$transmembraneto;
@@ -786,7 +810,16 @@ class Commonclass {
             for($i=0;$i<count($keys);$i++){
                 $cys1 = (int)substr($keys[$i], 0, strpos($keys[$i], "-"));
                 $cys2 = (int)substr($keys[$i], strpos($keys[$i], "-")+1);
-                if($cys1 > $transmembraneto || $cys2 < $transmembranefrom){
+                if(($cys1 >= $transmembranefrom && $cys1 <= $transmembraneto) || 
+                   ($cys2 >= $transmembranefrom && $cys2 <= $transmembraneto)){
+                    //bond will be removed
+                    if(!in_array($keys[$i], $testedbonds)){
+                        $testedbonds[] = $keys[$i];
+                        $theta += $pbonds[$keys[$i]]['score'];
+                        $thetabonds[] = $pbonds[$keys[$i]];
+                    }
+                }
+                else{
                     $bonds[$keys[$i]] = $pbonds[$keys[$i]];
                 }
             }
@@ -795,7 +828,7 @@ class Commonclass {
             $bonds = $pbonds;
         }
         
-        return $bonds;
+        return array("BONDS" => $bonds, "THETA" => $theta, "THETABONDS" => $thetabonds);
         
     }
     
@@ -997,11 +1030,103 @@ class Commonclass {
         return $newbonds;
     }
     
-    public function getNormalizedScores($bonds){
+    public function getNormalizedScores($method,$allbonds,$truebonds,$theta){
         
-        $bonds['THETA']['score'] = 0;
+        switch ($method) {
+            case "THETA=0":
+                
+                $keys = array_keys($allbonds);
+                
+                //calculate totalscore
+                $totalscore=0;
+                for($i=0;$i<count($keys);$i++){
+                    $totalscore += $allbonds[$keys[$i]]['score'];
+                }
+                
+                //normalize bonds
+                for($i=0;$i<count($keys);$i++){
+                    if($totalscore > 0){
+                        $allbonds[$keys[$i]]['score'] = number_format($allbonds[$keys[$i]]['score']/$totalscore,4);
+                    }
+                }                
+                $allbonds['THETA']['score'] = 0;
+                
+                return $allbonds;
+            
+            case "THETA!=0":
+                
+                $keys = array_keys($allbonds);
+                $thetabonds = array();
+                
+                //calculate totalscore
+                $totalscore=0;
+                for($i=0;$i<count($keys);$i++){
+                    $totalscore += $allbonds[$keys[$i]]['score'];
+                }
+                $totalscore += $theta;
+                
+                //normalize bonds
+                for($i=0;$i<count($keys);$i++){
+                    if($totalscore > 0){
+                        $allbonds[$keys[$i]]['score'] = number_format($allbonds[$keys[$i]]['score']/$totalscore,4);
+                    }
+                }
+                if($totalscore > 0){
+                    $theta /= $totalscore;
+                }
+                
+                //calculate m(theta)
+                $bonds = array();
+                $thetascore=0;
+                for($i=0;$i<count($keys);$i++){
+                    if(in_array($keys[$i], $truebonds)){
+                        $bonds[$keys[$i]]['score'] = $allbonds[$keys[$i]]['score'];
+                    }                    
+                    else{
+                        $thetascore += $allbonds[$keys[$i]]['score'];
+                        $thetabonds[$keys[$i]] = $allbonds[$keys[$i]];
+                    }
+                }
+                $thetascore += $theta;
+                $bonds['THETA']['score'] = number_format($thetascore,4);
+                $bonds['THETA']['bonds'] = $thetabonds;
+                $bonds['THETA']['factor'] = $totalscore;
+                
+                return $bonds;
+
+            default:
+                return $allbonds;
+        }  
+    }
+    
+    public function getBondsForPowerSet($allbonds,$truebonds){
+        
+        //getting consistent connectivity (after Gabow)
+        $keys = array_keys($allbonds);
+        $bonds = array();
+        for($i=0;$i<count($keys);$i++){
+            if(in_array($keys[$i], $truebonds) || empty($truebonds)){
+                $bonds[$keys[$i]]['score'] = $allbonds[$keys[$i]]['score'];
+            }                    
+        }
+        
+        //calculate totalscore
+        $keys = array_keys($allbonds);        
+        $totalscore=0;
+        for($i=0;$i<count($keys);$i++){
+            $totalscore += $allbonds[$keys[$i]]['score'];
+        }
+        
+        //normalize bonds
+        $keys = array_keys($bonds);
+        for($i=0;$i<count($keys);$i++){
+            if($totalscore > 0){
+                $bonds[$keys[$i]]['score'] = number_format($allbonds[$keys[$i]]['score']/$totalscore,4);
+            }
+        }
         
         return $bonds;
     }
+
 }
 ?>
