@@ -1345,7 +1345,35 @@
                             break;
                     }      
                 }
-
+                
+                $test = "";
+                for($i=0;$i<count($GlobalBonds['MSMS']['bonds']);$i++){
+                    $test .= $GlobalBonds['MSMS']['bonds'][$i];
+                    $test .= ", ";
+                }
+                $test .= " // ";
+                for($i=0;$i<count($GlobalBonds['SVM']['bonds']);$i++){
+                    $test .= $GlobalBonds['SVM']['bonds'][$i];
+                    $test .= ", ";
+                }
+                $test .= " // ";
+                for($i=0;$i<count($GlobalBonds['CSP']['bonds']);$i++){
+                    $test .= $GlobalBonds['CSP']['bonds'][$i];
+                    $test .= ", ";
+                }
+                $test .= " // ";
+                for($i=0;$i<count($GlobalBonds['CUSTOM']['bonds']);$i++){
+                    $test .= $GlobalBonds['CUSTOM']['bonds'][$i];
+                    $test .= ", ";
+                }
+                $test .= " // ";
+                $keys = array_keys($GlobalSS);
+                for($i=0;$i<count($keys)-1;$i++){
+                    $test .= $keys[$i];
+                    $test .= ", ";
+                }
+                echo $test;
+                
                 $integration = true;
                 if($integration)
                 {
