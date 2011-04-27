@@ -102,7 +102,8 @@
     
     function calculateSimilarity($distance){
         
-        return pow(1+log10(1+($distance/10)), -1);
+        $score = pow(1+log10(1+($distance/10)), -1);
+        return number_format($score,4);
         
     }
     

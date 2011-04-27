@@ -135,9 +135,44 @@
                 $return[] = $out;
             }
         }
-        return $return;
+        
+        $powerset = removeImpossibleCombinations($return);
+        
+        return $powerset;
         
     }
+    
+    function removeImpossibleCombinations($return)
+    {
+        $count = count($return);
+        $powerset = array();
+        for($i=0;$i<$count;$i++)
+        {
+            $counti = count($return[$i]);
+            if($counti > 1)
+            {
+                $cys = array();
+                for($j=0;$j<$counti;$j++)
+                {
+                    $tmp = explode("-", $return[$i][$j]);
+                    for($k=0;$k<count($tmp);$k++)
+                    {
+                        $cys[$tmp[$k]] = $tmp[$k];
+                    }
+                }
+                //all cysteines are different
+                if(count($cys) == ($counti*2))
+                {
+                    $powerset[] = $return[$i];
+                }
+            }
+            else
+            {
+                $powerset[] = $return[$i];
+            }
+        }
+        return $powerset;
+    }    
     
     function assignScoresToPowerSet($BaseSet,$bonds){
         
@@ -199,12 +234,12 @@
         //the factor is 1/2 when score = 0 and -1/4 when score > 0
         for($i=0;$i<$count;$i++){
             if($scores[$i] == 0){
-                $penalty = ($totalscore/$count)*0.5;
+                $penalty = ($totalscore/$count)*0.5*-1.0;
             }
             else{
-                $penalty = ($totalscore/$count)*0.25*-1.0;
+                $penalty = ($totalscore/$count)*0.25;
             }
-            $score += (pow(2, $scores[$i]-$penalty)-1);
+            $score += (pow(2, $scores[$i]+$penalty)-1);
         }
         $score = number_format($score/$count,4);
         $score = max(array(0.0,$score));
@@ -344,6 +379,96 @@
         }
         
         return $bonds;
+    }
+    
+    function integrateGlobalBondsPowerSet($M1bonds, $M2bonds, $M3bonds, $M4bonds){
+        
+            $bonds = array();
+            $M1set = array();
+            $M2set = array();
+            $M3set = array();
+            $M4set = array();
+            $Sets = array();
+            
+            //get all different disulfide bonds
+            $merge = array_merge($M1bonds,$M2bonds);
+            $merge = array_merge($merge,$M3bonds);
+            $merge = array_merge($merge,$M4bonds);
+            $merge = array_keys($merge);
+            
+            //calculate power set based on all bonds found by both methods
+            $BaseSet = getPowerSet($merge);
+            
+            //assign the scores to each power set combination based on the set of input bonds
+            //combinations with score 0 are discarded
+            //probability function to assign scores to combinations based on each input bond
+            if(count($M1bonds) > 0){
+                $M1set = assignScoresToPowerSet($BaseSet,$M1bonds);
+            }
+            if(count($M2bonds) > 0){
+                $M2set = assignScoresToPowerSet($BaseSet,$M2bonds);
+            }
+            if(count($M3bonds) > 0){
+                $M3set = assignScoresToPowerSet($BaseSet,$M3bonds);
+            }
+            if(count($M4bonds) > 0){
+                $M4set = assignScoresToPowerSet($BaseSet,$M4bonds);
+            }
+            
+            //normalize all scores such that their sum is 1
+            if(count($M1set) > 0){
+                $M1set = normalizeScore($M1set);
+                $Sets[] = $M1set;
+            }
+            if(count($M2set) > 0){
+                $M2set = normalizeScore($M2set);
+                $Sets[] = $M2set;
+            }
+            if(count($M3set) > 0){
+                $M3set = normalizeScore($M3set);
+                $Sets[] = $M3set;
+            }
+            if(count($M4set) > 0){
+                $M4set = normalizeScore($M4set);
+                $Sets[] = $M4set;
+            }
+            
+            //merge scores from each method
+            //does the intersection (multiplication) operation (matrix)
+            $MergeSet = getGlobalMergedSet($Sets);
+            
+            //list bonds separately, summing the scores of different entries for the same bond
+            //all bonding combinations with more than one disulfide bond is added to theta
+            //outputs only primitive hypothesis -> h1, h2, h3, etc... not h1 U h2, h1 U h3, etc...
+            $bonds = calculateScore($MergeSet);
+            
+            return $bonds;
+    }
+    
+    function getGlobalMergedSet($Sets){
+        
+        $merge = array();
+        $count = count($Sets);
+        
+        switch ($count) {
+            case 1:
+                $merge = $Sets[0];
+                break;
+            case 2:
+                $merge = getMergedSet($Sets[0], $Sets[1]);
+                break;
+            case 3:
+                $merge = getMergedSet($Sets[0], $Sets[1]);
+                $merge = getMergedSet($merge, $Sets[2]);
+                break;
+            case 4:
+                $merge = getMergedSet($Sets[0], $Sets[1]);
+                $merge = getMergedSet($merge, $Sets[2]);
+                $merge = getMergedSet($merge, $Sets[3]);
+                break;            
+        }
+        
+        return $merge;        
     }
 
 ?>
