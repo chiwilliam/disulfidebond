@@ -36,6 +36,9 @@
     require_once $root."/prediction.php";
     require_once $root."/integration.php";
     
+    echo 'test';
+    
+    
     //initialize objects
     $Users = new Usersclass();
     $IMClass = new InitialMatchclass();
@@ -172,8 +175,6 @@
     if($delta < 0){
         $delta = 0;
     }
-    
-    echo 'test';
     
     if($MSMS != "" || $SVM != "" || $CSP != "" || $CUSTOM != ""){
         //MSMS
