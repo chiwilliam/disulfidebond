@@ -1346,6 +1346,7 @@
                     }      
                 }
                 
+                /*Debugging purposes on Haddock2...
                 $test = "";
                 for($i=0;$i<count($GlobalBonds['MSMS']['bonds']);$i++){
                     $test .= $GlobalBonds['MSMS']['bonds'][$i];
@@ -1373,6 +1374,7 @@
                     $test .= ", ";
                 }
                 echo $test;
+                */
                 
                 $integration = true;
                 if($integration)
