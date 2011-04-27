@@ -6,8 +6,7 @@
 
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $root .= "/disulfidebond";
-   
+    
     //fix for SFSU servers root path
     $predictive = 'Y';
     if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
@@ -22,11 +21,12 @@
         $root .= "/ms2db++";
         $predictive = 'Y';    
     }
+    else{
+        $root .= "/disulfidebond";
+    }
 
     //remove time limit when executing a script
     set_time_limit(0);
-    
-    echo $root;    
     
     //include necessary classes
     require_once $root."/classes/Users.class.php";
