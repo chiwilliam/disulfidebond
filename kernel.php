@@ -26,7 +26,7 @@
     //remove time limit when executing a script
     set_time_limit(0);
     
-    echo 'test';    
+    echo $root;    
     
     //include necessary classes
     require_once $root."/classes/Users.class.php";
