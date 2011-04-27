@@ -173,6 +173,8 @@
         $delta = 0;
     }
     
+    echo 'test';
+    
     if($MSMS != "" || $SVM != "" || $CSP != "" || $CUSTOM != ""){
         //MSMS
         if($MSMS != ""){
