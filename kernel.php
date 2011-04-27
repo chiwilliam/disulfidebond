@@ -38,8 +38,6 @@
     require_once $root."/prediction.php";
     require_once $root."/integration.php";
     
-    echo $root;
-    
     //initialize objects
     $Users = new Usersclass();
     $IMClass = new InitialMatchclass();
