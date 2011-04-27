@@ -8,3 +8,20 @@ function showProcessing(){
     document.getElementById("graphdiv").style.visibility = "hidden";
     document.getElementById("listofbondsdiv").style.visibility = "hidden";
 }
+
+function changeSkin(id,method){
+    var path = document.getElementById(id).src;
+    var index = path.indexOf("_on");
+    if(index == -1){
+        document.getElementById(id).src = "images/"+method+"_on.png";
+        setMethod('input'+method, method);
+    }
+    else{
+        document.getElementById(id).src = "images/"+method+".png";
+        setMethod('input'+method, '');
+    }
+}
+
+function setMethod(method,value){
+    document.getElementById(method).value = value;
+}

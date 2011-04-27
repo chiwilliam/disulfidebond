@@ -1,15 +1,21 @@
 <?php
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
+    $root .= "/disulfidebond";
+    
     //fix for SFSU servers root path
     if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
         //for tintin
         $root = "/home/whemurad/public_html";
+        $root .= "/disulfidebond";    
         //for haddock2
         $root = "/home/ms2db/public_html";
+        $root .= "/ms2db++";    
     }
-    include $root."/disulfidebond/prediction/functionsDAT.php";
-    include $root."/disulfidebond/prediction/functionsCSP.php";
+    
+    
+    include $root."/prediction/functionsDAT.php";
+    include $root."/prediction/functionsCSP.php";
     
     function getBondsByPredictiveTechniques($bonds,$FASTA,$root,&$time, $transmembranefrom, $transmembraneto){
         
@@ -42,12 +48,12 @@
         $pbonds = getTruebonds($protein,$result,array());
         
         //Level-2 Predictive
-        $start = microtime(true);        
+        //$start = microtime(true);        
         //Level-2 Predictive based on the results from Level-1 SVM and MS/MS
         //$CSPmatch = confirmBondsViaSVM2(&$protein, &$pbonds, $bonds, $root);
         //Level-2 CSPmatchPredictive alone! No filtering nor dependency on others
-        $p2bonds = runCSP(&$protein, $pbonds, $root);        
-        $time["CSP"] = microtime(true) - $start;
+        //$p2bonds = runCSP(&$protein, $pbonds, $root);        
+        //$time["CSP"] = microtime(true) - $start;
         
         //Back to Level 1 here
         //Remove the bonds with lower scores
@@ -204,7 +210,7 @@
     function getFileName($folder,$filename,$root){
         
         $path = "";
-        $path = $root."/disulfidebond/".$folder."/".$filename;
+        $path = $root."/".$folder."/".$filename;
         
         if($_ENV['OS'] == "Windows_NT"){
             $command = str_replace("/", "\\", $command);
@@ -600,6 +606,151 @@
                 unset($csp);
             }
         }        
+    }
+    
+    function runCSPmethodAlone($protein, $countBonds, $root){
+        
+        $filenameDB = getFileName("prediction", "uniprotDB.dat",$root);
+        $proteinDB = getProtein($filenameDB);
+        $maxProteinLengthDB = getMaxProteinLength(&$proteinDB);
+        
+        $countDB = count($proteinDB);
+        for($i=0;$i<$countDB;$i++){
+            $proteinDB[$i]['CSP'] = getCSPKnownConnectivity($proteinDB[$i]);
+        }
+        
+        $CSPs = array();
+        $CSPs = getPossibleBondingCombinations($protein['BONDS'],$countBonds);
+        
+        setCSPs2(&$CSPs);
+        
+        $CSPmatch = array();
+        $CSPmatch = getCSPMatches2(&$CSPs,&$proteinDB);
+        
+        unset($proteinDB);
+        unset($CSPs);
+
+        $CSPmatch['similarity'] = calculateSimilarity($CSPmatch['CSPdelta']);
+        
+        return $CSPmatch;
+    }
+    
+    function getPossibleBondingCombinations($bonds, $countBonds){
+        
+        $cspbonds = array();
+        $count = count($bonds);
+        
+        for($i=0;$i<$count-1;$i++){
+            $cys = array();
+            $cys[] = substr($bonds[$i]['BOND'], 0, strpos($bonds[$i]['BOND'], "-"));
+            $cys[] = substr($bonds[$i]['BOND'], strpos($bonds[$i]['BOND'], "-")+1);
+            for($j=$i+1;$j<$count;$j++){
+                $cys1 = substr($bonds[$j]['BOND'], 0, strpos($bonds[$j]['BOND'], "-"));
+                $cys2 = substr($bonds[$j]['BOND'], strpos($bonds[$j]['BOND'], "-")+1);
+                if(!in_array($cys1, $cys) && !in_array($cys2, $cys)){
+                    $cspbonds[] = array($bonds[$i]['BOND'],$bonds[$j]['BOND']);
+                }
+            }
+        }
+        
+        $possiblebonds = array();
+        for($i=0;$i<$count;$i++){
+            $possiblebonds[] = $bonds[$i]['BOND'];
+        }
+        
+        for($w=3;$w<=$countBonds;$w++){
+            $count = count($cspbonds);
+            $tmpcspbonds = $cspbonds;
+            unset($cspbonds);
+            $cspbonds = array();
+            $count2 = count($possiblebonds);
+            for($i=0;$i<$count;$i++){
+                $cys = array();
+                $tmpcount = count($tmpcspbonds[$i]);
+                for($k=0;$k<$tmpcount;$k++){
+                    $cys[] = substr($tmpcspbonds[$i][$k], 0, strpos($tmpcspbonds[$i][$k], "-"));
+                    $cys[] = substr($tmpcspbonds[$i][$k], strpos($tmpcspbonds[$i][$k], "-")+1);
+                }
+                for($j=0;$j<$count2;$j++){
+                    $cys1 = substr($possiblebonds[$j], 0, strpos($possiblebonds[$j], "-"));
+                    $cys2 = substr($possiblebonds[$j], strpos($possiblebonds[$j], "-")+1);
+                    if(!in_array($cys1, $cys) && !in_array($cys2, $cys)){
+                        $tmp = $tmpcspbonds[$i];
+                        $tmp[] = $possiblebonds[$j];
+                        $cspbonds[] = $tmp;
+                    }
+                }
+            }
+            unset($tmpcspbonds);
+        }
+        
+        return $cspbonds;
+    }
+    
+    function setCSPs2(&$CSPs){
+        
+        $countBonds = count($CSPs);
+        for($i=0;$i<$countBonds;$i++){
+            $bonds = $CSPs[$i];
+            $cys = array();
+            $csp = array();
+            for($k=0;$k<count($bonds);$k++){
+                $cys[] = (int)substr($bonds[$k], 0, strpos($bonds[$k], "-"));
+                $cys[] = (int)substr($bonds[$k], strpos($bonds[$k], "-")+1);
+            }
+            for($k=0;$k<count($cys)-1;$k++){
+                $csp[] = abs($cys[$k+1]-$cys[$k]);
+            }
+            $CSPs[$i]['CSP'] = $csp;
+            unset($cys);
+            unset($csp);
+        }
+    }
+    
+    function getCSPMatches2(&$CSPs,&$proteinDB){
+        
+        $CSPmatches = array();
+        
+        $count = count($CSPs);
+        $countDB = count($proteinDB);
+
+        for($i=0;$i<$count;$i++){
+            $CSPmin = 100000;
+            for($j=0;$j<$countDB;$j++){
+                if(count($CSPs[$i]['CSP']) == count($proteinDB[$j]['CSP'])){
+                    $CSPd = getCSPDivergence($CSPs[$i]['CSP'],$proteinDB[$j]['CSP'],$CSPmin);
+                    if($CSPd < $CSPmin){
+                        $CSPmin = $CSPd;
+                        $CSPmatches[$i] = array("match" => $j, "CSPdelta" => $CSPd, "BONDS" => $CSPs[$i], "DB" => $proteinDB[$j]);
+                    }
+                }            
+            }
+        }
+        
+        $CSPmatch = filterCSPMatches2($CSPmatches);
+        unset($CSPmatches);
+        
+        return $CSPmatch;
+    }
+    
+    function filterCSPMatches2($CSPmatches){
+        
+        $match = array();
+        
+        $count = count($CSPmatches);
+        $index = -1;
+        $CSPmin = 100000;
+        
+        for($i=0;$i<$count;$i++){
+            if($CSPmatches[$i]['CSPdelta'] < $CSPmin){
+                $CSPmin = $CSPmatches[$i]['CSPdelta'];
+                $index = $i;
+            }
+        }
+        $match = $CSPmatches[$index];
+        
+        return $match;
+        
     }
 
 ?>

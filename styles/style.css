@@ -99,16 +99,41 @@ td.advancedusersright{
     font-size:10px;
 }
 
+div.readme{
+    padding-bottom:60px;
+}
+
+div.submit{
+    padding-top:40px;
+}
+
 table.input{
     margin-left:5px;
     padding: 0px 0px 0px 0px;
     width:900px;
+    margin-top:-20px;
 }
 
 tr.input{
     width:100%;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
+}
+
+td.method{
+    font-size:16px;
+    font-variant:small-caps;
+    font-weight:bold;
+    color:#305d71;
+    padding-left:350px;
+}
+
+label.info{
+    font-size:12px;
+    font-variant:normal;
+    font-weight:normal;
+    font-style:italic;
+    color:#305d71;
 }
 
 td.inputleft{

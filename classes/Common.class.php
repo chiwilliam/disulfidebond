@@ -237,7 +237,7 @@ class Commonclass {
         $input = $vertices." ".$totaledges." U \n\n".$input."\n";
 
         //prepare file paths
-        $path = $root."/disulfidebond/gabow/".$vertices.$totaledges."U";
+        $path = $root."/gabow/".$vertices.$totaledges."U";
 
         if($_ENV['OS'] == "Windows_NT"){
             $path = str_replace("/", "\\", $path);
@@ -257,12 +257,12 @@ class Commonclass {
         //write command to be executed to run wmatch executable
         $command = "";
         if($_ENV['OS'] == "Windows_NT"){
-            $command = $root."/disulfidebond/gabow/wmatch.exe ".
+            $command = $root."/gabow/wmatch.exe ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
             $command = str_replace("/", "\\", $command);
         }
         else{
-            $command = $root."/disulfidebond/gabow/./wmatch ".
+            $command = $root."/gabow/./wmatch ".
                        $path.$extensionIN." > ".$path.$extensionOUT;
         }
         
@@ -841,7 +841,7 @@ class Commonclass {
         
         $zip = zip_open($tmp_name);
         if($zip){
-            $dirPath = $root."/disulfidebond/DTA/".$name;
+            $dirPath = $root."/DTA/".$name;
 
             if(!is_dir($dirPath)){
                 mkdir($dirPath);
@@ -861,11 +861,11 @@ class Commonclass {
                         $mzIteration++;
                         
                         //save to File
-                        $path = $root."/disulfidebond/DTA/".$name."/".$mzIteration.".mzXML";
+                        $path = $root."/DTA/".$name."/".$mzIteration.".mzXML";
                         file_put_contents($path, $data);
                         
                         //convert File to DTA file(s)
-                        $DTApath = $root."/disulfidebond/DTA/".$name."/".$mzIteration."/";
+                        $DTApath = $root."/DTA/".$name."/".$mzIteration."/";
                         $this->convertMZXMLtoDTA($root, $path);
                                                 
                         //process each DTA file
@@ -895,7 +895,7 @@ class Commonclass {
                                 $PMLNames[$index] = $listFiles[$i];
 
                                 //store data in a local file
-                                $path = $root."/disulfidebond/DTA/".$name."/".$index.".txt";
+                                $path = $root."/DTA/".$name."/".$index.".txt";
                                 file_put_contents($path, $data);
                             }                        
                         }
@@ -922,7 +922,7 @@ class Commonclass {
                             $PMLNames[$index] = $filename;
 
                             //store data in a local file
-                            $path = $root."/disulfidebond/DTA/".$name."/".$index.".txt";
+                            $path = $root."/DTA/".$name."/".$index.".txt";
                             file_put_contents($path, $data);
                         }
                     }
@@ -938,11 +938,11 @@ class Commonclass {
         //generate files
         $pathtoexec = "";
         if($_ENV['OS'] == "Windows_NT"){
-            $pathtoexec = $root."/disulfidebond/MSMSconversion/MzXML2Search.exe ";
+            $pathtoexec = $root."/MSMSconversion/MzXML2Search.exe ";
             $pathtoexec = str_replace("/", "\\", $pathtoexec);
         }
         else{
-            $pathtoexec = $root."/disulfidebond/MSMSconversion/./MzXML2Search ";
+            $pathtoexec = $root."/MSMSconversion/./MzXML2Search ";
         }
         
         $cmd = $pathtoexec." -dta ".$mzXMLpath;
@@ -1126,6 +1126,37 @@ class Commonclass {
         }
         
         return $bonds;
+    }
+    
+    public function organizeBonds($msmsbonds,$msmsscores,$svmbonds,$svmscores,$cspbonds,$cspscores,$custombonds,$customscores){
+        
+        $global = array();
+        
+        $global['MSMS']['bonds'] = $msmsbonds;
+        $count = count($msmsbonds);
+        for($i=0;$i<$count;$i++){
+            $global['MSMS']['scores'][$msmsbonds[$i]] = $msmsscores[$msmsbonds[$i]];
+        }
+        
+        $global['SVM']['bonds'] = $svmbonds;
+        $count = count($svmbonds);
+        for($i=0;$i<$count;$i++){
+            $global['SVM']['scores'][$svmbonds[$i]] = $svmscores[$svmbonds[$i]];
+        }
+        
+        $global['CSP']['bonds'] = $cspbonds;
+        $count = count($cspbonds);
+        for($i=0;$i<$count;$i++){
+            $global['CSP']['scores'][$cspbonds[$i]] = $cspscores[$cspbonds[$i]];
+        }
+        
+        $global['CUSTOM']['bonds'] = $custombonds;
+        $count = count($custombonds);
+        for($i=0;$i<$count;$i++){
+            $global['CUSTOM']['scores'][$custombonds[$i]] = $customscores[$custombonds[$i]];
+        }
+        
+        return $global;        
     }
 
 }

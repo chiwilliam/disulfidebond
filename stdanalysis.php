@@ -2,9 +2,7 @@
 <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-        <!-- #BeginEditable "doctitle" -->
         <title>Standard Analysis</title>
-        <!-- #EndEditable -->
         <link href="styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
         <link href="styles/style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/wz_jsgraphics.js"></script>
@@ -18,13 +16,13 @@
                 <!-- Begin Navigation -->
                 <div id="navigation" class="horizontalmenu">
                         <ul>
-                            <li><a href="index.php" onmouseover="Tip('MS2DB+ Home Page')" onmouseout="UnTip()">Home</a></li>
-                            <li class="selected"><a href="stdanalysis.php" onmouseover="Tip('MS2DB+ for Beginner users')" onmouseout="UnTip()">Standard Analysis</a></li>
-                            <li><a href="advanalysis.php" onmouseover="Tip('MS2DB+ for Advanced users')" onmouseout="UnTip()">Advanced Analysis</a></li>
-                            <li><a href="datasets.php" onmouseover="Tip('MS2DB+ Datasets')" onmouseout="UnTip()">Datasets</a></li>
-                            <li><a href="publications.php" onmouseover="Tip('MS2DB+ Publications')" onmouseout="UnTip()">Publications</a></li>
-                            <li><a href="contactus.php" onmouseover="Tip('MS2DB+ Contact Us')" onmouseout="UnTip()">Contact Us</a></li>
-                            <li><a href="help.php" onmouseover="Tip('MS2DB+ Help')" onmouseout="UnTip()">Help</a></li>
+                            <li><a href="index.php" onmouseover="Tip('MS2DB Home Page')" onmouseout="UnTip()">Home</a></li>
+                            <li class="selected"><a href="analysis.php" onmouseover="Tip('MS2DB for Beginner users')" onmouseout="UnTip()">Standard Analysis</a></li>
+                            <li><a href="analysisadv.php" onmouseover="Tip('MS2DB for Advanced users')" onmouseout="UnTip()">Advanced Analysis</a></li>
+                            <li><a href="datasets.php" onmouseover="Tip('MS2DB Datasets')" onmouseout="UnTip()">Datasets</a></li>
+                            <li><a href="publications.php" onmouseover="Tip('MS2DB Publications')" onmouseout="UnTip()">Publications</a></li>
+                            <li><a href="contactus.php" onmouseover="Tip('MS2DB Contact Us')" onmouseout="UnTip()">Contact Us</a></li>
+                            <li><a href="help.php" onmouseover="Tip('MS2DB Help')" onmouseout="UnTip()">Help</a></li>
                         </ul>
                 </div>
                 <!-- End Navigation -->
