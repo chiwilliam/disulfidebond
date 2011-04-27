@@ -300,6 +300,8 @@ class Commonclass {
         $output = trim($output);
         $output = str_replace("\r\n", " ", $output);
         $output = str_replace("\t", " ", $output);
+        $output = str_replace("\n", " ", $output);
+        $output = str_replace("\r", " ", $output);
         $results = explode(" ", $output);
 
         //create an array with all chosen V-E-V (vertex-edge-vertex) combinations
