@@ -1,7 +1,6 @@
 <?php
     //build root path (i.e.: C:\xampp\htdocs\)
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $root .= "/disulfidebond";
     
     //fix for SFSU servers root path
     if(trim($root) == "/var/www/html/bioinformatics" || trim($root) == "/var/www"){
@@ -11,6 +10,9 @@
         //for haddock2
         $root = "/home/ms2db/public_html";
         $root .= "/ms2db++";    
+    }
+    else{
+        $root .= "/disulfidebond";
     }
     
     
