@@ -26,6 +26,8 @@
     //remove time limit when executing a script
     set_time_limit(0);
     
+    echo 'test';    
+    
     //include necessary classes
     require_once $root."/classes/Users.class.php";
     require_once $root."/classes/AA.class.php";
@@ -35,9 +37,6 @@
     require_once $root."/classes/Charting.class.php";
     require_once $root."/prediction.php";
     require_once $root."/integration.php";
-    
-    echo 'test';
-    
     
     //initialize objects
     $Users = new Usersclass();
