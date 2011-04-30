@@ -1130,7 +1130,7 @@ class Commonclass {
         return $bonds;
     }
     
-    public function organizeBonds($msmsbonds,$msmsscores,$svmbonds,$svmscores,$cspbonds,$cspscores,$custombonds,$customscores){
+    public function organizeBonds($msmsbonds,$msmsscores,$svmbonds,$svmscores,$cspbonds,$cspscores,$custombonds,$customscores,$custom2bonds,$custom2scores){
         
         $global = array();
         
@@ -1156,6 +1156,12 @@ class Commonclass {
         $count = count($custombonds);
         for($i=0;$i<$count;$i++){
             $global['CUSTOM']['scores'][$custombonds[$i]] = $customscores[$custombonds[$i]];
+        }
+        
+        $global['CUSTOM2']['bonds'] = $custom2bonds;
+        $count = count($custom2bonds);
+        for($i=0;$i<$count;$i++){
+            $global['CUSTOM2']['scores'][$custom2bonds[$i]] = $custom2scores[$custom2bonds[$i]];
         }
         
         return $global;        

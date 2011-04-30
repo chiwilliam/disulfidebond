@@ -138,7 +138,7 @@ label.info{
 
 td.inputleft{
     float:left;
-    width:250px;
+    width:240px;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 4px;
 }
@@ -148,6 +148,13 @@ td.inputright{
     width:600px;
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
+}
+
+td.inputrightresults{
+    width:900px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    text-align:center;
 }
 
 div.horizontalmenu{
@@ -171,6 +178,13 @@ span.title{
     color:blue;
     padding-right: 10px;
     padding-top: 20px;
+}
+span.strategiestitle{
+    font-size:20px;
+    color:red;
+    padding-top: 10px;
+    font-variant:small-caps;
+    font-weight:bold;
 }
 td.list{
     text-align: left;

@@ -12,7 +12,7 @@
         $root .= "/ms2db++";    
     }
     else{
-        $root .= "/disulfidebond";
+        $root .= "/ms2db++";
     }
     
     

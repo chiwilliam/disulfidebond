@@ -15,11 +15,14 @@ function changeSkin(id,method){
     if(index == -1){
         document.getElementById(id).src = "images/"+method+"_on.png";
         setMethod('input'+method, method);
+        document.getElementById(method+"details").style.display = "block";
     }
     else{
         document.getElementById(id).src = "images/"+method+".png";
         setMethod('input'+method, '');
+        document.getElementById(method+"details").style.display = "none";
     }
+    
 }
 
 function setMethod(method,value){
