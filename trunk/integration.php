@@ -177,6 +177,7 @@
     function assignScoresToPowerSet($BaseSet,$bonds){
         
         $set = array();
+        $nonzeroscore = pow(10, -4);
         
         $keys = array_keys($bonds);
         $count = count($BaseSet);
@@ -191,8 +192,16 @@
                 $auxBond[] = $tmp[0];
                 if(in_array($tmp[0], $keys)){
                     $score = getUnionScore(array($bonds[$tmp[0]]['score'],$tmp[0]));
-                    $set[] = array('bonds' => $auxBond, 'score' => $score);
                 }
+                else{
+                    $score = 0;
+                }
+                if($score == 0){
+                    $score = $nonzeroscore;
+                }
+                if($score > 0){
+                    $set[] = array('bonds' => $auxBond, 'score' => $score);
+                }                    
             }
             //more than 1 bond: Bi union Bj etc...
             else{
@@ -207,6 +216,9 @@
                 }
                 $scores[] = $tmp;
                 $score = getUnionScore($scores);
+                if($score == 0){
+                    $score = $nonzeroscore;
+                }
                 if($score > 0){
                     $set[] = array('bonds' => $tmp, 'score' => $score);
                 }
@@ -319,7 +331,7 @@
         return $bonds;
     }
     
-    function calculateScore($MergeSet){
+    function calculateScore($method, $MergeSet){
         
         /*
          * Array bonds must be in the format:
@@ -334,11 +346,34 @@
         $count = count($MergeSet);
         
         //calculate denominator
-        for($i=0;$i<$count;$i++){
-            if($MergeSet[$i]['score'] > 0){                
-                $totalscore += $MergeSet[$i]['score'];
-            }
-        }
+        switch ($method) {
+            case '1':
+                //denominator is the sum of all the non-zero intersections
+                for($i=0;$i<$count;$i++){
+                    if($MergeSet[$i]['score'] > 0){                
+                        $totalscore += $MergeSet[$i]['score'];
+                    }
+                }
+                break;
+            case '2':
+                //do not use the denominator
+                $totalscore = 1;
+                break;
+            case '3':
+                //denominator is 1 + log(1/K), where K is the sum of all the non-zero intersections
+                $K=0;
+                for($i=0;$i<$count;$i++){
+                    if($MergeSet[$i]['score'] > 0){                
+                        $K += $MergeSet[$i]['score'];
+                    }
+                }
+                if($K == 0){
+                    //very small number
+                    $K = pow(10, -10);
+                }
+                $totalscore += (1+log10(1/$K));
+                break;
+        }     
         
         //calculate numerators and theta
         for($i=0;$i<$count;$i++){            
@@ -369,6 +404,7 @@
                         $theta[$key]['score'] = $MergeSet[$i]['score'];
                     }
                     $totaltheta += $MergeSet[$i]['score'];
+                    $totaltheta = number_format($totaltheta/$totalscore,4);
                 }                
             }                        
         }
@@ -381,19 +417,66 @@
         return $bonds;
     }
     
-    function integrateGlobalBondsPowerSet($M1bonds, $M2bonds, $M3bonds, $M4bonds){
+    function calculateScoreDecision($Sets){
+        /*
+         * Array bonds must be in the format:
+         * $bonds[142-292][score] = $score
+         * $bonds[156-356][score] = $score
+         */
+        $tmp = array();
+        $bonds = array();
+        
+        $countmethods = count($Sets);
+        for($i=0;$i<$countmethods;$i++){
+            $countbonds = count($Sets[$i]);
+            for($j=0;$j<$countbonds;$j++){
+                //ONE SINGLE BOND
+                if(count($Sets[$i][$j]['bonds']) == 1){
+                    if(isset($Sets[$i][$j]['coeficient'])){
+                        $coeficient = $Sets[$i][$j]['coeficient'];
+                    }
+                    else{
+                        $coeficient = 1.0;
+                    }                    
+                    $score = $Sets[$i][$j]['score'];
+                    $score = number_format($score*$coeficient,4);
+                    $tmp[$Sets[$i][$j]['bonds'][0]][] = $score;
+                }
+            }
+        }
+        
+        $keys = array_keys($tmp);
+        $countbonds = count($keys);
+        for($i=0;$i<$countbonds;$i++){
+            $score = 0;
+            $countscores = count($tmp[$keys[$i]]);
+            for($j=0;$j<$countscores;$j++){
+                $score += $tmp[$keys[$i]][$j];
+            }
+            $score = number_format($score/$countscores,4);
+            $bonds[$keys[$i]]['score'] = $score;
+        }
+        
+        return $bonds;
+    }
+    
+    function integrateGlobalBondsPowerSet($method, $MSMSbonds, $SVMbonds, $CSPbonds, $CUSTOMbonds, $CUSTOM2bonds){
         
             $bonds = array();
+            
             $M1set = array();
             $M2set = array();
             $M3set = array();
             $M4set = array();
+            $M5set = array();
+            
             $Sets = array();
             
             //get all different disulfide bonds
-            $merge = array_merge($M1bonds,$M2bonds);
-            $merge = array_merge($merge,$M3bonds);
-            $merge = array_merge($merge,$M4bonds);
+            $merge = array_merge($MSMSbonds,$SVMbonds);
+            $merge = array_merge($merge,$CSPbonds);
+            $merge = array_merge($merge,$CUSTOMbonds);
+            $merge = array_merge($merge,$CUSTOM2bonds);
             $merge = array_keys($merge);
             
             //calculate power set based on all bonds found by both methods
@@ -402,45 +485,64 @@
             //assign the scores to each power set combination based on the set of input bonds
             //combinations with score 0 are discarded
             //probability function to assign scores to combinations based on each input bond
-            if(count($M1bonds) > 0){
-                $M1set = assignScoresToPowerSet($BaseSet,$M1bonds);
+            if(count($MSMSbonds) > 0){
+                $MSMSset = assignScoresToPowerSet($BaseSet,$MSMSbonds);
             }
-            if(count($M2bonds) > 0){
-                $M2set = assignScoresToPowerSet($BaseSet,$M2bonds);
+            if(count($SVMbonds) > 0){
+                $SVMset = assignScoresToPowerSet($BaseSet,$SVMbonds);
             }
-            if(count($M3bonds) > 0){
-                $M3set = assignScoresToPowerSet($BaseSet,$M3bonds);
+            if(count($CSPbonds) > 0){
+                $CSPset = assignScoresToPowerSet($BaseSet,$CSPbonds);
             }
-            if(count($M4bonds) > 0){
-                $M4set = assignScoresToPowerSet($BaseSet,$M4bonds);
+            if(count($CUSTOMbonds) > 0){
+                $CUSTOMset = assignScoresToPowerSet($BaseSet,$CUSTOMbonds);
+            }
+            if(count($CUSTOM2bonds) > 0){
+                $CUSTOM2set = assignScoresToPowerSet($BaseSet,$CUSTOM2bonds);
             }
             
             //normalize all scores such that their sum is 1
-            if(count($M1set) > 0){
-                $M1set = normalizeScore($M1set);
-                $Sets[] = $M1set;
+            if(count($MSMSset) > 0){
+                $MSMSset = normalizeScore($MSMSset);
+                $Sets[] = $MSMSset;
             }
-            if(count($M2set) > 0){
-                $M2set = normalizeScore($M2set);
-                $Sets[] = $M2set;
+            if(count($SVMset) > 0){
+                $SVMset = normalizeScore($SVMset);
+                $Sets[] = $SVMset;
             }
-            if(count($M3set) > 0){
-                $M3set = normalizeScore($M3set);
-                $Sets[] = $M3set;
+            if(count($CSPset) > 0){
+                $CSPset = normalizeScore($CSPset);
+                $Sets[] = $CSPset;
             }
-            if(count($M4set) > 0){
-                $M4set = normalizeScore($M4set);
-                $Sets[] = $M4set;
+            if(count($CUSTOMset) > 0){
+                $CUSTOMset = normalizeScore($CUSTOMset);
+                $Sets[] = $CUSTOMset;
+            }
+            if(count($CUSTOM2set) > 0){
+                $CUSTOM2set = normalizeScore($CUSTOM2set);
+                $Sets[] = $CUSTOM2set;
             }
             
-            //merge scores from each method
-            //does the intersection (multiplication) operation (matrix)
-            $MergeSet = getGlobalMergedSet($Sets);
-            
-            //list bonds separately, summing the scores of different entries for the same bond
-            //all bonding combinations with more than one disulfide bond is added to theta
-            //outputs only primitive hypothesis -> h1, h2, h3, etc... not h1 U h2, h1 U h3, etc...
-            $bonds = calculateScore($MergeSet);
+            if($method == "4"){
+                $bonds['4'] = calculateScoreDecision($Sets);
+            }
+            else{
+                //merge scores from each method
+                //does the intersection (multiplication) operation (matrix)
+                $MergeSet = getGlobalMergedSet($Sets);
+                if($method == 0){
+                    //list bonds separately, summing the scores of different entries for the same bond
+                    //all bonding combinations with more than one disulfide bond is added to theta
+                    //outputs only primitive hypothesis -> h1, h2, h3, etc... not h1 U h2, h1 U h3, etc...
+                    $bonds['1'] = calculateScore("1",$MergeSet);
+                    $bonds['2'] = calculateScore("2",$MergeSet);
+                    $bonds['3'] = calculateScore("3",$MergeSet);
+                    $bonds['4'] = calculateScoreDecision($Sets);
+                }
+                else{
+                    $bonds[$method] = calculateScore($method,$MergeSet);
+                }
+            }
             
             return $bonds;
     }
@@ -465,7 +567,13 @@
                 $merge = getMergedSet($Sets[0], $Sets[1]);
                 $merge = getMergedSet($merge, $Sets[2]);
                 $merge = getMergedSet($merge, $Sets[3]);
-                break;            
+                break;
+            case 5:
+                $merge = getMergedSet($Sets[0], $Sets[1]);
+                $merge = getMergedSet($merge, $Sets[2]);
+                $merge = getMergedSet($merge, $Sets[3]);
+                $merge = getMergedSet($merge, $Sets[4]);
+                break;
         }
         
         return $merge;        
