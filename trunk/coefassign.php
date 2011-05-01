@@ -1,9 +1,6 @@
 <?php
     session_start();
     
-    require_once $root."/classes/Common.class.php";
-    include 'integration.php';
-    
     $MSMS = $_SESSION['MSMS'];
     $SVM = $_SESSION['SVM'];
     $CSP = $_SESSION['CSP'];
@@ -24,6 +21,9 @@
     
     $root = $_SESSION['root'];
     $GlobalBonds = $_SESSION['bonds'];
+    
+    require_once $root."/classes/Common.class.php";
+    include 'integration.php';
     
     //account for coefficients
     $methods = array_keys($GlobalBonds);
