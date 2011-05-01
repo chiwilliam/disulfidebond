@@ -66,8 +66,8 @@
                                                 <option <?php if(!isset($combStrategy)){$combStrategy = "0";} if($combStrategy == "0"){echo "selected";} ?> value="0">Use ALL combination strategies available</option>
                                                 <option <?php if(!isset($combStrategy)){$combStrategy = "1";} if($combStrategy == "1"){echo "selected";} ?> value="1">Use combination strategy 1</option>
                                                 <option <?php if(!isset($combStrategy)){$combStrategy = "2";} if($combStrategy == "2"){echo "selected";} ?> value="2">Use combination strategy 2</option>
-                                                <option <?php if(!isset($combStrategy)){$combStrategy = "3";} if($combStrategy == "2"){echo "selected";} ?> value="3">Use combination strategy 3</option>
-                                                <option <?php if(!isset($combStrategy)){$combStrategy = "4";} if($combStrategy == "3"){echo "selected";} ?> value="4">Use combination strategy 4</option>
+                                                <option <?php if(!isset($combStrategy)){$combStrategy = "3";} if($combStrategy == "3"){echo "selected";} ?> value="3">Use combination strategy 3</option>
+                                                <option <?php if(!isset($combStrategy)){$combStrategy = "4";} if($combStrategy == "4"){echo "selected";} ?> value="4">Use combination strategy 4</option>
                                             </select>
                                         </td>
                                     </tr>
