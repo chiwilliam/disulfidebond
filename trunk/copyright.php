@@ -18,6 +18,7 @@
             <?php include "header.php" ?>
             <!-- End Header -->
             <!-- Begin Navigation -->
+            <?php include "menu.php" ?>
             <div id="copyright">
                 <br/><br/>
                 <p>

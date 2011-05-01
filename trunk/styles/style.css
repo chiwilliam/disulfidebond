@@ -225,3 +225,54 @@ td.note{
 a.alwaysblue{
     color:blue;
 }
+
+div.coefassign{
+    width: 950px;
+}
+
+table.coefassign{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-size:14px;
+}
+
+tr.results{
+    text-align: center;
+}
+
+td.bonds{
+    width: 80px;
+}
+
+td.methods{
+    width: 174px;
+    text-align: center;
+}
+
+label.score{
+    float: left;
+    font-weight: bold;
+    margin-left:10px;
+}
+
+label.coef{
+    float: right;    
+    font-weight: bold;
+    margin-right:10px;
+}
+
+label.bonds{
+    text-align: center;
+    font-weight: bold;
+}
+
+input.score{
+    float: left;    
+    margin-left:10px;
+}
+
+input.coef{
+    float: right;
+    margin-right:10px;
+}

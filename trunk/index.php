@@ -73,8 +73,7 @@
                                 <b>MS2DB++</b> is an open-source platform-independent web application that efficiently determines 
                                 the disulfide connectivity in proteins by allowing users to combine a method based on Mass Spectrometry 
                                 data with methods based on machine learning techniques. The combination of different methods is fully 
-                                controlled by the user, enhancing the user experience and improving the final results according to the 
-                                data provided.                                
+                                controlled by the user, enhancing the user experience and improving the final results.                                
                             </td>
                         </tr>
                         <tr>
@@ -91,11 +90,11 @@
                         </tr>
                         <tr>
                             <td colspan="2" class="justified">
-                                Lastly, MS2DB++ allows the user to enter the bonding pattern found by a custom method, which can be combined 
+                                Lastly, MS2DB++ allows the user to enter the bonding pattern found by custom methods, which can be combined 
                                 with the results obtained by the other three methods (MS/MS, SVM, and CSP) to determine a global consistent 
-                                disulfide connectivity. The method's combination can be performed in many different ways, also fully controlled 
-                                by the user. The different combination options aim to improve the quality and accuracy of the results. A
-                                through description of each combination method is presented in the 
+                                disulfide connectivity. The methods' combination can be performed using four different strategies, also 
+                                fully controlled by the user. The different combination strategies/options aim to improve the quality and 
+                                accuracy of the results. A through description of each combination strategy is presented in the 
                                 <a target="_blank" href="help.php"><span style="color:blue;">help</span></a> section.
                             </td>
                         </tr>
