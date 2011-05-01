@@ -1,6 +1,5 @@
 <?php
     session_start();
-    echo $_SERVER['REQUEST_URI'];
     //measure computational time
     $time = array();
     $time["start"] = microtime(true);

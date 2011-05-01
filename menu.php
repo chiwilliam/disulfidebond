@@ -1,6 +1,7 @@
 <?php
     $page = $_SERVER['REQUEST_URI'];
     $page = str_replace("/ms2db++/", "", $page);
+    $page = str_replace("/~ms2db", "", $page);
     $page = str_replace(".php", "", $page);
     $index = strpos($page, "?");
     if($index > 0){
