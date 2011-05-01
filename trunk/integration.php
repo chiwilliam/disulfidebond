@@ -645,9 +645,10 @@
         $message = "";
         
         $countSScomb = count($GlobalSScomb);
+        $keys = array_keys($GlobalSScomb);
         for($a=0;$a<$countSScomb;$a++){
 
-            $GlobalSS = $GlobalSScomb[((string)($a+1))];
+            $GlobalSS = $GlobalSScomb[$keys[$a]];
 
             //global graph, including all bonds for both frameworks
             //normalized gabow
@@ -683,7 +684,7 @@
                     if($a > 0){
                         $message .= "<br/><br/>";
                     }
-                    $message .= "COMBINATION STRATEGY ".((string)($a+1))."";
+                    $message .= "COMBINATION STRATEGY ".$keys[$a]."";
                     $message .= "</p></span>";
                 }
 
@@ -789,17 +790,17 @@
 
                 //Javascript to draw S-S bonds
                 $SSgraphJS = '<script type="text/javascript">';
-                $SSgraphJS .= 'var jg_doc'.((string)($a+1)).' = new jsGraphics("graphdiv'.((string)($a+1)).'");';
+                $SSgraphJS .= 'var jg_doc'.$keys[$a].' = new jsGraphics("graphdiv'.$keys[$a].'");';
                 for($j=0;$j<$totalbonds;$j++){
                     $cysteines = explode('-', $combinedbonds[$j]);
-                    $SSgraphJS .= "myDrawFunction".((string)($a+1))."(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
+                    $SSgraphJS .= "myDrawFunction".$keys[$a]."(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
                 }
                 $SSgraphJS .= '</script>';
 
                 //close table
                 $SSgraph .= "</table>";
 
-                $message .= "<div id=\"graphdiv".((string)($a+1))."\" class=\"graph\">";
+                $message .= "<div id=\"graphdiv".$keys[$a]."\" class=\"graph\">";
                 $message .= $SSgraph;
                 $message .= $SSgraphJS;
                 $message .= "</div>";
