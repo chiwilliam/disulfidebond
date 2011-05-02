@@ -679,132 +679,142 @@
                     $GlobalIntegration = $Func->executeGabow($newgraph, $root);
                 }
 
-                if(count($GlobalIntegration) > 0){
+                $countBonds = count($GlobalIntegration);                
+                if($countBonds > 0){
                     $message .= "<span class=\"strategiestitle\"><p>";
                     if($a > 0){
                         $message .= "<br/><br/>";
                     }
                     $message .= "COMBINATION STRATEGY ".$keys[$a]."";
                     $message .= "</p></span>";
-                }
+                
+                    //List disulfide bonds found
+                    for($i=0;$i<$countBonds;$i++){
 
-                //List disulfide bonds found
-                for($i=0;$i<count($GlobalIntegration);$i++){
+                        $message .= "<span style=\"margin-left:0px;\"><b>Disulfide Bond found on positions: ".$GlobalIntegration[$i]."</b> ";
+                        $message .= "(score:".number_format($GlobalSS[$GlobalIntegration[$i]]["score"],3);
+                        $message .= ")</span><br><br>";
+                    }
 
-                    $message .= "<span style=\"margin-left:0px;\"><b>Disulfide Bond found on positions: ".$GlobalIntegration[$i]."</b> ";
-                    $message .= "(score:".number_format($GlobalSS[$GlobalIntegration[$i]]["score"],3);
-                    $message .= ")</span><br><br>";
-                }
-
-                /*
-                //form debug output just displaying data for the DTA files
-                //that contains SS-bonds
-                $bonds = $GlobalIntegration;
-                for($i=0;$i<count($bonds);$i++){
-                    $dtafile = $truebonds[$bonds[$i]]['DTA'];
-                    for($j=0;$j<count($aDebug);$j++){
-                        if(strtolower($aDebug[$j]['DTA']) == strtolower($dtafile)){
-                            $debug .= '<tr><td colspan="3"><span style="color:red;"><b>';
-                            $debug .= 'Disulfide Bond: '.$bonds[$i];
-                            $debug .= '</b></span></td></tr>';
-                            $debug .= $aDebug[$j]['string'];
-                            break;
+                    /*
+                    //form debug output just displaying data for the DTA files
+                    //that contains SS-bonds
+                    $bonds = $GlobalIntegration;
+                    for($i=0;$i<count($bonds);$i++){
+                        $dtafile = $truebonds[$bonds[$i]]['DTA'];
+                        for($j=0;$j<count($aDebug);$j++){
+                            if(strtolower($aDebug[$j]['DTA']) == strtolower($dtafile)){
+                                $debug .= '<tr><td colspan="3"><span style="color:red;"><b>';
+                                $debug .= 'Disulfide Bond: '.$bonds[$i];
+                                $debug .= '</b></span></td></tr>';
+                                $debug .= $aDebug[$j]['string'];
+                                break;
+                            }
                         }
                     }
-                }
-                $debug .= "</table>";
-                */
-                
-                //populate disulfide bonds graph
-                $AAsarray = str_split($fastaProtein,1);
-                $totalAAs = count($AAsarray);
-                $combinedbonds = $GlobalIntegration;
-                $totalbonds = count($combinedbonds);
-                $allbonds = array();
+                    $debug .= "</table>";
+                    */
 
-                //define AAs to have colored background
-                for($i=0;$i<$totalbonds;$i++){
-                    $cys = explode('-', $combinedbonds[$i]);
-                    $allbonds[] = $cys[0];
-                    $allbonds[] = $cys[1];
-                }
+                    //populate disulfide bonds graph
+                    $AAsarray = str_split($fastaProtein,1);
+                    $totalAAs = count($AAsarray);
+                    $combinedbonds = $GlobalIntegration;
+                    $totalbonds = count($combinedbonds);
+                    $allbonds = array();
 
-                //DISULFIDE BOND VISUALIZATION GRAPH
-                //start table
-                $numColumns = 30;
-                $SSgraph = '<table class="graphtable">';
+                    //define AAs to have colored background
+                    for($i=0;$i<$totalbonds;$i++){
+                        $cys = explode('-', $combinedbonds[$i]);
+                        $allbonds[] = $cys[0];
+                        $allbonds[] = $cys[1];
+                    }
 
-                //add last index at the last column
+                    //DISULFIDE BOND VISUALIZATION GRAPH
+                    //start table
+                    $numColumns = 30;
+                    $SSgraph = '<table class="graphtable">';
 
-                for($i=0;$i<$totalAAs;$i++){
-                    //start row
-                    if($i%$numColumns == 0){
-                        if($i == 0){
-                            $SSgraph .= '<tr align="center">';
+                    //add last index at the last column
+
+                    for($i=0;$i<$totalAAs;$i++){
+                        //start row
+                        if($i%$numColumns == 0){
+                            if($i == 0){
+                                $SSgraph .= '<tr align="center">';
+                            }
+                            else{
+                                $SSgraph .= '</tr><tr align="center">';
+                            }
+                        }
+
+                        //fill columns
+                        //check if columns participates in any disulfide bond
+                        $isBonded = false;
+                        for($j=0;$j<count($allbonds);$j++){
+                            if($allbonds[$j] == ($i+1)){
+                                $isBonded = true;
+                                break;
+                            }
+                        }
+
+                        //add indexes to each lines (beginning)
+                        if($i%$numColumns == 0){
+                            $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
+                        }
+
+                        //if it is a bond, color background
+                        if($isBonded){
+                            $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\'Cysteine at position '.($i+1).'\')">'.$AAsarray[$i].'</td>';
                         }
                         else{
-                            $SSgraph .= '</tr><tr align="center">';
+                            $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
+                        }
+
+                        //add indexes to each lines (end)
+                        if(($i+1)%$numColumns == 0){
+                            $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
+                        }                            
+
+                        //end row
+                        if($i == ($totalAAs-1)){
+
+                            $missingcolumns = $numColumns-($totalAAs%$numColumns);
+                            for($j=0;$j<$missingcolumns;$j++){
+                                $SSgraph .= '<td class="graphtd"></td>';
+                            }
+                            $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+$missingcolumns+1).'</span></td>';
+
+                            $SSgraph .= '</tr>';
                         }
                     }
 
-                    //fill columns
-                    //check if columns participates in any disulfide bond
-                    $isBonded = false;
-                    for($j=0;$j<count($allbonds);$j++){
-                        if($allbonds[$j] == ($i+1)){
-                            $isBonded = true;
-                            break;
-                        }
+                    //Javascript to draw S-S bonds
+                    $SSgraphJS = '<script type="text/javascript">';
+                    $SSgraphJS .= 'var jg_doc'.$keys[$a].' = new jsGraphics("graphdiv'.$keys[$a].'");';
+                    for($j=0;$j<$totalbonds;$j++){
+                        $cysteines = explode('-', $combinedbonds[$j]);
+                        $SSgraphJS .= "myDrawFunction".$keys[$a]."(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
                     }
+                    $SSgraphJS .= '</script>';
 
-                    //add indexes to each lines (beginning)
-                    if($i%$numColumns == 0){
-                        $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
-                    }
+                    //close table
+                    $SSgraph .= "</table>";
 
-                    //if it does, color background
-                    if($isBonded){
-                        $SSgraph .= '<td class="graphselectedtd" onmouseout="UnTip()" onmouseover="Tip(\'Cysteine at position '.($i+1).'\')">'.$AAsarray[$i].'</td>';
-                    }
-                    else{
-                        $SSgraph .= '<td class="graphtd">'.$AAsarray[$i].'</td>';
-                    }
-
-                    //add indexes to each lines (end)
-                    if(($i+1)%$numColumns == 0){
-                        $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+1).'</span></td>';
-                    }                            
-
-                    //end row
-                    if($i == ($totalAAs-1)){
-
-                        $missingcolumns = $numColumns-($totalAAs%$numColumns);
-                        for($j=0;$j<$missingcolumns;$j++){
-                            $SSgraph .= '<td class="graphtd"></td>';
-                        }
-                        $SSgraph .= '<td class="graphtdnum"><span style="font-size:xx-small;">'.($i+$missingcolumns+1).'</span></td>';
-
-                        $SSgraph .= '</tr>';
-                    }
+                    $message .= "<div id=\"graphdiv".$keys[$a]."\" class=\"graph\">";
+                    $message .= $SSgraph;
+                    $message .= $SSgraphJS;
+                    $message .= "</div>";
                 }
-
-                //Javascript to draw S-S bonds
-                $SSgraphJS = '<script type="text/javascript">';
-                $SSgraphJS .= 'var jg_doc'.$keys[$a].' = new jsGraphics("graphdiv'.$keys[$a].'");';
-                for($j=0;$j<$totalbonds;$j++){
-                    $cysteines = explode('-', $combinedbonds[$j]);
-                    $SSgraphJS .= "myDrawFunction".$keys[$a]."(".($cysteines[0]).",".($cysteines[1]).",20,20,30,'blue',3);";
+                else{
+                    $message .= "<span class=\"strategiestitle\"><p>";
+                    if($a > 0){
+                        $message .= "<br/><br/>";
+                    }
+                    $message .= "COMBINATION STRATEGY ".$keys[$a]."";
+                    $message .= "</p></span>";
+                
+                    $message .= "<span style=\"margin-left:0px;\"><b>Disulfide Bonds not found!</span><br><br>";
                 }
-                $SSgraphJS .= '</script>';
-
-                //close table
-                $SSgraph .= "</table>";
-
-                $message .= "<div id=\"graphdiv".$keys[$a]."\" class=\"graph\">";
-                $message .= $SSgraph;
-                $message .= $SSgraphJS;
-                $message .= "</div>";
-
             }
         }
         if($count == 0){
