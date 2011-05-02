@@ -64,7 +64,7 @@
                                         }
                                         echo '</tr>';
                                         
-                                        //score, coeficient
+                                        //score, coeficient labels
                                         echo '<tr class="results">';
                                         echo '<td class="bonds"><label class="bonds"><i>BONDS</i></label></td>';
                                         $keys = array_keys($methods);
@@ -80,7 +80,7 @@
                                             echo '<tr class="results">';
                                             echo '<td class="bonds"><label class="bonds">'.$keys[$i].'</label></td>';
                                             for($j=0;$j<$cols;$j++){
-                                                $score = $data[$methodkeys[$j]]['scores'][$keys[$i]]['score'];
+                                                $score = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['score'],4);
                                                 if(!isset($score)){
                                                     $score = 0.0;
                                                 }

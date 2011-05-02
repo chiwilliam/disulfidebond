@@ -14,8 +14,20 @@ function myDrawFunction1(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
 
     var rowC1 = parseInt(C1/totalperrow);
     var rowC2 = parseInt(C2/totalperrow);
-    var colC1 = C1%30;
-    var colC2 = C2%30;
+    if(C1 == (rowC1*totalperrow)){
+        rowC1--;
+    }
+    if(C2 == (rowC2*totalperrow)){
+        rowC2--;
+    }
+    var colC1 = C1%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
+    var colC2 = C2%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
     var correction = 0;
 
     if (rowC1 == rowC2){
@@ -89,8 +101,20 @@ function myDrawFunction2(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
 
     var rowC1 = parseInt(C1/totalperrow);
     var rowC2 = parseInt(C2/totalperrow);
-    var colC1 = C1%30;
-    var colC2 = C2%30;
+    if(C1 == (rowC1*totalperrow)){
+        rowC1--;
+    }
+    if(C2 == (rowC2*totalperrow)){
+        rowC2--;
+    }
+    var colC1 = C1%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
+    var colC2 = C2%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
     var correction = 0;
 
     if (rowC1 == rowC2){
@@ -163,8 +187,20 @@ function myDrawFunction3(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
 
     var rowC1 = parseInt(C1/totalperrow);
     var rowC2 = parseInt(C2/totalperrow);
-    var colC1 = C1%30;
-    var colC2 = C2%30;
+    if(C1 == (rowC1*totalperrow)){
+        rowC1--;
+    }
+    if(C2 == (rowC2*totalperrow)){
+        rowC2--;
+    }
+    var colC1 = C1%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
+    var colC2 = C2%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
     var correction = 0;
 
     if (rowC1 == rowC2){
@@ -237,8 +273,20 @@ function myDrawFunction4(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
 
     var rowC1 = parseInt(C1/totalperrow);
     var rowC2 = parseInt(C2/totalperrow);
-    var colC1 = C1%30;
-    var colC2 = C2%30;
+    if(C1 == (rowC1*totalperrow)){
+        rowC1--;
+    }
+    if(C2 == (rowC2*totalperrow)){
+        rowC2--;
+    }
+    var colC1 = C1%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
+    var colC2 = C2%totalperrow;
+    if(colC1 == 0){
+        colC1 = totalperrow;
+    }
     var correction = 0;
 
     if (rowC1 == rowC2){
