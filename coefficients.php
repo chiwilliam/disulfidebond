@@ -80,16 +80,16 @@
                                             echo '<tr class="results">';
                                             echo '<td class="bonds"><label class="bonds">'.$keys[$i].'</label></td>';
                                             for($j=0;$j<$cols;$j++){
-                                                $score = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['score'],4);
+                                                if($methodkeys[$j] == "MSMS"){
+                                                    $score = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['ppvalue'],4);
+                                                }
+                                                else{
+                                                    $score = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['score'],4);
+                                                }
                                                 if(!isset($score)){
                                                     $score = 0.0;
                                                 }
-                                                if($score == 0.0){
-                                                    $coef = 0.0;
-                                                }
-                                                else{
-                                                    $coef = 1.0;
-                                                }
+                                                $coef = 1.0;
                                                 $inputscore = 'score_'.$keys[$i].'_'.$methodkeys[$j];
                                                 $inputcoef = 'coef_'.$keys[$i].'_'.$methodkeys[$j];
                                                 echo '<td class="methods"><input id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="7" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="7" value="'.$coef.'"></input></td>';

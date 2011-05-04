@@ -976,6 +976,9 @@
                             if(count($truebonds) > 0){
                                 $bonds = $Func->executeGabow($newgraph, $root);
                             }
+                            else{
+                                $bonds = array();
+                            }
 
                             //Divide score by 100 after Gabow is executed
                             //Scores back to [0, 1] range
@@ -1088,6 +1091,15 @@
                         }
                     }
                     $predictedbonds = $Func->executeGabow($newgraph, $root);
+                    
+                    $tmp = $predictedbonds;
+                    unset($predictedbonds);
+                    $pcount = count($tmp);
+                    for($a=0;$a<$pcount;$a++){
+                        if($pbonds[$tmp[$a]]['score'] >= 0.10){
+                            $predictedbonds[] = $tmp[$a];
+                        }                    
+                    }
                 }
             }
         }
@@ -1278,7 +1290,9 @@
                         $data['bond'] = $csps[$i];
                         $data['cys1'] = substr($csps[$i], 0, strpos($csps[$i], "-"));
                         $data['cys2'] = substr($csps[$i], strpos($csps[$i], "-")+1);
-                        $data['score'] = number_format($CSPmatch['similarity']/$count,2);
+                        $data['score'] = number_format($CSPmatch['similarity'],4);
+                        //divide score by number of bonds
+                        //$data['score'] = number_format($CSPmatch['similarity']/$count,4);
                         $cspbonds[$csps[$i]] = $data;
                         unset($data);
                     }                    
@@ -1325,6 +1339,15 @@
             }
             
             if($countBonds > 0){
+                
+                //bring ppvalue range to [0,1]
+                if(count($bonds) > 0){
+                    $bkeys = array_keys($truebonds);
+                    for($a=0;$a<count($bkeys);$a++){
+                        $truebonds[$bkeys[$a]]['ppvalueoriginal'] = $truebonds[$bkeys[$a]]['ppvalue'];
+                        $truebonds[$bkeys[$a]]['ppvalue'] = $truebonds[$bkeys[$a]]['ppvalue']/$minmaxMSMS['ppmax'];
+                    }
+                }
                 
                 $GlobalBonds = $Func->organizeBonds($bonds, $truebonds, 
                                                     $predictedbonds, $pbonds, 
