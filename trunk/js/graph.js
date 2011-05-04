@@ -25,8 +25,8 @@ function myDrawFunction1(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
         colC1 = totalperrow;
     }
     var colC2 = C2%totalperrow;
-    if(colC1 == 0){
-        colC1 = totalperrow;
+    if(colC2 == 0){
+        colC2 = totalperrow;
     }
     var correction = 0;
 
@@ -112,8 +112,8 @@ function myDrawFunction2(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
         colC1 = totalperrow;
     }
     var colC2 = C2%totalperrow;
-    if(colC1 == 0){
-        colC1 = totalperrow;
+    if(colC2 == 0){
+        colC2 = totalperrow;
     }
     var correction = 0;
 
@@ -198,8 +198,8 @@ function myDrawFunction3(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
         colC1 = totalperrow;
     }
     var colC2 = C2%totalperrow;
-    if(colC1 == 0){
-        colC1 = totalperrow;
+    if(colC2 == 0){
+        colC2 = totalperrow;
     }
     var correction = 0;
 
@@ -284,8 +284,8 @@ function myDrawFunction4(C1,C2,Hspacing,Vspacing,totalperrow,color,stroke)
         colC1 = totalperrow;
     }
     var colC2 = C2%totalperrow;
-    if(colC1 == 0){
-        colC1 = totalperrow;
+    if(colC2 == 0){
+        colC2 = totalperrow;
     }
     var correction = 0;
 

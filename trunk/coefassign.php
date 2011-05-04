@@ -37,7 +37,7 @@
                 $coef = $_POST[$inputid];
                 $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['coef'] = $coef;
                 if($methods[$i] == "MSMS"){
-                    $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['pp2value'] = number_format($GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['pp2value']*$coef,4);
+                    $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['ppvalue'] = number_format($GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['ppvalue']*$coef,4);
                 }
                 else{
                     $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['score'] = number_format($GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['score']*$coef,4);

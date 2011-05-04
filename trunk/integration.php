@@ -177,7 +177,7 @@
     function assignScoresToPowerSet($BaseSet,$bonds){
         
         $set = array();
-        $nonzeroscore = pow(10, -4);
+        $nonzeroscore = pow(10, -3);
         
         $keys = array_keys($bonds);
         $count = count($BaseSet);
@@ -308,8 +308,48 @@
                         }
                     }
                     $data = array('bonds' => $merge, 'score' => number_format($M1['score']*$M2['score'],4));
-                    $set[] = $data;
+                    $testscore = ((float)($data['score']));
+                    if($testscore > 0.0){
+                        $set[] = $data;
+                    }
                 }                
+            }
+        }
+        
+        $set = combineSamePatterns($M1set,$set);
+        
+        return $set;
+    }
+    
+    function combineSamePatterns($base,$bonds){
+        
+        $set = array();
+        
+        $countbase = count($base);
+        for($i=0;$i<$countbase;$i++){
+            $base[$i]['score'] = (float)0.0;
+            $countbonds = count($bonds);
+            for($j=0;$j<$countbonds;$j++){
+                $count1 = count($base[$i]['bonds']);
+                $count2 = count($bonds[$j]['bonds']);
+                if($count1 == $count2){
+                    $match = true;
+                    for($k=0;$k<$count1;$k++){
+                        if($base[$i]['bonds'][$k] != $bonds[$j]['bonds'][$k]){
+                            $match = false;
+                            break;
+                        }
+                    }
+                    if($match){
+                        $base[$i]['score'] += ((float)($bonds[$j]['score']));
+                    }
+                }
+            }
+        }
+        
+        for($i=0;$i<$countbase;$i++){
+            if($base[$i]['score'] > 0){
+                $set[] = $base[$i];                
             }
         }
         
@@ -463,12 +503,6 @@
     function integrateGlobalBondsPowerSet($method, $MSMSbonds, $SVMbonds, $CSPbonds, $CUSTOMbonds, $CUSTOM2bonds){
         
             $bonds = array();
-            
-            $M1set = array();
-            $M2set = array();
-            $M3set = array();
-            $M4set = array();
-            $M5set = array();
             
             $Sets = array();
             
@@ -817,7 +851,7 @@
                 }
             }
         }
-        if($count == 0){
+        if($countSScomb == 0){
             $message .= "Disulfide Bonds not found!";
         }
         
