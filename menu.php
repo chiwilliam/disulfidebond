@@ -13,7 +13,7 @@
 <div id="navigation" class="horizontalmenu">
     <ul>
         <li <?php if($page == "index" || strlen($page) == 0) echo 'class="selected"';?>><a href="index.php" onmouseover="Tip('MS2DB Home Page')" onmouseout="UnTip()">Home</a></li>
-        <li <?php if($page == "analysis" || $page == "coefficients" || $page == "kernel" || $page == "coefassign") echo 'class="selected"';?>><a href="analysis.php" onmouseover="Tip('MS2DB++ Disulfide Bond Determination')" onmouseout="UnTip()">Find Disulfide Connectivity</a></li>
+        <li <?php if($page == "methods" || $page == "kernel" || $page == "coefficients" || $page == "coefassign" || $page == "strategies" || $page == "strategyassign" || $page == "results") echo 'class="selected"';?>><a href="methods.php" onmouseover="Tip('MS2DB++ Disulfide Bond Determination')" onmouseout="UnTip()">Find Disulfide Connectivity</a></li>
         <li <?php if($page == "datasets") echo 'class="selected"';?>><a href="datasets.php" onmouseover="Tip('MS2DB Datasets')" onmouseout="UnTip()">Datasets</a></li>
         <li <?php if($page == "publications") echo 'class="selected"';?>><a href="publications.php" onmouseover="Tip('MS2DB Publications')" onmouseout="UnTip()">Publications</a></li>
         <li <?php if($page == "contactus") echo 'class="selected"';?>><a href="contactus.php" onmouseover="Tip('MS2DB Contact Us')" onmouseout="UnTip()">Contact Us</a></li>
@@ -22,3 +22,10 @@
         
     </ul>
 </div>
+
+<?php
+    if($page == "methods" || $page == "kernel" || $page == "coefficients" || $page == "coefassign" || 
+       $page == "strategies" || $page == "strategyassign" || $page == "results"){
+        include 'submenu.php';
+    }
+?>

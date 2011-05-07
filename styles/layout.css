@@ -42,6 +42,14 @@ body {
 	clear: both;
 }
 
+#subnavigation {
+	width: auto;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	clear: both;
+}
+
 #column_l {
 	position: relative;
 	float: left;

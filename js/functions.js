@@ -7,6 +7,7 @@ function showProcessing(){
     document.getElementById("bondsdiv").style.visibility = "hidden";
     document.getElementById("graphdiv").style.visibility = "hidden";
     document.getElementById("listofbondsdiv").style.visibility = "hidden";
+    document.getElementById("submitlink").style.visibility = "hidden";
 }
 
 function changeSkin(id,method){

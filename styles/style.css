@@ -100,7 +100,7 @@ td.advancedusersright{
 }
 
 div.readme{
-    padding-bottom:60px;
+    padding-bottom:40px;
 }
 
 div.submit{
@@ -158,6 +158,10 @@ td.inputrightresults{
 }
 
 div.horizontalmenu{
+    font-weight:bold;
+}
+
+div.subhorizontalmenu{
     font-weight:bold;
 }
 
@@ -234,7 +238,7 @@ table.coefassign{
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    font-size:14px;
+    font-size:13px;
 }
 
 tr.results{
@@ -253,13 +257,13 @@ td.methods{
 label.score{
     float: left;
     font-weight: bold;
-    margin-left:10px;
+    margin-left: 25px;
 }
 
 label.coef{
     float: right;    
     font-weight: bold;
-    margin-right:10px;
+    margin-right: 5px;
 }
 
 label.bonds{
@@ -269,10 +273,16 @@ label.bonds{
 
 input.score{
     float: left;    
-    margin-left:10px;
+    margin-left: 10px;
 }
 
 input.coef{
     float: right;
-    margin-right:10px;
+    margin-right: 10px;
+}
+
+label.error{
+    color: red;
+    font-weight: bold;
+    margin-left: 240px;
 }
