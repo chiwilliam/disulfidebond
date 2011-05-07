@@ -1,9 +1,9 @@
-<?php session_start(); $_SESSION['step'] = 2; ?>
+<?php session_start(); $_SESSION['step'] = 3; ?>
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-        <title>Coefficients Assignment</title>
+        <title>Strategies Selection</title>
         <link href="styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
         <link href="styles/style.css" rel="stylesheet" type="text/css" />        
     </head>
@@ -22,25 +22,45 @@
                 <div id="page_content">
                     <div class="readme" id="readme">
                         <p style="margin-left:30px;text-align:justify;">
-                            Please assign the confidence value to each disulfide bond.
-                            Initially, all confidence values are assign as 1.0 (maximum confidence).
-                            While a confidence value of 1.0 means the disulfide bond is highly reliable,
-                            a confidence value of 0.0 means the disulfide bond should be discarded.
-                            <br/><br/>
-                            If the MS/MS method was selected, the user can check the precursor ion
-                            mass by pointing the cursor over the score field.
+                            In this step, the user can choose from different combination strategies to 
+                            determine the global disulfide connectivity pattern. Each combination strategy
+                            has its advantages, thus aiding in the user analysis and improving the quality 
+                            of the results. At least one combination strategy is required, but the user
+                            may want to choose all of them.
                         </p>
                     </div>
                     <div id="column_l">
                         <!-- #BeginEditable "content" -->
-                        <form action="coefassign.php" name="submitForm" id="submitForm" enctype="multipart/form-data" method="post">
-                            <div class="coefassign">
+                        <form action="strategyassign.php" name="submitForm" id="submitForm" enctype="multipart/form-data" method="post">
+                            <div id="errormessage" class="errormessage">
+                                <table class="errormessage">
+                                    <tr class="input">
+                                        <td colspan="2" align="center">
+                                            <label id="error" class="error"><?php if(strlen($error) > 0) echo $error."<br/>"; ?></label>
+                                        </td>
+                                    </tr>                                    
+                                </table>
+                            </div>
+                            <div id="hiddenfields">
+                                <input type="hidden" value="<?php echo $S1; ?>" name="inputstrategy1" id="inputstrategy1"/>
+                                <input type="hidden" value="<?php echo $S2; ?>" name="inputstrategy2" id="inputstrategy2"/>
+                                <input type="hidden" value="<?php echo $S3; ?>" name="inputstrategy3" id="inputstrategy3"/>
+                                <input type="hidden" value="<?php echo $S4; ?>" name="inputstrategy4" id="inputstrategy4"/>
+                                <input type="hidden" value="<?php echo $S5; ?>" name="inputstrategy5" id="inputstrategy5"/>
+                                <input type="hidden" value="<?php echo $S6; ?>" name="inputstrategy6" id="inputstrategy6"/>
+                            </div>
+                            <div id="strategyselection" class="strategyselection">
+                                <table class="strategyselection">
+                                    
+                                </table>
+                            </div>
+                            <div style="display:none;" id="coefassign" class="coefassign">
                                 <table class="coefassign">
                                     <?php
                                         $bonds = array();
                                         $methods = array();
                                         
-                                        $data = $_SESSION['bonds'];
+                                        $data = $_SESSION['coefbonds'];
                                         $count = count($data);
                                         $keys = array_keys($data);
                                         
@@ -113,7 +133,8 @@
                                         }                                    
                                     ?>
                                 </table>
-                                <p><br></br></p>
+                            </div>
+                            <div id="submit" class="submit">
                                 <table class="input">
                                     <tr class="input">
                                         <td colspan="2" align="center">

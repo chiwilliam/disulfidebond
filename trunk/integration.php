@@ -178,6 +178,7 @@
         
         $set = array();
         $nonzeroscore = pow(10, -3);
+        //$nonzeroscore = 0.0;
         
         $keys = array_keys($bonds);
         $count = count($BaseSet);
@@ -500,7 +501,7 @@
         return $bonds;
     }
     
-    function integrateGlobalBondsPowerSet($method, $MSMSbonds, $SVMbonds, $CSPbonds, $CUSTOMbonds, $CUSTOM2bonds){
+    function integrateGlobalBondsPowerSet($strategy, $MSMSbonds, $SVMbonds, $CSPbonds, $CUSTOMbonds, $CUSTOM2bonds){
         
             $bonds = array();
             
@@ -557,25 +558,31 @@
                 $Sets[] = $CUSTOM2set;
             }
             
-            if($method == "4"){
+            
+            //merge scores from each method
+            //does the intersection (multiplication) operation (matrix)
+            $MergeSet = getGlobalMergedSet($Sets);
+            
+            //list bonds separately, summing the scores of different entries for the same bond
+            //all bonding combinations with more than one disulfide bond is added to theta
+            //outputs only primitive hypothesis -> h1, h2, h3, etc... not h1 U h2, h1 U h3, etc...
+            if($strategy['1']){
+                $bonds['1'] = calculateScore("1",$MergeSet);
+            }
+            if($strategy['2']){
+                $bonds['2'] = calculateScore("2",$MergeSet);
+            }
+            if($strategy['3']){
+                $bonds['3'] = calculateScore("3",$MergeSet);
+            }
+            if($strategy['4']){
                 $bonds['4'] = calculateScoreDecision($Sets);
             }
-            else{
-                //merge scores from each method
-                //does the intersection (multiplication) operation (matrix)
-                $MergeSet = getGlobalMergedSet($Sets);
-                if($method == 0){
-                    //list bonds separately, summing the scores of different entries for the same bond
-                    //all bonding combinations with more than one disulfide bond is added to theta
-                    //outputs only primitive hypothesis -> h1, h2, h3, etc... not h1 U h2, h1 U h3, etc...
-                    $bonds['1'] = calculateScore("1",$MergeSet);
-                    $bonds['2'] = calculateScore("2",$MergeSet);
-                    $bonds['3'] = calculateScore("3",$MergeSet);
-                    $bonds['4'] = calculateScoreDecision($Sets);
-                }
-                else{
-                    $bonds[$method] = calculateScore($method,$MergeSet);
-                }
+            if($strategy['5']){
+                //$bonds['5'] = calculateScore("5",$MergeSet);
+            }
+            if($strategy['6']){
+                //$bonds['6'] = calculateScore("6",$MergeSet);
             }
             
             return $bonds;

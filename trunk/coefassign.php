@@ -1,24 +1,7 @@
 <?php
     session_start();
     
-    $MSMS = $_SESSION['MSMS'];
-    $SVM = $_SESSION['SVM'];
-    $CSP = $_SESSION['CSP'];
-    $CUSTOM = $_SESSION['CUSTOM'];
-    $CUSTOM2 = $_SESSION['CUSTOM2'];
-    $combStrategy = $_SESSION['strategies'];
-    
-    $fastaProtein = $_SESSION['fasta'];
-    $transmembranefrom = $_SESSION['transmembranefrom'];
-    $transmembraneto = $_SESSION['transmembraneto'];
-    
-    $protease = $_SESSION['protease'];
-    $alliontypes = $_SESSION['ions'];
-    $missingcleavages = $_SESSION['missingcleavages'];
-    
-    $customdata = $_SESSION['customdata'];
-    $custom2data = $_SESSION['custom2data'];
-    
+    $step = $_SESSION['step'];
     $root = $_SESSION['root'];
     $GlobalBonds = $_SESSION['bonds'];
     
@@ -46,20 +29,17 @@
         }
     }
     
-    $GlobalSScomb = IntegrateAllResults($combStrategy,$GlobalBonds);
-                
-    $integration = true;
-    if($integration)
-    {
-        $message = getResults($GlobalSScomb,$root,$fastaProtein);                    
+    if($step == 2){
+        $step++;
+        $_SESSION['coefbonds'] = $GlobalBonds;
+        $_SESSION['step'] = $step;
+        include 'strategies.php';
+        exit();
     }
     
-    if($transmembranefrom == 0 ){
-        $transmembranefrom = "";
-    }
-    if($transmembraneto == 0 ){
-        $transmembraneto = "";
-    }    
+    $GlobalSScomb = IntegrateAllResults($combStrategy,$GlobalBonds);
+                
+    $message = getResults($GlobalSScomb,$root,$fastaProtein);                        
     
     include 'analysis.php';
     exit();

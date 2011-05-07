@@ -27,6 +27,15 @@ body {
 	background-color: #D3D3D3;
 	overflow: hidden;
 }
+
+#subnavigation {
+	margin-right: 10px;
+	margin-left: 10px;
+        padding-left: 110px;
+	background-color: #EEEEFF;
+	overflow: hidden;
+}
+
 #column_l {
 	width: 950px;
 	margin: 0 0 0 10px;
@@ -85,6 +94,29 @@ body {
 	border: 0px solid #D3D3D3;
 }
 #navigation a:hover {
+        color:blue;
+	/*background-color: #f2f2f2;
+	border: 0px solid #f2f2f2;*/
+}
+/* Styles for Sub Navigation */
+#subnavigation ul {
+	list-style-type: none;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+#subnavigation li {
+	float: left;
+}
+#subnavigation a {
+	color: #000;
+	text-decoration: none;
+	margin: 0px 0px 0px 0px;
+	padding: 5px;
+	display: block;
+	border: 0px solid #EEEEFF;
+}
+#subnavigation a:hover {
         color:blue;
 	/*background-color: #f2f2f2;
 	border: 0px solid #f2f2f2;*/
