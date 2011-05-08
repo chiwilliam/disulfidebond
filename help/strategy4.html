@@ -3,14 +3,40 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
-        <link href="styles/style.css" rel="stylesheet" type="text/css" />
+        <link href="../styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
+        <link href="../styles/style.css" rel="stylesheet" type="text/css" />
     </head>
-    <body>
+    <body class="popup">
         <div>
             <table>
                 <tr>
+                    <td>
+                        <label class="popuptitle">Combination Strategy 4<br></br></label>
+                    </td>
+                </tr>
+                <tr>
                     <td class="justified">
+                        This combination strategy allows users to weight the scores obtained by
+                        each disulfide bond determination method differently. This strategy is specially powerful when the 
+                        bonding patterns found are conflicting or if a particular method is known to perform poorly
+                        due to a specific motif <i>(i.e.: poor fragmentation in tandem MS/MS analysis,
+                        or when a method is known to perform poorly due to a specific amino acid sequence or bonding
+                        arrangement)</i>.
+                        <p>
+                            While using this strategy, an expert user may assign confidence (reliability) values to the 
+                            bonding scores obtained by the different methods used. These confidence values are then 
+                            multiplied by their respective bonding pattern score.
+                            By default, MS2DB++ assigns maximum confidence (<i>alfa = 1</i>) to all scores.
+                        </p>
+                        <p>
+                            In this strategy, the score of a bonding pattern <i>A</i> is calculated as the average score of 
+                            all bonding scores <i>A</i> obtained by the different disulfide bond determination methods, 
+                            multiplied by their respective confidence factor <i>alfa</i>. The formula is presented below.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="centered">
                         <img alt="Combination Strategy 4" src="../images/strategy4.png" />
                     </td>
                 </tr>

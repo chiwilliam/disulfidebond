@@ -3,14 +3,47 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
-        <link href="styles/style.css" rel="stylesheet" type="text/css" />
+        <link href="../styles/style1.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
+        <link href="../styles/style.css" rel="stylesheet" type="text/css" />
     </head>
-    <body>
+    <body class="popup">
         <div>
             <table>
                 <tr>
+                    <td>
+                        <label class="popuptitle">Combination Strategy 3<br></br></label>
+                    </td>
+                </tr>
+                <tr>
                     <td class="justified">
+                        According to the combination strategy 3 and considering only two disulfide bond determination
+                        methods (for simplicity), the score of a disulfide bond pattern <i>A</i> is:
+                        <ul>
+                            <li>
+                                the summation of the product of the scores of bonding patterns <i>B</i> and <i>C</i>, respectively 
+                                obtained by disulfide bond determination methods <i>m<sub>1</sub></i> and <i>m<sub>2</sub></i>, when
+                                the intersection between <i>B</i> and <i>C</i> equals to <i>A</i> and bonding pattern <i>A</i> is not 
+                                an empty set.
+                            </li>
+                            <li>
+                                divided by
+                            </li>
+                            <li>
+                                1 plus the logarithm (base 10) of 1 divided by  
+                                the summation of the product of the scores of bonding patterns <i>B</i> and <i>C</i>, respectively 
+                                obtained by disulfide bond determination methods <i>m<sub>1</sub></i> and <i>m<sub>2</sub></i>, when
+                                the intersection between <i>B</i> and <i>C</i> is not an empty set.
+                            </li>
+                        </ul>
+                        <p>
+                            The formula used to combine disulfide bonds scores according to strategy 1 is presented below. 
+                            This combination formula is commutative and associative; thus, other disulfide bond determination
+                            methods (and their scores) can be easily added.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="centered">
                         <img alt="Combination Strategy 3" src="../images/strategy3.png" />
                     </td>
                 </tr>
