@@ -64,7 +64,7 @@
             for($j=0;$j<$count2;$j++){
                 $inputid = 'coef_'.$bonds[$j].'_'.$methods[$i];
                 $coef = $_POST[$inputid];
-                $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['coef'] = $coef;
+                $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['coefcombination'] = $coef;
                 if($methods[$i] == "MSMS"){
                     $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['ppvalue'] = number_format($GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['ppvalue']*$coef,4);
                 }

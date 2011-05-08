@@ -29,3 +29,28 @@ function changeSkin(id,method){
 function setMethod(method,value){
     document.getElementById(method).value = value;
 }
+
+function selectStrategy(strategy){
+    //set hidden field value
+    document.getElementById('input'+strategy).value = "selected";
+    document.getElementById('selectimg'+strategy).style.display = "none";
+    document.getElementById('removeimg'+strategy).style.display = "";
+    document.getElementById('checkmark'+strategy).style.visibility = "visible";
+    if(strategy == "strategy4"){
+        document.getElementById('coefassign').style.display = "";
+    }
+}
+
+function deselectStrategy(strategy){
+    //set hidden field value
+    document.getElementById('input'+strategy).value = "";
+    document.getElementById('removeimg'+strategy).style.display = "none";
+    document.getElementById('selectimg'+strategy).style.display = "";
+    document.getElementById('checkmark'+strategy).style.visibility = "hidden";
+    if(strategy == "strategy4"){
+        document.getElementById('coefassign').style.display = "none";
+    }
+}
+
+
+
