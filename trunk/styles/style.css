@@ -325,3 +325,14 @@ td.strategyselectiontitle{
 
 tr.strategyselect{
 }
+
+body.popup{
+    background-color: #EEEEEE;
+}
+
+label.popuptitle{
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 200px;
+    font-variant: small-caps;
+}
