@@ -27,7 +27,7 @@
                             has its advantages, thus aiding in the user analysis and improving the quality 
                             of the results. At least one combination strategy is required. The user
                             may want to choose any or all of them. For a more detailed description of each
-                            click on its equation or visit our
+                            strategy, click on its formula or visit our
                             <a class="alwaysblue" target="_blank" href="help.php">HELP</a>
                             section.
                         </p>
@@ -66,7 +66,8 @@
                                         <td class="strategy">
                                             <a onclick="window.open('help/strategy1.html', 'Help - Strategy 1', 
                                             'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
-                                            id="linkformula1" href="#linkformula1">
+                                            id="linkformula1" href="#linkformula1"
+                                            onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
                                                 <img alt="Equation for Strategy 1" src="images/strategy1.png"></img>
                                             </a>
                                         </td>
@@ -98,7 +99,8 @@
                                         <td class="strategy">
                                             <a onclick="window.open('help/strategy2.html', 'Help - Strategy 2', 
                                             'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
-                                            id="linkformula2" href="#linkformula2">
+                                            id="linkformula1" href="#linkformula1"
+                                            onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
                                                 <img alt="Equation for Strategy 2" src="images/strategy2.png"></img>
                                             </a>
                                         </td>
@@ -130,7 +132,8 @@
                                         <td class="strategy">
                                             <a onclick="window.open('help/strategy3.html', 'Help - Strategy 3', 
                                             'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
-                                            id="linkformula3" href="#linkformula3">
+                                            id="linkformula1" href="#linkformula1"
+                                            onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
                                                 <img alt="Equation for Strategy 3" src="images/strategy3.png"></img>
                                             </a>
                                         </td>
@@ -162,7 +165,8 @@
                                         <td class="strategy">
                                             <a onclick="window.open('help/strategy4.html', 'Help - Strategy 4', 
                                             'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
-                                            id="linkformula4" href="#linkformula4">
+                                            id="linkformula1" href="#linkformula1"
+                                            onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
                                                 <img alt="Equation for Strategy 4" src="images/strategy4.png"></img>
                                             </a>
                                         </td>
