@@ -79,7 +79,10 @@
     
         $GlobalSScomb = IntegrateAllResults($combStrategy,$GlobalBonds);
 
-        $message = getResults($GlobalSScomb,$root,$fastaProtein);                    
+        $message = getResults($GlobalSScomb,$root,$fastaProtein);
+        
+        $TXTFile = getTextFile($GlobalSScomb,$root);
+        $XMLFile = getXMLFile($GlobalSScomb,$root);
 
         $step++;
         $_SESSION['step'] = $step;

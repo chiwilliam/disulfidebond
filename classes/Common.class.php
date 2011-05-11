@@ -899,6 +899,8 @@ class Commonclass {
                                 //store data in a local file
                                 $path = $root."/DTA/".$name."/".$index.".txt";
                                 file_put_contents($path, $data);
+                                $path = $root."/DTA/".$name."/".$listFiles[$i];
+                                file_put_contents($path, $data);
                             }                        
                         }
                     }
@@ -925,6 +927,8 @@ class Commonclass {
 
                             //store data in a local file
                             $path = $root."/DTA/".$name."/".$index.".txt";
+                            file_put_contents($path, $data);
+                            $path = $root."/DTA/".$name."/".substr($filename,strpos($filename, "/")+1);
                             file_put_contents($path, $data);
                         }
                     }

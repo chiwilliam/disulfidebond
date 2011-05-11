@@ -5,35 +5,33 @@ body {
 	font-size: small;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-style: normal;
-	background-color: #abc;
+	background: url(../images/background.gif);
+        background-repeat: repeat-x;
+        width: 100%;
 }
 #container {
 	width: 1000px;
 	margin: 0 auto;
-	background: #fff url(../images/bkgd_tile.gif) top;
+	background: #FAFAFA;
 	background-repeat: repeat-y;
 }
 #masthead {
 	text-align: right;
-	margin-right: 10px;
-	margin-left: 10px;
-	width: 980px;
+	width: 1000px;
 	padding: 0;
-	background-color: #cde;
+	background-color: #000000;
 }
 #navigation {
-	margin-right: 10px;
-	margin-left: 10px;
-	background-color: #D3D3D3;
-	overflow: hidden;
+	background-color: #393939;
+        overflow: hidden;
+        color: #FFFFFF;
 }
 
 #subnavigation {
-	margin-right: 10px;
-	margin-left: 10px;
-        padding-left: 110px;
-	background-color: #EEEEFF;
+	padding-left: 110px;
+	background-color: #909090;
 	overflow: hidden;
+        color:white;
 }
 
 #column_l {
@@ -53,9 +51,7 @@ body {
 }
 #footer {
 	text-align: center;
-	background-color: #89a;
-	margin-right: 10px;
-	margin-left: 10px;
+	background-color: #000000;
 	overflow: hidden;
 	padding: 2px;        
 }
@@ -86,7 +82,7 @@ body {
 	float: left;
 }
 #navigation a {
-	color: #000;
+	color: #FFFFFF;
 	text-decoration: none;
 	margin: 0px 0px 0px 0px;
 	padding: 5px;
@@ -109,7 +105,7 @@ body {
 	float: left;
 }
 #subnavigation a {
-	color: #000;
+	color: #FFFFFF;
 	text-decoration: none;
 	margin: 0px 0px 0px 0px;
 	padding: 5px;

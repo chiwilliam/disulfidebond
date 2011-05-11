@@ -27,11 +27,13 @@ body {
 
 #masterheadcenter {
         float:left;
-	margin-left:60px;
+	margin-left:5px;
         margin-top:15px;
-        font-size:16px;
+        font-size:17px;
         font-style:italic;
         font-variant:small-caps;
+        color:#FFFFFF;
+        font-weight:bold;
 }
 
 #navigation {
@@ -70,7 +72,23 @@ body {
 }
 
 li.selected {
-        background-color:white;
+        background-color:#FAFAFA;
+}
+
+label.selected {
+        color:black;
+}
+
+li.notselected {
+        
+}
+
+label.notselected{
+    
+}
+
+label.menu{
+    color: #FFFFFF;
 }
 
 #copyright{

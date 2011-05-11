@@ -10,7 +10,7 @@
         Efficient Disulfide Bond Determination Using Multiple Methods
     </div>
     <div id="mastheadright">
-        <a href="http://www.sfsu.edu" class="noborders" target="_blank"><img alt="SFSU Logo" src="images/sfsu.jpg" onmouseover="Tip('SFSU http://www.sfsu.edu')" onmouseout="UnTip()"/></a>
+        <a href="http://tintin.sfsu.edu/" class="noborders" target="_blank"><img alt="SFSU Bioinformatics Logo" src="images/researchgroup.png" onmouseover="Tip('SFSU Bioinformatics http://tintin.sfsu.edu/')" onmouseout="UnTip()"/></a>
     </div>
 </div>
 <!-- End Masthead -->

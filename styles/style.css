@@ -157,7 +157,7 @@ td.inputrightresults{
     text-align:center;
 }
 
-div.horizontalmenu{
+div.horizontalmenu{	
     font-weight:bold;
 }
 
@@ -287,6 +287,12 @@ label.error{
     margin-left: 240px;
 }
 
+label.warning{
+    color: red;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
 td.checkmark{
     vertical-align: middle;
     float: left;
@@ -333,6 +339,12 @@ body.popup{
 label.popuptitle{
     font-size: 16px;
     font-weight: bold;
-    margin-left: 200px;
+    margin-left: 230px;
     font-variant: small-caps;
+}
+
+p.files{
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 10px;
 }

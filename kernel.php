@@ -259,6 +259,7 @@
                     $PML = array();
                     $PMLNames = array();
                     $dirPath = "";
+                    $MSMSFilePath = "";
                     $k=0;
                     $graph = array();
 
@@ -267,6 +268,9 @@
                     $PMLNames = $aPML["PMLNames"];
                     unset($aPML);
                     $dirPath = $root."/DTA/".$zipFile["name"];
+                    $MSMSFilePath = $_SERVER['HTTP_REFERER'];
+                    $MSMSFilePath = substr($MSMSFilePath, 0, strpos($MSMSFilePath, '++')+3);
+                    $MSMSFilePath .= 'DTA/'.$zipFile["name"].'/';
 
                     //If DTA files are present
                     if(count($PML) > 0){
@@ -719,6 +723,11 @@
                                                 //$numberBonds[$i]["TML"] = $totalscreenedTML;
                                                 $numberBonds[$i]["TML"] = $totalexpandedTMLConsideringIntensity;
                                                 $numberBonds[$i]["DTA"] = $PMLNames[$IM[$i]["PML"]];
+                                                $filetrim = strpos($PMLNames[$IM[$i]["PML"]], "/");
+                                                if($filetrim > 0){
+                                                    $filetrim++;
+                                                }
+                                                $numberBonds[$i]["filepath"] = $MSMSFilePath.substr($PMLNames[$IM[$i]["PML"]],$filetrim);
                                                 $numberBonds[$i]["score"] = $totalCMsConsideringIntensity/$totalexpandedTMLConsideringIntensity;
                                                 $numberBonds[$i]["ppvalue"] = $Pvalues[$i]["ppvalue"];
                                                 $numberBonds[$i]["pp2value"] = $Pvalues[$i]["pp2value"];
@@ -823,7 +832,7 @@
                                        ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
                                        && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){
                                             //avoid matches with double bonds
-                                            if(count($numberBonds[$w]) == 12 || $numberBonds[$w]['DTA'] == "FT3/Z1129S1.1495.1495.2.dta"){
+                                            if(count($numberBonds[$w]) == 13 || $numberBonds[$w]['DTA'] == "FT3/Z1129S1.1495.1495.2.dta"){
                                                 //Consider a true bond ony if either:
                                                 //1. The bond is not previously found
                                                 //2. If the new bond has higher score than previous
@@ -845,6 +854,7 @@
                                                         $truebonds[$DTA]['cys1'] = substr($SSbond, 0, $dashpos);
                                                         $truebonds[$DTA]['cys2'] = substr($SSbond,$dashpos+1);
                                                         $truebonds[$DTA]['DTA'] = $DTA;
+                                                        $truebonds[$DTA]['filepath'] = $numberBonds[$w]["filepath"];
 
                                                         if($score < $minimumscore)
                                                             $minimumscore = $score;

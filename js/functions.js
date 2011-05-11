@@ -39,6 +39,7 @@ function selectStrategy(strategy){
     if(strategy == "strategy4"){
         document.getElementById('coefassign').style.display = "";
     }
+    setWarning();
 }
 
 function deselectStrategy(strategy){
@@ -49,6 +50,29 @@ function deselectStrategy(strategy){
     document.getElementById('checkmark'+strategy).style.visibility = "hidden";
     if(strategy == "strategy4"){
         document.getElementById('coefassign').style.display = "none";
+    }
+    setWarning();
+}
+
+function setWarning(){
+        var count = 0;
+    if(document.getElementById('inputstrategy1').value != ""){
+        count++;
+    }
+    if(document.getElementById('inputstrategy2').value != ""){
+        count++;
+    }
+    if(document.getElementById('inputstrategy3').value != ""){
+        count++;
+    }
+    if(document.getElementById('inputstrategy4').value != ""){
+        count++;
+    }
+    if(count > 1){
+        document.getElementById('strategieswarning').style.display = "";
+    }
+    else{
+        document.getElementById('strategieswarning').style.display = "none";
     }
 }
 

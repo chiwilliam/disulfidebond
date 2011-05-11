@@ -46,6 +46,15 @@
                             </tr>
                         </table>
                     </div>
+                    <div id="files">
+                        <p class="files">
+                            <br></br>
+                            *Download the results in
+                            <a href="<?php echo $TXTFile; ?>" target="_blank">TXT</a>
+                            or
+                            <a href="<?php echo $XMLFile; ?>" target="_blank">XML</a>                            
+                        </p>
+                    </div>
                     <div id="graphdiv" class="graph">                            
                     </div>
                     <div id="listofbondsdiv" class="listofbonds">                            
