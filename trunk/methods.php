@@ -201,8 +201,8 @@
                                 <table class="input">
                                     <tr class="input">
                                         <td colspan="2" align="center">
-                                            <a id="submitlink" href="#submitlink"><img alt="Search for S-S bonds" src="images/submit.png" id="imgsubmit" onmouseover="Tip('Click here to search for disulfide bonds');document.getElementById('imgsubmit').src='images/submit_on.png';"
-                                                         onmouseout="UnTip();document.getElementById('imgsubmit').src='images/submit.png';" onclick="showProcessing();document.submitForm.submit();"></img></a>
+                                            <a id="submitlink" href="#submitlink"><img alt="Search for S-S bonds" src="images/next.png" id="imgsubmit" onmouseover="Tip('Click here to search for disulfide bonds');document.getElementById('imgsubmit').src='images/next_on.png';"
+                                                         onmouseout="UnTip();document.getElementById('imgsubmit').src='images/next.png';" onclick="showProcessing();document.submitForm.submit();"></img></a>
                                         </td>
                                     </tr>
                                     <tr>

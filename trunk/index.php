@@ -92,9 +92,9 @@
                             <td colspan="2" class="justified">
                                 Lastly, MS2DB++ allows the user to enter the bonding pattern found by custom methods, which can be combined 
                                 with the results obtained by the other three methods (MS/MS, SVM, and CSP) to determine a global consistent 
-                                disulfide connectivity. The methods' combination can be performed using four different strategies, also 
-                                fully controlled by the user. The different combination strategies/options aim to improve the quality and 
-                                accuracy of the results. A through description of each combination strategy is presented in the 
+                                disulfide connectivity. The methods' combination can be performed using four different rules, also 
+                                fully controlled by the user. The different combination rules/options aim to improve the quality and 
+                                accuracy of the results. A through description of each combination rule is presented in the 
                                 <a target="_blank" href="help.php"><span style="color:blue;">help</span></a> section.
                             </td>
                         </tr>
@@ -115,7 +115,7 @@
                             <td colspan="2" class="centered">
                                 <!-- Youtube tutorial vide -->
                                 <p>
-                                    <object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/gu9LOpTWCOY?hl=en&fs=1&hd=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/gu9LOpTWCOY?rel=0&hl=en&fs=1&hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
+                                    
                                 </p>
                             </td>
                         </tr>

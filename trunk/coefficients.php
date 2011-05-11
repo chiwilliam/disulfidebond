@@ -82,8 +82,14 @@
                                         $methodkeys = array_keys($methods);
                                         for($i=0;$i<$rows;$i++){
                                             echo '<tr class="results">';
-                                            echo '<td class="bonds"><label class="bonds">'.$keys[$i].'</label></td>';
-                                            for($j=0;$j<$cols;$j++){
+                                            $bondlabel = "";
+                                            if(isset($data['MSMS']['scores'][$keys[$i]])){
+                                                $bondlabel = '<td class="bonds"><a href="'.$data['MSMS']['scores'][$keys[$i]]['filepath'].'" target="_blank"><label class="bonds">'.$keys[$i].'</a></label></td>';
+                                            }
+                                            else{
+                                                $bondlabel = '<td class="bonds"><label class="bonds">'.$keys[$i].'</label></td>';
+                                            }
+                                            echo $bondlabel;for($j=0;$j<$cols;$j++){
                                                 if($methodkeys[$j] == "MSMS"){
                                                     $score = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['ppvalue'],4);
                                                     $info = "";

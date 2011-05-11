@@ -864,5 +864,71 @@
         
         return $message;
     }
+    
+    function getTextFile($bonds,$root){
+        
+        $file = ((string)(rand(100000, 999999)));
+        $file .= ".txt";
+        
+        $path = $_SERVER['HTTP_REFERER'];
+        $path = substr($path, 0, strpos($path, '++')+3);
+        $path .= "DTA/";
+        $path .= $file;
+        
+        $filepath = $root.'/DTA/'.$file;
+        
+        $txt = "***** ";
+        
+        $keys = array_keys($bonds);
+        for($i=0;$i<count($keys);$i++){
+            $txt .= 'Combination Rule '.$keys[$i].' => ';
+            $txt .= "Bonds:";
+            $list = array_keys($bonds[$keys[$i]]);
+            for($j=0;$j<count($list);$j++){
+                $txt .= $list[$j].",";
+                $txt .= "score:".$bonds[$keys[$i]][$list[$j]]['score']."; ";
+            }
+            $txt .= "***** ";
+        }
+        
+        file_put_contents($filepath, $txt);
+        
+        return $path;
+    }
+    
+    function getXMLFile($bonds,$root){
+        
+        $file = ((string)(rand(100000, 999999)));
+        $file .= ".xml";
+        
+        $path = $_SERVER['HTTP_REFERER'];
+        $path = substr($path, 0, strpos($path, '++')+3);
+        $path .= "DTA/";
+        $path .= $file;
+        
+        $filepath = $root.'/DTA/'.$file;
+        
+        $xml = "<connectivity>";
+        $xml .= "<combination_rules>";
+        $keys = array_keys($bonds);
+        for($i=0;$i<count($keys);$i++){
+            $xml .= "<combination_rule>";
+            $xml .= '<combination_type>'.$keys[$i].'</combination_type>';
+            $xml .= "<bonds>";
+            $list = array_keys($bonds[$keys[$i]]);
+            for($j=0;$j<count($list);$j++){
+                $xml .= "<bond>".$list[$j]."</bond>";
+                $xml .= "<score>".$bonds[$keys[$i]][$list[$j]]['score']."</score>";
+            }
+            $xml .= "</bonds>";
+            $xml .= "</combination_rule>";
+        }
+        $xml .= "</combination_rules>";
+        $xml .= "</connectivity>";
+        
+        file_put_contents($filepath, $xml);
+        
+        return $path;
+    }
 
 ?>
