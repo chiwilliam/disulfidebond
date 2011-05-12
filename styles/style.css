@@ -271,6 +271,11 @@ label.bonds{
     font-weight: bold;
 }
 
+a.bonds{
+    text-align: center;
+    font-weight: bold;
+}
+
 input.score{
     float: left;    
     margin-left: 10px;
@@ -347,4 +352,13 @@ p.files{
     font-weight: bold;
     font-size: 14px;
     margin-left: 10px;
+}
+
+a.selected{
+    color: #000000;
+}
+
+a.notselected{
+    color: #FFFFFF;
+	
 }
