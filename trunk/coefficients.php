@@ -84,7 +84,7 @@
                                             echo '<tr class="results">';
                                             $bondlabel = "";
                                             if(isset($data['MSMS']['scores'][$keys[$i]])){
-                                                $bondlabel = '<td class="bonds"><a href="'.$data['MSMS']['scores'][$keys[$i]]['filepath'].'" target="_blank"><label class="bonds">'.$keys[$i].'</a></label></td>';
+                                                $bondlabel = '<td class="bonds"><a class="bonds" href="'.$data['MSMS']['scores'][$keys[$i]]['filepath'].'" target="_blank">'.$keys[$i].'</a></td>';
                                             }
                                             else{
                                                 $bondlabel = '<td class="bonds"><label class="bonds">'.$keys[$i].'</label></td>';
@@ -108,10 +108,10 @@
                                                 $inputscore = 'score_'.$keys[$i].'_'.$methodkeys[$j];
                                                 $inputcoef = 'coef_'.$keys[$i].'_'.$methodkeys[$j];
                                                 if(strlen($info) > 0){
-                                                    echo '<td class="methods"><input onmouseover="Tip(\''.$info.'\');" onmouseout="UnTip();" id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="7" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="7" value="'.$coef.'"></input></td>';
+                                                    echo '<td class="methods"><input onmouseover="Tip(\''.$info.'\');" onmouseout="UnTip();" id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="6" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="6" value="'.$coef.'"></input></td>';
                                                 }
                                                 else{
-                                                    echo '<td class="methods"><input id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="7" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="7" value="'.$coef.'"></input></td>';
+                                                    echo '<td class="methods"><input id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="6" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="6" value="'.$coef.'"></input></td>';
                                                 }
                                                 
                                             }

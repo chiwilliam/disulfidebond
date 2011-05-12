@@ -72,10 +72,7 @@
                                             <img style="visibility:hidden;" alt="Combination Rule 1 Selected" src="images/selected.png" id="checkmarkstrategy1"></img>
                                         </td>
                                         <td class="strategy">
-                                            <a onclick="window.open('help/strategy1.html', 'Help - Rule 1', 
-                                            'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
-                                            id="linkformula1" href="#linkformula1"
-                                            onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
+                                            <a onclick="window.open('help/strategy1.html','','width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" id="linkformula1" href="#linkformula1" onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
                                                 <img alt="Equation for Rule 1" src="images/strategy1.png"></img>
                                             </a>
                                         </td>
@@ -105,7 +102,7 @@
                                             <img style="visibility:hidden;" alt="Combination Rule 2 Selected" src="images/selected.png" id="checkmarkstrategy2"></img>
                                         </td>
                                         <td class="strategy">
-                                            <a onclick="window.open('help/strategy2.html', 'Help - Rule 2', 
+                                            <a onclick="window.open('help/strategy2.html', '', 
                                             'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
                                             id="linkformula1" href="#linkformula1"
                                             onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
@@ -138,7 +135,7 @@
                                             <img style="visibility:hidden;" alt="Combination Rule 3 Selected" src="images/selected.png" id="checkmarkstrategy3"></img>
                                         </td>
                                         <td class="strategy">
-                                            <a onclick="window.open('help/strategy3.html', 'Help - Rule 3', 
+                                            <a onclick="window.open('help/strategy3.html', '', 
                                             'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
                                             id="linkformula1" href="#linkformula1"
                                             onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
@@ -171,7 +168,7 @@
                                             <img style="visibility:hidden;" alt="Combination Rule 4 Selected" src="images/selected.png" id="checkmarkstrategy4"></img>
                                         </td>
                                         <td class="strategy">
-                                            <a onclick="window.open('help/strategy4.html', 'Help - Rule 4', 
+                                            <a onclick="window.open('help/strategy4.html', '', 
                                             'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" 
                                             id="linkformula1" href="#linkformula1"
                                             onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
@@ -246,7 +243,7 @@
                                             echo '<tr class="results">';
                                             $bondlabel = "";
                                             if(isset($data['MSMS']['scores'][$keys[$i]])){
-                                                $bondlabel = '<td class="bonds"><a href="'.$data['MSMS']['scores'][$keys[$i]]['filepath'].'" target="_blank"><label class="bonds">'.$keys[$i].'</a></label></td>';
+                                                $bondlabel = '<td class="bonds"><a class="bonds" href="'.$data['MSMS']['scores'][$keys[$i]]['filepath'].'" target="_blank">'.$keys[$i].'</a></td>';
                                             }
                                             else{
                                                 $bondlabel = '<td class="bonds"><label class="bonds">'.$keys[$i].'</label></td>';
@@ -271,10 +268,10 @@
                                                 $inputscore = 'score_'.$keys[$i].'_'.$methodkeys[$j];
                                                 $inputcoef = 'coef_'.$keys[$i].'_'.$methodkeys[$j];
                                                 if(strlen($info) > 0){
-                                                    echo '<td class="methods"><input onmouseover="Tip(\''.$info.'\');" onmouseout="UnTip();" id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="7" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="7" value="'.$coef.'"></input></td>';
+                                                    echo '<td class="methods"><input onmouseover="Tip(\''.$info.'\');" onmouseout="UnTip();" id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="6" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="6" value="'.$coef.'"></input></td>';
                                                 }
                                                 else{
-                                                    echo '<td class="methods"><input id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="7" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="7" value="'.$coef.'"></input></td>';
+                                                    echo '<td class="methods"><input id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="6" value="'.$score.'"></input><input id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="6" value="'.$coef.'"></input></td>';
                                                 }
                                                 
                                             }

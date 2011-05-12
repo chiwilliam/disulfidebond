@@ -50,10 +50,15 @@ body {
 	padding-left: 5px;
 }
 #footer {
+        color:#FFFFFF;
 	text-align: center;
 	background-color: #000000;
 	overflow: hidden;
-	padding: 2px;        
+	padding: 2px;      
+        font-size: 11px;
+        width: auto;
+	clear: both;
+	overflow: auto;
 }
 
 #footerbottom{
@@ -82,17 +87,13 @@ body {
 	float: left;
 }
 #navigation a {
-	color: #FFFFFF;
 	text-decoration: none;
 	margin: 0px 0px 0px 0px;
 	padding: 5px;
 	display: block;
-	border: 0px solid #D3D3D3;
 }
 #navigation a:hover {
-        color:blue;
-	/*background-color: #f2f2f2;
-	border: 0px solid #f2f2f2;*/
+        color:blue;	
 }
 /* Styles for Sub Navigation */
 #subnavigation ul {
@@ -105,17 +106,13 @@ body {
 	float: left;
 }
 #subnavigation a {
-	color: #FFFFFF;
 	text-decoration: none;
 	margin: 0px 0px 0px 0px;
 	padding: 5px;
 	display: block;
-	border: 0px solid #EEEEFF;
 }
 #subnavigation a:hover {
         color:blue;
-	/*background-color: #f2f2f2;
-	border: 0px solid #f2f2f2;*/
 }
 /* Styles for Content */
 h1 {
@@ -166,29 +163,29 @@ big {
 	display: list-item;
 	list-style-position: outside;
 }
-/* Styles for Footer */
 #footer p {
-	color: #fff;
+	color: #FFFFFF;
 	font-size: x-small;
 	margin-top: 2px;
 	margin-bottom: 6px;
 }
 #footer a {
-	color: #fff;
-	text-decoration: underline;
-}
-#footer a:hover {
-	color: #000;
+	color: blue;
 	text-decoration: none;
 }
-/* Styles for Links */
+#footer a:hover {
+	color: #945;
+	text-decoration: none;
+}
 a {
-	color: #456;
-	text-decoration: underline;
+	color: blue;
+	text-decoration: none;
+        border:0;
+        border-collapse: collapse;
 }
 a:hover {
 	color: #965;
-	text-decoration: underline;
+	text-decoration: none;
 }
 .style_bold {
 	font-weight: bold;
@@ -197,7 +194,16 @@ a:hover {
 	font-style: italic;
 }
 a.noborders {
-        border-width:0px;
         text-decoration:none;
         color:#CCDDEE;
+        border:0;
+        border-color:black;
+}
+
+img.noborder{
+    border: 0;
+}
+
+img{
+    border:0;
 }
