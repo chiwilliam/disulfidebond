@@ -1390,6 +1390,9 @@
                 $message = getResults($GlobalSScomb,$root,$fastaProtein);                                     
             }
         }
+        else{
+            $message = "RESULTS: ".$message;
+        }
     }
     else{
         if($MSMS == "" && $SVM == "" && $CSP == "" && $CUSTOM == "" && $CUSTOM2 == ""){
