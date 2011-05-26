@@ -658,20 +658,21 @@
             $M5bonds = $Func->getFormattedBonds($GlobalBonds['CUSTOM2']['scores'],"score");
         }
 
+        $normalize = false;
         if(count($M1bonds) > 0){
-            $M1bondsPower = $Func->getBondsForPowerSet($M1bonds,$GlobalBonds['MSMS']['bonds']);
+            $M1bondsPower = $Func->getBondsForPowerSet($M1bonds,$GlobalBonds['MSMS']['bonds'],$normalize);
         }
         if(count($M2bonds) > 0){
-            $M2bondsPower = $Func->getBondsForPowerSet($M2bonds,$GlobalBonds['SVM']['bonds']);
+            $M2bondsPower = $Func->getBondsForPowerSet($M2bonds,$GlobalBonds['SVM']['bonds'],$normalize);
         }
         if(count($M3bonds) > 0){
-            $M3bondsPower = $Func->getBondsForPowerSet($M3bonds,$GlobalBonds['CSP']['bonds']);
+            $M3bondsPower = $Func->getBondsForPowerSet($M3bonds,$GlobalBonds['CSP']['bonds'],$normalize);
         }
         if(count($M4bonds) > 0){
-            $M4bondsPower = $Func->getBondsForPowerSet($M4bonds,$GlobalBonds['CUSTOM']['bonds']);
+            $M4bondsPower = $Func->getBondsForPowerSet($M4bonds,$GlobalBonds['CUSTOM']['bonds'],$normalize);
         }
         if(count($M5bonds) > 0){
-            $M5bondsPower = $Func->getBondsForPowerSet($M5bonds,$GlobalBonds['CUSTOM2']['bonds']);
+            $M5bondsPower = $Func->getBondsForPowerSet($M5bonds,$GlobalBonds['CUSTOM2']['bonds'],$normalize);
         }
 
         $GlobalSScomb = integrateGlobalBondsPowerSet($combStrategy, $M1bondsPower, $M2bondsPower, $M3bondsPower, $M4bondsPower, $M5bondsPower);

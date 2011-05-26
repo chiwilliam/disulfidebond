@@ -1386,7 +1386,10 @@
                     exit();
                 }
                 
-                $GlobalSScomb = IntegrateAllResults($combStrategy,$GlobalBonds);                
+                //integrate bonds
+                $GlobalSScomb = IntegrateAllResults($combStrategy,$GlobalBonds);
+                
+                //create graphs
                 $message = getResults($GlobalSScomb,$root,$fastaProtein);                                     
             }
         }
