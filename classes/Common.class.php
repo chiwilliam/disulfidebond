@@ -1105,7 +1105,7 @@ class Commonclass {
         }  
     }
     
-    public function getBondsForPowerSet($allbonds,$truebonds){
+    public function getBondsForPowerSet($allbonds,$truebonds,$normalize){
         
         //getting consistent connectivity (after Gabow)
         $keys = array_keys($allbonds);
@@ -1116,18 +1116,20 @@ class Commonclass {
             }                    
         }
         
-        //calculate totalscore
-        $keys = array_keys($allbonds);        
-        $totalscore=0;
-        for($i=0;$i<count($keys);$i++){
-            $totalscore += $allbonds[$keys[$i]]['score'];
-        }
-        
-        //normalize bonds
-        $keys = array_keys($bonds);
-        for($i=0;$i<count($keys);$i++){
-            if($totalscore > 0){
-                $bonds[$keys[$i]]['score'] = number_format($allbonds[$keys[$i]]['score']/$totalscore,4);
+        if($normalize ==  true){
+            //calculate totalscore
+            $keys = array_keys($allbonds);        
+            $totalscore=0;
+            for($i=0;$i<count($keys);$i++){
+                $totalscore += $allbonds[$keys[$i]]['score'];
+            }
+
+            //normalize bonds
+            $keys = array_keys($bonds);
+            for($i=0;$i<count($keys);$i++){
+                if($totalscore > 0){
+                    $bonds[$keys[$i]]['score'] = number_format($allbonds[$keys[$i]]['score']/$totalscore,4);
+                }
             }
         }
         

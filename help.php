@@ -213,10 +213,10 @@
                                 or when a method is known to perform poorly due to a specific amino acid sequence or bonding
                                 arrangement)</i>.
                                 <p>
-                                    While using this rule, an expert user may assign confidence (reliability) values to the 
-                                    bonding scores obtained by the different methods used. These confidence values are then 
+                                    While using this rule, an expert user may assign reliability values to the 
+                                    bonding scores obtained by the different methods used. These reliability values are then 
                                     multiplied by their respective bonding pattern score.
-                                    By default, MS2DB++ assigns maximum confidence (<i>alfa = 1</i>) to all scores.
+                                    By default, MS2DB++ assigns maximum reliability (<i>alfa = 1</i>) to all scores.
                                 </p>
                                 <p>
                                     In this rule, the score of a bonding pattern <i>A</i> is calculated as the average score of 
