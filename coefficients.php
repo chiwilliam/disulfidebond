@@ -22,10 +22,10 @@
                 <div id="page_content">
                     <div class="readme" id="readme">
                         <p style="margin-left:30px;text-align:justify;">
-                            Please assign the confidence value to each disulfide bond.
-                            Initially, all confidence values are assign as 1.0 (maximum confidence).
-                            While a confidence value of 1.0 means the disulfide bond is highly reliable,
-                            a confidence value of 0.0 means the disulfide bond should be discarded.
+                            Please assign the reliability value to each disulfide bond.
+                            Initially, all reliability values are assign as 1.0 (maximum reliability).
+                            While a reliability value of 1.0 means the disulfide bond is highly trustworthy,
+                            a reliability value of 0.0 means the disulfide bond should be discarded.
                             <br/><br/>
                             If the MS/MS method was selected, the user can check the precursor ion
                             mass by pointing the cursor over the score field.
@@ -73,7 +73,7 @@
                                         echo '<td class="bonds"><label class="bonds"><i>Bonds</i></label></td>';
                                         $keys = array_keys($methods);
                                         for($i=0;$i<$cols;$i++){
-                                            echo '<td class="methods"><label class="score"><i>Score</i></label><label class="coef"><i>Confidence</i></label></td>';
+                                            echo '<td class="methods"><label class="score"><i>Score</i></label><label class="coef"><i>Reliability</i></label></td>';
                                         }
                                         echo '</tr>';
                                         
