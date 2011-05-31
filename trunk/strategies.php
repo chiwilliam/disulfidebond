@@ -232,7 +232,7 @@
                                         echo '<td class="bonds"><label class="bonds"><i>Bonds</i></label></td>';
                                         $keys = array_keys($methods);
                                         for($i=0;$i<$cols;$i++){
-                                            echo '<td class="methods"><label class="score"><i>Score</i></label><label class="coef"><i>Confidence</i></label></td>';
+                                            echo '<td class="methods"><label class="score"><i>Score</i></label><label class="coef"><i>Weight</i></label></td>';
                                         }
                                         echo '</tr>';
                                         

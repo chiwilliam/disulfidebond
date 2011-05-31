@@ -223,8 +223,13 @@
                                     <tr id="trbondsdiv">
                                         <td class="inputrightresults">
                                             <?php
-                                                if(strtoupper(substr($message, 0, 5)) == "ERROR"){
-                                                    echo '<font color="red">';
+                                                if(isset($message)){
+                                                    if(strtoupper(substr($message, 0, 5)) == "ERROR"){
+                                                        echo '<font color="red">';
+                                                    }
+                                                    else{
+                                                        echo '<font color="blue">';
+                                                    }
                                                 }
                                                 else{
                                                     echo '<font color="blue">';
