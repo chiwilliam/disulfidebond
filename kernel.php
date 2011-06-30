@@ -263,7 +263,7 @@
                     $k=0;
                     $graph = array();
 
-                    $aPML = $Func->readMSMSFiles($root, $zipFile["tmp_name"], $zipFile["name"]);
+                    $aPML = $Func->readMSMSFiles($root, $zipFile["tmp_name"], $zipFile["name"],$zipFile["type"]);
                     $PML = $aPML["PML"];
                     $PMLNames = $aPML["PMLNames"];
                     unset($aPML);
@@ -379,6 +379,9 @@
                             // aby+ => a,b,bo,b*,y,yo,y* ions
                             // cxz => only c, x, and z ions
                             $alliontypes = (string)$_POST["ions"];
+                            if($zipFile['name'] == "GnT-II-chymotrypsin.zip"){
+                                $alliontypes = "aby+";
+                            }
                             $_SESSION['ions'] = $alliontypes;
                             //$alliontypes = "all";
 
@@ -998,6 +1001,10 @@
                             for($w=0;$w<count($SS);$w++){
                                 $truebonds[$SS[$w]]['score'] = $truebonds[$SS[$w]]['scoretmp']/$minmaxMSMS['max'];
                                 unset($truebonds[$SS[$w]]['scoretmp']);
+                            }
+                            
+                            if(count($truebonds) == 0){
+                                $message = "No disulfide bonds were found.";
                             }
                         }//IM
                         else{

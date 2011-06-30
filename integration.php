@@ -254,6 +254,15 @@
             }
             $score += (pow(2, $scores[$i]+$penalty)-1);
         }
+        
+        //simple score averaging...
+        /*
+        $score = 0;
+        for($i=0;$i<$count;$i++){
+            $score += $scores[$i];
+        }
+        */
+        
         $score = number_format($score/$count,4);
         $score = max(array(0.0,$score));
         
