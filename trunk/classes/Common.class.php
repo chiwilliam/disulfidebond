@@ -836,57 +836,139 @@ class Commonclass {
     
     //$zipFile["tmp_name"]
     //$zipFile["name"]
-    public function readMSMSFiles($root, $tmp_name, $name){
+    public function readMSMSFiles($root, $tmp_name, $name,$filetype){
         
         $PML = array();
         $PMLNames = array();
         
-        $zip = zip_open($tmp_name);
-        if($zip){
-            $dirPath = $root."/DTA/".$name;
+        if($filetype == "application/octet-stream"){
+            
+            $extension = strtoupper(substr(strrchr($name,"."),1));
+            
+            if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA"){
+                
+                $data = file_get_contents($tmp_name);
 
-            if(!is_dir($dirPath)){
-                mkdir($dirPath);
-            }
-            $mzIteration = 0;
-            $iterations = 0;
-            while($zip_entry = zip_read($zip)){
-                if(zip_entry_open($zip, $zip_entry)){
+                //save to File
+                $path = $root."/DTA/".$name."/1.mzXML";
+                file_put_contents($path, $data);
 
-                    $filename = zip_entry_name($zip_entry);
-                    $extension = strtoupper(substr(strrchr($filename,"."),1));
+                //convert File to DTA file(s)
+                $DTApath = $root."/DTA/".$name."/1/";
+                $this->convertMZXMLtoDTA($root, $path);
 
-                    if($extension == "MZXML"){
-                        
-                        //load MZXML data
-                        $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
-                        $mzIteration++;
-                        
-                        //save to File
-                        $path = $root."/DTA/".$name."/".$mzIteration.".mzXML";
+                //process each DTA file
+                $listFiles = array();
+
+                $handle = opendir($DTApath);
+                while (false !== ($file = readdir($handle))) {
+                    if(strlen($file) > 3){
+                        $listFiles[] = $file;
+                    }                            
+                }
+
+                $numFiles = count($listFiles);
+                for($i=0;$i<$numFiles;$i++)
+                {
+                    $data = file_get_contents($DTApath.$listFiles[$i]);
+
+                    //subtract one due to DTA format for precursor ions mass Mr
+                    //index is number of AA - number of charges - calculated mass
+                    $index = substr($data,0,strpos($data,"."))."-".
+                             substr($data,(strpos($data," ")+1),1)."-".(string)$iterations;
+                    $iterations++;
+
+                    if(strlen($data) > 0){
+
+                        $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
+                        $PMLNames[$index] = $listFiles[$i];
+
+                        //store data in a local file
+                        $path = $root."/DTA/".$name."/".$index.".txt";
                         file_put_contents($path, $data);
-                        
-                        //convert File to DTA file(s)
-                        $DTApath = $root."/DTA/".$name."/".$mzIteration."/";
-                        $this->convertMZXMLtoDTA($root, $path);
-                                                
-                        //process each DTA file
-                        $listFiles = array();
-                        
-                        $handle = opendir($DTApath);
-                        while (false !== ($file = readdir($handle))) {
-                            if(strlen($file) > 3){
-                                $listFiles[] = $file;
-                            }                            
+                        $path = $root."/DTA/".$name."/".$listFiles[$i];
+                        file_put_contents($path, $data);
+                    }                        
+                }
+            }
+        }
+        else
+        {        
+            $zip = zip_open($tmp_name);
+            if($zip){
+                $dirPath = $root."/DTA/".$name;
+
+                if(!is_dir($dirPath)){
+                    mkdir($dirPath);
+                }
+                $mzIteration = 0;
+                $iterations = 0;
+                while($zip_entry = zip_read($zip)){
+                    if(zip_entry_open($zip, $zip_entry)){
+
+                        $filename = zip_entry_name($zip_entry);
+                        $extension = strtoupper(substr(strrchr($filename,"."),1));
+
+                        if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA"){
+
+                            //load MZXML data
+                            $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
+                            $mzIteration++;
+
+                            //save to File
+                            $path = $root."/DTA/".$name."/".$mzIteration.".mzXML";
+                            file_put_contents($path, $data);
+
+                            //convert File to DTA file(s)
+                            $DTApath = $root."/DTA/".$name."/".$mzIteration."/";
+                            $this->convertMZXMLtoDTA($root, $path);
+
+                            //process each DTA file
+                            $listFiles = array();
+
+                            $handle = opendir($DTApath);
+                            while (false !== ($file = readdir($handle))) {
+                                if(strlen($file) > 3){
+                                    $listFiles[] = $file;
+                                }                            
+                            }
+
+                            $numFiles = count($listFiles);
+                            for($i=0;$i<$numFiles;$i++)
+                            {
+                                $data = file_get_contents($DTApath.$listFiles[$i]);
+
+                                //subtract one due to DTA format for precursor ions mass Mr
+                                //index is number of AA - number of charges - calculated mass
+                                $index = substr($data,0,strpos($data,"."))."-".
+                                         substr($data,(strpos($data," ")+1),1)."-".(string)$iterations;
+                                $iterations++;
+
+                                if(strlen($data) > 0){
+
+                                    $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
+                                    $PMLNames[$index] = $listFiles[$i];
+
+                                    //store data in a local file
+                                    $path = $root."/DTA/".$name."/".$index.".txt";
+                                    file_put_contents($path, $data);
+                                    $path = $root."/DTA/".$name."/".$listFiles[$i];
+                                    file_put_contents($path, $data);
+                                }                        
+                            }
                         }
-                        
-                        $numFiles = count($listFiles);
-                        for($i=0;$i<$numFiles;$i++)
-                        {
-                            $data = file_get_contents($DTApath.$listFiles[$i]);
+
+                        if($extension == "DTA"){
+
+                            $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
 
                             //subtract one due to DTA format for precursor ions mass Mr
                             //index is number of AA - number of charges - calculated mass
+                            /*
+                            $index = (string)((int)((substr($data,0,strpos($data," "))-1.0) / $me))."-".
+                                     substr($data,(strpos($data," ")+1),1)."-".
+                                     substr($data,0,strpos($data,"."))."-".(string)$iterations;
+                            */
                             $index = substr($data,0,strpos($data,"."))."-".
                                      substr($data,(strpos($data," ")+1),1)."-".(string)$iterations;
                             $iterations++;
@@ -894,46 +976,18 @@ class Commonclass {
                             if(strlen($data) > 0){
 
                                 $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
-                                $PMLNames[$index] = $listFiles[$i];
+                                $PMLNames[$index] = $filename;
 
                                 //store data in a local file
                                 $path = $root."/DTA/".$name."/".$index.".txt";
                                 file_put_contents($path, $data);
-                                $path = $root."/DTA/".$name."/".$listFiles[$i];
+                                $begin = 0;
+                                if(strpos($filename, "/") > 0){
+                                    $begin = strpos($filename, "/")+1;
+                                }                            
+                                $path = $root."/DTA/".$name."/".substr($filename,$begin);
                                 file_put_contents($path, $data);
-                            }                        
-                        }
-                    }
-                    
-                    if($extension == "DTA"){
-
-                        $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
-
-                        //subtract one due to DTA format for precursor ions mass Mr
-                        //index is number of AA - number of charges - calculated mass
-                        /*
-                        $index = (string)((int)((substr($data,0,strpos($data," "))-1.0) / $me))."-".
-                                 substr($data,(strpos($data," ")+1),1)."-".
-                                 substr($data,0,strpos($data,"."))."-".(string)$iterations;
-                        */
-                        $index = substr($data,0,strpos($data,"."))."-".
-                                 substr($data,(strpos($data," ")+1),1)."-".(string)$iterations;
-                        $iterations++;
-
-                        if(strlen($data) > 0){
-
-                            $PML[$index] = substr($data,0,strpos($data," ",strlen(substr($data,0,strpos($data," ")))+1));
-                            $PMLNames[$index] = $filename;
-
-                            //store data in a local file
-                            $path = $root."/DTA/".$name."/".$index.".txt";
-                            file_put_contents($path, $data);
-                            $begin = 0;
-                            if(strpos($filename, "/") > 0){
-                                $begin = strpos($filename, "/")+1;
-                            }                            
-                            $path = $root."/DTA/".$name."/".substr($filename,$begin);
-                            file_put_contents($path, $data);
+                            }
                         }
                     }
                 }
