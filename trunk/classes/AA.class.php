@@ -135,7 +135,7 @@ class AAclass {
         if($delta < 0){
             $delta = 0.0;
         }
-
+        
         return $delta;
 
     }
