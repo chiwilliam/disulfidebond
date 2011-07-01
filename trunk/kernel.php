@@ -57,7 +57,7 @@
     $errors["nofile"]["code"] = "01";
     $errors["nofile"]["message"] = "No MS/MS file was uploaded.";
     $errors["emptyfile"]["code"] = "02";
-    $errors["emptyfile"]["message"] = "MS/MS file uploaded is empty.";
+    $errors["emptyfile"]["message"] = "MS/MS file uploaded is either empty or is not supported. If your file is not empty, please compress this file into a ZIP file and try again.";
     $errors["invalidfile"]["code"] = "03";
     $errors["invalidfile"]["message"] = "MS/MS file uploaded is invalid. Please upload a ZIP file containing either DTA or XML-based files.";
     $errors["noprotein"]["code"] = "04";
@@ -172,6 +172,14 @@
 
     //Check File uploaded
     $zipFile = $_FILES["zipFile"];
+    if($zipFile["type"] == ""){
+        $extension = strtoupper(substr(strrchr($zipFile["name"],"."),1));
+        $extension = strtoupper($extension);
+        if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA"){
+            $zipFile["type"] = "application/octet-stream";
+        }
+    }
+    
     $fastaProtein = (string)$_POST["fastaProtein"];
 
     //Format fasta sequence, removing unnecessary characters
@@ -199,9 +207,9 @@
     if($MSMS != "" || $SVM != "" || $CSP != "" || $CUSTOM != "" || $CUSTOM2 != ""){
         //MSMS
         if($MSMS != ""){
-            if(strlen($_FILES["zipFile"]["name"]) > 0 && 
-               $_FILES["zipFile"][size] > 0 &&
-               ($_FILES["zipFile"]["type"] == "application/zip" || $_FILES["zipFile"]["type"] == "application/x-zip-compressed" || $_FILES["zipFile"]["type"] == "application/octet-stream") &&
+            if(strlen($zipFile["name"]) > 0 && 
+               $zipFile["size"] > 0 &&
+               ($zipFile["type"] == "application/zip" || $zipFile["type"] == "application/x-zip-compressed" || $zipFile["type"] == "application/octet-stream") &&
                $fastaProtein != false &&
                strlen($_POST["fastaProtein"]) > 0 && 
                strlen($_POST["protease"]) > 0
@@ -381,6 +389,10 @@
                             $alliontypes = (string)$_POST["ions"];
                             if($zipFile['name'] == "GnT-II-chymotrypsin.zip"){
                                 $alliontypes = "aby+";
+                                $tempdebug = true;
+                            }
+                            else{
+                                $tempdebug = false;
                             }
                             $_SESSION['ions'] = $alliontypes;
                             //$alliontypes = "all";
@@ -502,6 +514,9 @@
                                         //Second Stage Matching. Forms FMS and Confirmed Matches (CMs)
                                         $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes, $delta);
 
+                                        if($tempdebug){
+                                            $alliontypes = "all";
+                                        }
                                         //$CM = $CMClass->Cmatch($FMS, $TML, $precursor, $CMthreshold);
 
                                         $FMS = $FMSpolynomial['FMS'];
