@@ -238,6 +238,7 @@ class InitialMatchclass {
 
         $keys = array_keys($disulfideBondedPeptides);
         $total = count($keys);
+        $debug = 0;
 
         $peps = array();
         for($i=0;$i<$total;$i++){
@@ -258,6 +259,9 @@ class InitialMatchclass {
                 $index = $tmp[0].'-'.$tmp[1].'-'.round(rand(101,999));
                 //populate array
                 $peps[$index] = array('sequence' => $peptide, 'cysteines' => $disulfideBondedPeptides[$keys[$i]]['cysteines']);
+            }
+            else{
+                $debug++;
             }
         }
         //sort by mass
@@ -282,7 +286,7 @@ class InitialMatchclass {
         //change index organization
         //index will be peptides mass, swapping . for - as indexes do not accept double values
         $disulfideBondedPeptides = $this->reIndexSubsetSum($AAs, $disulfideBondedPeptides, $maxPrecursor);
-
+        
         //get value used to trim lists
         //second parameter: average or median
         if($epsilon == 0){

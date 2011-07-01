@@ -836,7 +836,7 @@ class Commonclass {
     
     //$zipFile["tmp_name"]
     //$zipFile["name"]
-    public function readMSMSFiles($root, $tmp_name, $name,$filetype){
+    public function readMSMSFiles($root, $tmp_name, $name, $filetype){
         
         $PML = array();
         $PMLNames = array();
@@ -849,8 +849,12 @@ class Commonclass {
                 
                 $data = file_get_contents($tmp_name);
 
+                $path = $root."/DTA/".$name;
+                if(!is_dir($path)){
+                    mkdir($path);
+                }
                 //save to File
-                $path = $root."/DTA/".$name."/1.mzXML";
+                $path .= "/1.mzXML";
                 file_put_contents($path, $data);
 
                 //convert File to DTA file(s)
