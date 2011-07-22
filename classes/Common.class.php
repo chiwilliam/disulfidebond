@@ -328,7 +328,7 @@ class Commonclass {
 
     //function to generate the different ion types (a, b, c, x, y, z) for peptides
     //necessary for the validation step of the experiment.
-    public function generateFragments($peptides, $alltypes = "all"){
+    public function generateFragments($peptides, $alltypes){
 
         $AAs = new AAclass();
 
@@ -340,7 +340,7 @@ class Commonclass {
             //peptide sequence
             $peptide = $peptides[$p];
 
-            if($alltypes == "all" || $alltypes == "by" || $alltypes == "aby+"){
+            if(strlen($alltypes["a"]) > 0){
                 //Y-ions
                 if($p%2 == 0){
                     $fragtype = 'Y';
@@ -363,7 +363,9 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
                 }
+            }
 
+            if(strlen($alltypes["b"]) > 0){
                 //B-ions
                 if($p%2 == 0){
                     $fragtype = 'B';
@@ -386,7 +388,7 @@ class Commonclass {
                 }
             }
 
-            if($alltypes == "all" || $alltypes == "aby+"){
+            if(strlen($alltypes["yo"]) > 0){            
 
                 //Yo-ions (-H2O)
                 if($p%2 == 0){
@@ -412,7 +414,10 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
                 }
+            }
 
+            if(strlen($alltypes["ys"]) > 0){
+            
                 //Y*-ions (-NH3)
                 if($p%2 == 0){
                     $fragtype = 'Y*';
@@ -437,7 +442,10 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
                 }
+            }
 
+            if(strlen($alltypes["bo"]) > 0){
+            
                 //Bo-ions (-H2O)
                 if($p%2 == 0){
                     $fragtype = 'Bo';
@@ -460,7 +468,10 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
+            }
 
+            if(strlen($alltypes["bs"]) > 0){
+            
                 //B*-ions (-NH3)
                 if($p%2 == 0){
                     $fragtype = 'B*';
@@ -483,7 +494,10 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
+            }
             
+            if(strlen($alltypes["a"]) > 0){
+                        
                 //A-ions
                 if($p%2 == 0){
                     $fragtype = 'A';
@@ -504,8 +518,9 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
+            }
 
-                /*
+            if(strlen($alltypes["ao"]) > 0){
                 //Ao-ions (-H20)
                 if($p%2 == 0){
                     $fragtype = 'Ao';
@@ -528,7 +543,9 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
+            }
 
+             if(strlen($alltypes["as"]) > 0){
                 //A*-ions (-NH3)
                 if($p%2 == 0){
                     $fragtype = 'A*';
@@ -551,10 +568,10 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
-                */
+                
             }
             
-            if($alltypes == "all" || $alltypes == "cxz"){
+            if(strlen($alltypes["c"]) > 0){
                 
                 //C-ions
                 if($p%2 == 0){
@@ -576,7 +593,9 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($i)), "cysteines" => $cyscount);
                 }
-
+            }
+            
+            if(strlen($alltypes["x"]) > 0){
                 //X-ions
                 if($p%2 == 0){
                     $fragtype = 'X';
@@ -598,7 +617,9 @@ class Commonclass {
                         "fragment" => $fragment, "peptide" => $peptide,
                         "ion" => ($fragtype.($peplength-$i)), "cysteines" => $cyscount);
                 }
+            }
 
+            if(strlen($alltypes["z"]) > 0){
                 //Z-ions
                 if($p%2 == 0){
                     $fragtype = 'Z';
