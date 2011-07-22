@@ -22,8 +22,7 @@ function changeSkin(id,method){
         document.getElementById(id).src = "images/"+method+".png";
         setMethod('input'+method, '');
         document.getElementById(method+"details").style.display = "none";
-    }
-    
+    }    
 }
 
 function setMethod(method,value){
