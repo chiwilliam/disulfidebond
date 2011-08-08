@@ -81,7 +81,7 @@
                             <td colspan="2" class="justified">
                                 <p>
                                     MS2DB++ uses the framework available in MS2DB+ to determine S-S bonds using Mass Spectrometry data.
-                                    While analyzing tandem MS/MS data, the software can account for multiple ions (a, b, bo, b*, c, x, y, yo, 
+                                    While analyzing tandem MS/MS data, the software can account for multiple ions (a, ao, a*, b, bo, b*, c, x, y, yo, 
                                     y*, and z) in determining the disulfide bonds, yet ensuring that the solution is found in polynomial time.
                                     Two other methods based on machine learning techniques to analyze sequence-level information
                                     are also available in MS2DB++. The first is based on a SVM-classifier and the second method is based on 
