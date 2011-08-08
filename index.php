@@ -54,7 +54,8 @@
                                 </p>                                
                             </td>
                             <td class="imageatright">
-                                <img alt="" height="300" src="./images/ms2dbp%20picture.jpg" width="464" />
+                                <!--<img alt="" height="300" src="./images/ms2dbp%20picture.jpg" width="464" />-->
+                                <img alt="MS2DB++" height="300" src="./images/summary.png" width="464" />
                             </td>
                         </tr>
                         <!-- For MS2DB+

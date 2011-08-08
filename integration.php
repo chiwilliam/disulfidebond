@@ -394,6 +394,7 @@
         $theta = array();
         $totaltheta = 0;
         $count = count($MergeSet);
+        $coef = 1.0;
         
         //calculate denominator
         switch ($method) {
@@ -407,7 +408,7 @@
                 break;
             case '2':
                 //do not use the denominator
-                $totalscore = 1;
+                $totalscore = 1.0;
                 break;
             case '3':
                 //denominator is 1 + log(1/K), where K is the sum of all the non-zero intersections
@@ -422,6 +423,7 @@
                     $K = pow(10, -10);
                 }
                 $totalscore += (1+log10(1/$K));
+                $coef = 1/$K;
                 break;
         }     
         
@@ -430,10 +432,10 @@
             if($MergeSet[$i]['score'] > 0){                
                 if(count($MergeSet[$i]['bonds']) == 1){                    
                     if(isset($bonds[$MergeSet[$i]['bonds'][0]]['score'])){
-                        $bonds[$MergeSet[$i]['bonds'][0]]['score'] += number_format($MergeSet[$i]['score']/$totalscore,4);
+                        $bonds[$MergeSet[$i]['bonds'][0]]['score'] += number_format(($coef*$MergeSet[$i]['score'])/$totalscore,4);
                     }
                     else{
-                        $bonds[$MergeSet[$i]['bonds'][0]]['score'] = number_format($MergeSet[$i]['score']/$totalscore,4);
+                        $bonds[$MergeSet[$i]['bonds'][0]]['score'] = number_format(($coef*$MergeSet[$i]['score'])/$totalscore,4);
                     }
                 }
                 else{
@@ -454,14 +456,14 @@
                         $theta[$key]['score'] = $MergeSet[$i]['score'];
                     }
                     $totaltheta += $MergeSet[$i]['score'];
-                    $totaltheta = number_format($totaltheta/$totalscore,4);
+                    $totaltheta = number_format(($coef*$totaltheta)/$totalscore,4);
                 }                
             }                        
         }
         
         if(count($theta) > 0){
             $bonds['THETA'] = $theta;
-            $bonds['THETA']['TOTAL'] = $totaltheta;
+            $bonds['THETA']['TOTAL'] = $coef*$totaltheta;
         }
         
         return $bonds;
