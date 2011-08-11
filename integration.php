@@ -278,7 +278,10 @@
             $totalscore += $bonds[$i]['score'];
         }
         
-        if($totalscore > 0){
+        //if($totalscore > 0){
+        //changed to > 1.0 here to only normalize scores that exceed one.
+        //When > 0 and only one bond is found, its score is increased mistakenly
+        if($totalscore > 1.0){
             for($i=0;$i<$count;$i++){
                 $bonds[$i]['score'] = number_format($bonds[$i]['score']/$totalscore,4);
             }

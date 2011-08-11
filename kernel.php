@@ -460,7 +460,7 @@
 
                             //compute Confirmed Match
                             for($i=0;$i<count($IM);$i++){
-
+                                
                                 //output for debugging
                                 $aDebug[$i]['string'] = '';
                                 $aDebug[$i]['string'] .= '<tr>';
@@ -804,6 +804,10 @@
                                                 $numberBonds[$i]["pp2value"] = $Pvalues[$i]["pp2value"];
                                                 $numberBonds[$i]["ppconfidence"] = $Pvalues[$i]["ppconfidence"];
                                                 $numberBonds[$i]["pp2confidence"] = $Pvalues[$i]["pp2confidence"];
+                                                //information for the weights used in combination rule 4
+                                                $numberBonds[$i]["weightmass"] = number_format($DMS[$IM[$i]["DMS"]]["mass"],1);
+                                                $numberBonds[$i]["weightpp2"] = number_format($Pvalues[$i]["pp2confidence"],1);
+                                                $numberBonds[$i]["weightpeaks"] = $FMSpolynomial['peaks'];
 
                                                 //compute number of by ions and number of other ions types
                                                 $by = 0;
@@ -903,7 +907,7 @@
                                        ((($score) > $threshold2*$ionFactor) && ($numberBonds[$w]['by']+$numberBonds[$w]['others']) >= $minmatches2
                                        && (($numberBonds[$w][$SSbond]/$CMtotal) > $threshold2*$ionFactor))){
                                             //avoid matches with double bonds
-                                            if(count($numberBonds[$w]) == 13 || $numberBonds[$w]['DTA'] == "FT3/Z1129S1.1495.1495.2.dta"){
+                                            if(count($numberBonds[$w]) == 16 || $numberBonds[$w]['DTA'] == "FT3/Z1129S1.1495.1495.2.dta"){
                                                 //Consider a true bond ony if either:
                                                 //1. The bond is not previously found
                                                 //2. If the new bond has higher score than previous
@@ -926,6 +930,9 @@
                                                         $truebonds[$DTA]['cys2'] = substr($SSbond,$dashpos+1);
                                                         $truebonds[$DTA]['DTA'] = $DTA;
                                                         $truebonds[$DTA]['filepath'] = $numberBonds[$w]["filepath"];
+                                                        $truebonds[$DTA]['weightmass'] = $numberBonds[$w]["weightmass"];
+                                                        $truebonds[$DTA]['weightpp2'] = $numberBonds[$w]["weightpp2"];
+                                                        $truebonds[$DTA]['weightpeaks'] = $numberBonds[$w]["weightpeaks"];
 
                                                         if($score < $minimumscore)
                                                             $minimumscore = $score;
@@ -1378,6 +1385,9 @@
                         $data['cys1'] = substr($csps[$i], 0, strpos($csps[$i], "-"));
                         $data['cys2'] = substr($csps[$i], strpos($csps[$i], "-")+1);
                         $data['score'] = number_format($CSPmatch['similarity'],4);
+                        $data['weightD'] = number_format($CSPmatch['divergence'],4);
+                        $data['weightCSPs'] = $CSPmatch['matches'];
+                        
                         //divide score by number of bonds
                         //$data['score'] = number_format($CSPmatch['similarity']/$count,4);
                         $cspbonds[$csps[$i]] = $data;
@@ -1441,6 +1451,8 @@
                                                     $csps, $cspbonds, 
                                                     $custombonds, $cbonds,
                                                     $custom2bonds, $c2bonds);
+                
+                $GlobalBonds = $Func->calculateWeights($GlobalBonds);
                 
                 if($step == 1){
                     $step++;

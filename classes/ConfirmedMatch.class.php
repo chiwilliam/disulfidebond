@@ -492,6 +492,10 @@ class ConfirmedMatchclass {
         }
         */
         
+        //used to calculate the number of peaks with high intensity to
+        //determine the weight used in combination rule 4
+        $peaks = 0;
+        
         $fragments = $Common->generateFragments($peptides,$alliontypes);
 
         $total = count($peptides);
@@ -595,6 +599,9 @@ class ConfirmedMatchclass {
                                     //end debugging
 
                                     $CM[] = $match;
+                                    if($match['intensity'] >= 0.25){
+                                        $peaks++;
+                                    }
                                 }
                         }
                     }
@@ -616,6 +623,14 @@ class ConfirmedMatchclass {
                 $FMS = array_merge($list1, $FMS);
             }
         }
+        
+        $count = count($TML);
+        $total = 0;
+        for($i=0;$i<$count;$i++){
+            if($TML[$i]['intensity'] >= 0.25){
+                $total++;
+            }
+        }        
 
         unset($list1);
         unset($list2);
@@ -627,6 +642,15 @@ class ConfirmedMatchclass {
 
         $result['FMS'] = $FMS;
         $result['CM'] = $CM;
+        if($total > 0){
+            $result['peaks'] = $peaks/$total;
+            if($result['peaks'] > 1.0){
+                $result['peaks'] = 1.0;
+            }
+        }
+        else{
+            $result['peaks'] = "1.0";
+        }
 
         return $result;
 

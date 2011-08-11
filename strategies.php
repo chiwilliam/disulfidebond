@@ -264,7 +264,8 @@
                                                 if(!isset($score)){
                                                     $score = 0.0;
                                                 }
-                                                $coef = 1.0;
+                                                //$coef = 1.0;
+                                                $coef = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['weight'],2);
                                                 $inputscore = 'score_'.$keys[$i].'_'.$methodkeys[$j];
                                                 $inputcoef = 'coef_'.$keys[$i].'_'.$methodkeys[$j];
                                                 if(strlen($info) > 0){
