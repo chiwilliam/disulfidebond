@@ -632,6 +632,7 @@
         unset($proteinDB);
         unset($CSPs);
 
+        $CSPmatch['divergence'] = $CSPmatch['CSPdelta'];
         $CSPmatch['similarity'] = calculateSimilarity($CSPmatch['CSPdelta']);
         
         return $CSPmatch;
@@ -731,6 +732,19 @@
         
         $CSPmatch = filterCSPMatches2($CSPmatches);
         unset($CSPmatches);
+        $i = $CSPmatch['index'];
+        
+        $matches = 0;
+        $CSPmax = 20;
+        for($j=0;$j<$countDB;$j++){
+            if(count($CSPs[$i]['CSP']) == count($proteinDB[$j]['CSP'])){
+                $CSPd = getCSPDivergence($CSPs[$i]['CSP'],$proteinDB[$j]['CSP'],$CSPmin);
+                if($CSPd <= $CSPmax){
+                    $matches++;
+                }
+            }            
+        }
+        $CSPmatch['matches'] = $matches;
         
         return $CSPmatch;
     }
@@ -750,6 +764,7 @@
             }
         }
         $match = $CSPmatches[$index];
+        $match['index'] = $index;
         
         return $match;
         

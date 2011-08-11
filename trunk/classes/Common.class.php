@@ -1255,6 +1255,70 @@ class Commonclass {
         
         return $global;        
     }
+    
+    public function calculateWeights($GlobalBonds){
+        
+        $methods = array_keys($GlobalBonds);
+        $count = count($methods);
+        for($i=0;$i<$count;$i++){
+            if(count($GlobalBonds[$methods[$i]]['bonds']) > 0){
+                $bonds = $GlobalBonds[$methods[$i]]['bonds'];
+                for($j=0;$j<count($bonds);$j++){
+                    switch($methods[$i]){
+                        case "MSMS":
+                            $weight = 1.0;
+                            $mass = $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightmass'];
+                            $mass = str_replace(",", "", $mass);
+                            $mass = substr($mass, 0, strpos($mass, "."));
+                            $mass = ((int)($mass));
+                            $pp2 = (float)$GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightpp2'];
+                            $peaks = $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightpeaks'];
+                            if($mass > 4000){
+                                $weight -= 0.10;
+                            }
+                            if($pp2 < 50){
+                                $weight -= 0.20;
+                            }
+                            if($peaks < 0.8 && $peaks > 0.5){
+                                $weight -= 0.10;
+                            }
+                            if($peaks < 0.5){
+                                $weight -= 0.20;
+                            }
+                            $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weight'] = $weight;
+                            break;
+                        case "SVM":
+                            $weight = $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['score'];
+                            if($weight < 0.9 && $weight > 0.5){
+                                $weight = $weight/1.5;
+                            }
+                            if($weight < 0.5){
+                                $weight = $weight/3;
+                            }
+                            $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weight'] = $weight;
+                            break;
+                        case "CSP":
+                            $weight = 1.0;
+                            $D = (float)$GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightD'];
+                            $matches = (int)$GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightCSPs'];
+                            if($D > 10){
+                                $weight -= $D/100;
+                            }
+                            if($matches == 0){
+                                $weight -= 0.25;
+                            }
+                            if($matches == 1){
+                                $weight -= 0.10;
+                            }
+                            $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weight'] = $weight;
+                            break;
+                    }
+                }
+            }
+        }
+        
+        return $GlobalBonds;
+    }
 
 }
 ?>
