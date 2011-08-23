@@ -153,23 +153,6 @@
                                                 <?php if(!isset($alliontypes['z']) || strlen($alliontypes['z']) > 0) echo "checked";?> />
                                         </td>
                                     </tr>
-                                    <!--
-                                    <tr class="input">
-                                        <td class="inputleft">
-                                            <label>Multi-ion types selection:</label>
-                                        </td>
-                                        <td class="inputright">
-                                            <select id="ions" name="ions"
-                                                    onmouseover="Tip('Select which ion types will be considered in the analysis')"
-                                                    onmouseout="UnTip()">
-                                                <option <?php //if(!isset($alliontypes)){$alliontypes = "all";} if($alliontypes == "all"){echo "selected";} ?> value="all">a b bo b* c x y yo y* z</option>
-                                                <option <?php //if(!isset($alliontypes)){$alliontypes = "all";} if($alliontypes == "by"){echo "selected";} ?> value="by">b and y </option>
-                                                <option <?php //if(!isset($alliontypes)){$alliontypes = "all";} if($alliontypes == "aby+"){echo "selected";} ?> value="aby+">a b bo b* y yo y*</option>
-                                                <option <?php //if(!isset($alliontypes)){$alliontypes = "all";} if($alliontypes == "cxz"){echo "selected";} ?> value="cxz">c x and z</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    -->
                                     <tr class="input">
                                         <td class="inputleft">
                                             <label>Number of missing cleavages:</label>
@@ -184,6 +167,15 @@
                                                 <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "2"){echo "selected";} ?> value="2">2</option>
                                                 <option <?php if(!isset($missingcleavages)){$missingcleavages = "-1";} if($missingcleavages == "3"){echo "selected";} ?> value="3">3</option>
                                             </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="input">
+                                        <td class="inputleft">Initial Matching threshold:</td>
+                                        <td class="inputright">
+                                            <input type="text" id="IMthreshold" name="IMthreshold" size="5" value="<?php if (isset($IMthreshold)) {echo $IMthreshold;}else {echo '1.0';} ?>"
+                                                   onmouseover="Tip('Threshold used during the matching between precursor ions and disulfide bonded structures')"
+                                                   onmouseout="UnTip()"></input>
+                                            <span style="color:red;font-size:10px;">(default: +-1.0)</span>
                                         </td>
                                     </tr>
                                 </table>
