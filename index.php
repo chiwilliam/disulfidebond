@@ -96,23 +96,13 @@
                                 disulfide connectivity. The methods' combination can be performed using four different rules, also 
                                 fully controlled by the user. The different combination rules/options aim to improve the quality and 
                                 accuracy of the results. A through description of each combination rule is presented in the 
-                                <a target="_blank" href="help.php">help</a> section.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="justified">                               
-                                <p>
-                                    If you are not familiar with MS2DB++, check the demo video
-                                    below to get started <i>(best video quality: 720p HD and full screen)</i> or click 
-                                        <a target="_blank" href="videos/ms2db++_demo.wmv">here</a>
-                                    to download/access the video directly. The most up-to-date source code is available 
-                                        <a target="_blank" href="http://code.google.com/p/disulfidebond/source/checkout">here</a>.                                    
-				</p>
+                                <a target="_blank" href="help.php">help</a> section. The most up-to-date source code is available
+                                <a target="_blank" href="http://code.google.com/p/disulfidebond/source/checkout">here</a>.
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" class="centered">
-                                <!-- Youtube tutorial vide -->
+                                <!-- Youtube tutorial video -->
                                 <p>
                                     
                                 </p>
