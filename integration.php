@@ -452,21 +452,21 @@
                         }                        
                     }
                     if(isset($theta[$key])){
-                        $theta[$key]['score'] += $MergeSet[$i]['score'];
+                        $theta[$key]['score'] += number_format(($coef*$MergeSet[$i]['score'])/$totalscore,4);
                     }
                     else{
                         $theta[$key]['bonds'] = $MergeSet[$i]['bonds'];
-                        $theta[$key]['score'] = $MergeSet[$i]['score'];
+                        $theta[$key]['score'] = number_format(($coef*$MergeSet[$i]['score'])/$totalscore,4);
                     }
-                    $totaltheta += $MergeSet[$i]['score'];
-                    $totaltheta = number_format(($coef*$totaltheta)/$totalscore,4);
+                    
+                    $totaltheta += number_format(($coef*$MergeSet[$i]['score'])/$totalscore,4);
                 }                
             }                        
         }
-        
+                
         if(count($theta) > 0){
             $bonds['THETA'] = $theta;
-            $bonds['THETA']['TOTAL'] = $coef*$totaltheta;
+            $bonds['THETA']['TOTAL'] = $totaltheta;
         }
         
         return $bonds;

@@ -177,13 +177,19 @@
                                         an empty set.
                                     </li>
                                     <li>
+                                        multiplied by
+                                    </li>
+                                    <li>
+                                        <i>I</i>, which is 1 divided by the summation of the product of the scores of bonding patterns
+                                        <i>B</i> and <i>C</i>, respectively obtained by disulfide bond determination methods
+                                        <i>m<sub>1</sub></i> and <i>m<sub>2</sub></i>, when the intersection between <i>B</i> and <i>C</i>
+                                        is not an empty set.
+                                    </li>
+                                    <li>
                                         divided by
                                     </li>
                                     <li>
-                                        1 plus the logarithm (base 10) of 1 divided by  
-                                        the summation of the product of the scores of bonding patterns <i>B</i> and <i>C</i>, respectively 
-                                        obtained by disulfide bond determination methods <i>m<sub>1</sub></i> and <i>m<sub>2</sub></i>, when
-                                        the intersection between <i>B</i> and <i>C</i> is not an empty set.
+                                        1 plus the logarithm (base 10) of <i>I</i>.
                                     </li>
                                 </ul>
                                 <p>

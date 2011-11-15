@@ -19,23 +19,29 @@
                         methods (for simplicity), the score of a disulfide bond pattern <i>A</i> is:
                         <ul>
                             <li>
-                                the summation of the product of the scores of bonding patterns <i>B</i> and <i>C</i>, respectively 
+                                the summation of the product of the scores of bonding patterns <i>B</i> and <i>C</i>, respectively
                                 obtained by disulfide bond determination methods <i>m<sub>1</sub></i> and <i>m<sub>2</sub></i>, when
-                                the intersection between <i>B</i> and <i>C</i> equals to <i>A</i> and bonding pattern <i>A</i> is not 
+                                the intersection between <i>B</i> and <i>C</i> equals to <i>A</i> and bonding pattern <i>A</i> is not
                                 an empty set.
+                            </li>
+                            <li>
+                                multiplied by
+                            </li>
+                            <li>
+                                <i>I</i>, which is 1 divided by the summation of the product of the scores of bonding patterns
+                                <i>B</i> and <i>C</i>, respectively obtained by disulfide bond determination methods
+                                <i>m<sub>1</sub></i> and <i>m<sub>2</sub></i>, when the intersection between <i>B</i> and <i>C</i>
+                                is not an empty set.
                             </li>
                             <li>
                                 divided by
                             </li>
                             <li>
-                                1 plus the logarithm (base 10) of 1 divided by  
-                                the summation of the product of the scores of bonding patterns <i>B</i> and <i>C</i>, respectively 
-                                obtained by disulfide bond determination methods <i>m<sub>1</sub></i> and <i>m<sub>2</sub></i>, when
-                                the intersection between <i>B</i> and <i>C</i> is not an empty set.
+                                1 plus the logarithm (base 10) of <i>I</i>.
                             </li>
                         </ul>
                         <p>
-                            The formula used to combine disulfide bonds scores according to rule 1 is presented below. 
+                            The formula used to combine disulfide bonds scores according to rule 1 is presented below.
                             This combination formula is commutative and associative; thus, other disulfide bond determination
                             methods (and their scores) can be easily added.
                         </p>
