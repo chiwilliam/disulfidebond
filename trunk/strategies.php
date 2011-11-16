@@ -243,7 +243,7 @@
                                             echo '<tr class="results">';
                                             $bondlabel = "";
                                             if(isset($data['MSMS']['scores'][$keys[$i]])){
-                                                $bondlabel = '<td class="bonds"><a class="bonds" href="'.$data['MSMS']['scores'][$keys[$i]]['filepath'].'" target="_blank">'.$keys[$i].'</a></td>';
+                                                $bondlabel = '<td class="bonds"><a onmouseout="UnTip()" onmouseover="Tip(\'PP2 score: '.number_format($data['MSMS']['scores'][$keys[$i]]['pp2value'],0).' (The pp2 score evaluates whether the total abundance (intensity) of confirmatory matches could be a random).\')" class="bonds" href="'.$data['MSMS']['scores'][$keys[$i]]['filepath'].'" target="_blank">'.$keys[$i].'</a></td>';
                                             }
                                             else{
                                                 $bondlabel = '<td class="bonds"><label class="bonds">'.$keys[$i].'</label></td>';
