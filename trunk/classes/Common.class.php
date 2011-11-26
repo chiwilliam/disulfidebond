@@ -1338,6 +1338,7 @@ class Commonclass {
                             $mass = ((int)($mass));
                             $pp2 = (float)$GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightpp2'];
                             $peaks = $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightpeaks'];
+                            $data = "Precursor mass: ".$mass."; pp2 value: ".$pp2."; % matched peaks with I > 0.25: ".$peaks;
                             if($mass > 4000){
                                 $weight -= 0.10;
                             }
@@ -1347,35 +1348,46 @@ class Commonclass {
                             if($peaks < 0.8 && $peaks > 0.5){
                                 $weight -= 0.10;
                             }
-                            if($peaks < 0.5){
-                                $weight -= 0.20;
+                            else{
+                                if($peaks < 0.5){
+                                    $weight -= 0.20;
+                                }
                             }
                             $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weight'] = $weight;
+                            $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightdata'] = $data;
                             break;
                         case "SVM":
                             $weight = $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['score'];
-                            if($weight < 0.9 && $weight > 0.5){
-                                $weight = $weight/1.5;
-                            }
-                            if($weight < 0.5){
-                                $weight = $weight/3;
+                            $data = "Score/weight: ".$weight;
+                            switch($weight){
+                                case ($weight < 0.9 && $weight > 0.5):
+                                    $weight = $weight/1.5;
+                                    break;
+                                case ($weight < 0.5):
+                                    $weight = $weight/3;
+                                    break;
                             }
                             $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weight'] = $weight;
+                            $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightdata'] = $data;
                             break;
                         case "CSP":
                             $weight = 1.0;
                             $D = (float)$GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightD'];
                             $matches = (int)$GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightCSPs'];
+                            $data = "Divergence: ".$D."; CSP matches with lowest score: ".$matches;
                             if($D > 10){
                                 $weight -= $D/100;
                             }
                             if($matches == 0){
                                 $weight -= 0.25;
                             }
-                            if($matches == 1){
-                                $weight -= 0.10;
+                            else{
+                                if($matches == 1){
+                                    $weight -= 0.10;
+                                }
                             }
                             $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weight'] = $weight;
+                            $GlobalBonds[$methods[$i]]['scores'][$bonds[$j]]['weightdata'] = $data;
                             break;
                     }
                 }

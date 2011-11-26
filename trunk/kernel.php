@@ -1452,8 +1452,15 @@
                                                     $csps, $cspbonds, 
                                                     $custombonds, $cbonds,
                                                     $custom2bonds, $c2bonds);
-                
+
+                //calculate weights based on the intrinsic data for each bond
+                //according to each method selected
+                //This weight will be automatically assigned to the weight field
+                //when combination rule 4 is selected
                 $GlobalBonds = $Func->calculateWeights($GlobalBonds);
+
+                $scores = serializeInitialScores($GlobalBonds);
+                $_SESSION['initialScores'] = $scores;
                 
                 if($step == 1){
                     $step++;

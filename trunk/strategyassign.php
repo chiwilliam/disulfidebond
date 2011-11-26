@@ -83,6 +83,7 @@
         
         $TXTFile = getTextFile($GlobalSScomb,$root);
         $XMLFile = getXMLFile($GlobalSScomb,$root);
+        $DebugFile = formXMLDebug($root);
 
         $step++;
         $_SESSION['step'] = $step;

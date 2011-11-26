@@ -54,6 +54,9 @@
                             or
                             <a href="<?php echo $XMLFile; ?>" target="_blank">XML</a>                            
                         </p>
+                        <p class="files">
+                            **Intermediary scores: <a href="<?php echo $DebugFile; ?>" target="_blank">XML</a>
+                        </p>
                     </div>
                     <div id="graphdiv" class="graph">                            
                     </div>
