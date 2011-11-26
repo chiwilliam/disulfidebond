@@ -549,29 +549,39 @@
             if(count($CUSTOM2bonds) > 0){
                 $CUSTOM2set = assignScoresToPowerSet($BaseSet,$CUSTOM2bonds);
             }
+
+            $methods = array();
             
             //normalize all scores such that their sum is 1
             if(count($MSMSset) > 0){
                 $MSMSset = normalizeScore($MSMSset);
                 $Sets[] = $MSMSset;
+                $methods['MSMS'] = $MSMSset;
             }
             if(count($SVMset) > 0){
                 $SVMset = normalizeScore($SVMset);
                 $Sets[] = $SVMset;
+                $methods['SVM'] = $SVMset;
             }
             if(count($CSPset) > 0){
                 $CSPset = normalizeScore($CSPset);
                 $Sets[] = $CSPset;
+                $methods['CSP'] = $CSPset;
             }
             if(count($CUSTOMset) > 0){
                 $CUSTOMset = normalizeScore($CUSTOMset);
                 $Sets[] = $CUSTOMset;
+                $methods['CUSTOM'] = $CUSTOMset;
             }
             if(count($CUSTOM2set) > 0){
                 $CUSTOM2set = normalizeScore($CUSTOM2set);
                 $Sets[] = $CUSTOM2set;
+                $methods['CUSTOM2'] = $CUSTOM2set;
             }
-            
+
+            $scores = serializeMFunctionScores($methods);
+            unset($methods);
+            $_SESSION['mFunctionScores'] = $scores;
             
             //merge scores from each method
             //does the intersection (multiplication) operation (matrix)
@@ -655,6 +665,7 @@
         $M5bonds = array();
         $M5bondsPower = array();
 
+        //Get Bonds and their respective scores and adds to MXbonds arrays.
         if(count($GlobalBonds['MSMS']['bonds']) > 0){
             $MSMSscoreSelection = 'ppvalue';
             $M1bonds = $Func->getFormattedBonds($GlobalBonds['MSMS']['scores'],$MSMSscoreSelection);
@@ -672,6 +683,7 @@
             $M5bonds = $Func->getFormattedBonds($GlobalBonds['CUSTOM2']['scores'],"score");
         }
 
+        //Get Bonds and their respective scores and adds to MXbonds arrays.
         $normalize = false;
         if(count($M1bonds) > 0){
             $M1bondsPower = $Func->getBondsForPowerSet($M1bonds,$GlobalBonds['MSMS']['bonds'],$normalize);
@@ -689,10 +701,120 @@
             $M5bondsPower = $Func->getBondsForPowerSet($M5bonds,$GlobalBonds['CUSTOM2']['bonds'],$normalize);
         }
 
+        //list all initial scores according to each method
+        $tmparray = array("MSMS" => $M1bondsPower, "SVM" => $M2bondsPower, "CSP" => $M3bondsPower, "CUSTOM" => $M4bondsPower, "CUSTOM2" => $M5bondsPower);
+        $scores = serializeWeightedScores($tmparray);
+        unset($tmparray);
+        $_SESSION['weightedScores'] = $scores;
+
         $GlobalSScomb = integrateGlobalBondsPowerSet($combStrategy, $M1bondsPower, $M2bondsPower, $M3bondsPower, $M4bondsPower, $M5bondsPower);
         
         return $GlobalSScomb;
 
+    }
+
+    function serializeInitialScores($methods){
+
+        $string = "<methods>";
+
+        $countmethods = count($methods);
+        $keys = array_keys($methods);
+        for($i=0;$i<$countmethods;$i++){
+            $string .= "<method>";
+            $string .= "<name>".$keys[$i]."</name>";
+            $count = count($methods[$keys[$i]]['scores']);
+            if($count > 0){
+                $bonds = array_keys($methods[$keys[$i]]['scores']);
+                $string .= "<bonds>";
+                for($j=0;$j<$count;$j++){
+                    $string .= "<bond>";
+                    $string .= "<cysteines>".$bonds[$j]."</cysteines>";
+                    if($keys[$i] == "MSMS"){
+                        $string .= "<score>".$methods[$keys[$i]]['scores'][$bonds[$j]]['ppvalue']."</score>";
+                    }
+                    else{
+                        $string .= "<score>".$methods[$keys[$i]]['scores'][$bonds[$j]]['score']."</score>";
+                    }
+                    $string .= "</bond>";
+                }
+                $string .= "</bonds>";
+            }
+            else{
+                $string .= "<bonds></bonds>";
+            }
+            $string .= "</method>";
+        }
+
+        $string .= "</methods>";
+
+        return $string;
+    }
+
+    function serializeWeightedScores($methods){
+
+        $string = "<methods>";
+
+        $countmethods = count($methods);
+        $keys = array_keys($methods);
+        for($i=0;$i<$countmethods;$i++){
+            $string .= "<method>";
+            $string .= "<name>".$keys[$i]."</name>";
+            $count = count($methods[$keys[$i]]);
+            $bonds = array_keys($methods[$keys[$i]]);
+            $string .= "<bonds>";
+            for($j=0;$j<$count;$j++){
+                $string .= "<bond>";
+                $string .= "<cysteines>".$bonds[$j]."</cysteines>";
+                $string .= "<score>".$methods[$keys[$i]][$bonds[$j]]['score']."</score>";
+                $string .= "</bond>";
+            }
+            $string .= "</bonds>";
+            $string .= "</method>";
+        }        
+
+        $string .= "</methods>";
+
+        return $string;
+    }
+    
+    function serializeMFunctionScores($methods){
+
+        $string = "<methods>";
+
+        $countmethods = count($methods);
+        $keys = array_keys($methods);
+        for($i=0;$i<$countmethods;$i++){
+            $string .= "<method>";
+            $string .= "<name>".$keys[$i]."</name>";
+            $count = count($methods[$keys[$i]]);
+            if($count > 0){
+                $string .= "<bonds>";
+                for($j=0;$j<$count;$j++){
+                    if($methods[$keys[$i]][$j]['score'] > 0.001){
+                        $string .= "<bond>";
+                        $bond = "";
+                        for($k=0;$k<count($methods[$keys[$i]][$j]['bonds']);$k++){
+                            if($k > 0){
+                                $bond .= " // ";
+                            }
+                            $bond .= $methods[$keys[$i]][$j]['bonds'][$k];
+                        }
+                        $string .= "<cysteines>".$bond."</cysteines>";
+                        $string .= "<score>".$methods[$keys[$i]][$j]['score']."</score>";
+                        $string .= "</bond>";
+                    }
+                }
+                $string .= "</bonds>";
+            }
+            else{
+                $string .= "<bonds></bonds>";
+            }
+            $string .= "</method>";
+        }
+
+        $string .= "</methods>";
+
+        return $string;
     }
     
     function getResults($GlobalSScomb,$root,$fastaProtein){
@@ -943,6 +1065,40 @@
         
         file_put_contents($filepath, $xml);
         
+        return $path;
+    }
+
+    function formXMLDebug($root){
+
+        $file = ((string)(rand(100000, 999999)));
+        $file .= ".xml";
+
+        $path = $_SERVER['HTTP_REFERER'];
+        $path = substr($path, 0, strpos($path, '++')+3);
+        $path .= "DTA/";
+        $path .= $file;
+
+        $filepath = $root.'/DTA/'.$file;
+
+        $xml = "<connectivity>";
+        $xml .= "<steps>";
+        $xml .= "<step>";
+        $xml .= "<name>INITIAL/METHOD SCORES</name>";
+        $xml .= "<data>".$_SESSION[initialScores]."</data>";
+        $xml .= "</step>";
+        $xml .= "<step>";
+        $xml .= "<name>WEIGHTED SCORES</name>";
+        $xml .= "<data>".$_SESSION[weightedScores]."</data>";
+        $xml .= "</step>";
+        $xml .= "<step>";
+        $xml .= "<name>M() FUNCTION SCORES</name>";
+        $xml .= "<data>".$_SESSION[mFunctionScores]."</data>";
+        $xml .= "</step>";
+        $xml .= "</steps>";
+        $xml .= "</connectivity>";
+
+        file_put_contents($filepath, $xml);
+
         return $path;
     }
 
