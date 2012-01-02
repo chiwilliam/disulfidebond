@@ -1029,8 +1029,10 @@
             $txt .= "Bonds:";
             $list = array_keys($bonds[$keys[$i]]);
             for($j=0;$j<count($list);$j++){
-                $txt .= $list[$j].",";
-                $txt .= "score:".$bonds[$keys[$i]][$list[$j]]['score']."; ";
+                if($list[$j] != "THETA"){
+                    $txt .= $list[$j].",";
+                    $txt .= "score:".$bonds[$keys[$i]][$list[$j]]['score']."; ";
+                }
             }
             $txt .= "***** ";
         }
@@ -1061,8 +1063,10 @@
             $xml .= "<bonds>";
             $list = array_keys($bonds[$keys[$i]]);
             for($j=0;$j<count($list);$j++){
-                $xml .= "<bond>".$list[$j]."</bond>";
-                $xml .= "<score>".$bonds[$keys[$i]][$list[$j]]['score']."</score>";
+                if($list[$j] != "THETA"){
+                    $xml .= "<bond>".$list[$j]."</bond>";
+                    $xml .= "<score>".$bonds[$keys[$i]][$list[$j]]['score']."</score>";
+                }
             }
             $xml .= "</bonds>";
             $xml .= "</combination_rule>";
