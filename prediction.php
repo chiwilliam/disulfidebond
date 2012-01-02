@@ -655,36 +655,42 @@
                 }
             }
         }
+        unset($cys);
         
         $possiblebonds = array();
         for($i=0;$i<$count;$i++){
             $possiblebonds[] = $bonds[$i]['BOND'];
         }
-        
-        for($w=3;$w<=$countBonds;$w++){
-            $count = count($cspbonds);
-            $tmpcspbonds = $cspbonds;
-            unset($cspbonds);
-            $cspbonds = array();
-            $count2 = count($possiblebonds);
-            for($i=0;$i<$count;$i++){
-                $cys = array();
-                $tmpcount = count($tmpcspbonds[$i]);
-                for($k=0;$k<$tmpcount;$k++){
-                    $cys[] = substr($tmpcspbonds[$i][$k], 0, strpos($tmpcspbonds[$i][$k], "-"));
-                    $cys[] = substr($tmpcspbonds[$i][$k], strpos($tmpcspbonds[$i][$k], "-")+1);
-                }
-                for($j=0;$j<$count2;$j++){
-                    $cys1 = substr($possiblebonds[$j], 0, strpos($possiblebonds[$j], "-"));
-                    $cys2 = substr($possiblebonds[$j], strpos($possiblebonds[$j], "-")+1);
-                    if(!in_array($cys1, $cys) && !in_array($cys2, $cys)){
-                        $tmp = $tmpcspbonds[$i];
-                        $tmp[] = $possiblebonds[$j];
-                        $cspbonds[] = $tmp;
+
+        //if allows to run when count is large, an out of memory error occurs.
+        if($count < 300){
+            for($w=3;$w<=$countBonds;$w++){
+                $count = count($cspbonds);
+                $tmpcspbonds = $cspbonds;
+                unset($cspbonds);
+                $cspbonds = array();
+                $count2 = count($possiblebonds);
+                for($i=0;$i<$count;$i++){
+                    unset($cys);
+                    $cys = array();
+                    $tmpcount = count($tmpcspbonds[$i]);
+                    for($k=0;$k<$tmpcount;$k++){
+                        $cys[] = substr($tmpcspbonds[$i][$k], 0, strpos($tmpcspbonds[$i][$k], "-"));
+                        $cys[] = substr($tmpcspbonds[$i][$k], strpos($tmpcspbonds[$i][$k], "-")+1);
+                    }
+                    for($j=0;$j<$count2;$j++){
+                        $cys1 = substr($possiblebonds[$j], 0, strpos($possiblebonds[$j], "-"));
+                        $cys2 = substr($possiblebonds[$j], strpos($possiblebonds[$j], "-")+1);
+                        if(!in_array($cys1, $cys) && !in_array($cys2, $cys)){
+                            $tmp = $tmpcspbonds[$i];
+                            $tmp[] = $possiblebonds[$j];
+                            $cspbonds[] = $tmp;
+                            unset($tmp);
+                        }
                     }
                 }
+                unset($tmpcspbonds);
             }
-            unset($tmpcspbonds);
         }
         
         return $cspbonds;

@@ -1374,9 +1374,29 @@
                         $countBonds = $tmp;
                     }
                 }
-                if($countBonds > 0){
+                if($CSP != ""){
                     $protein = formatProtein($fastaProtein, $transmembranefrom, $transmembraneto);
-                    $CSPmatch = runCSPmethodAlone($protein, $countBonds, $root);
+
+                    if($countBonds > 0){
+                        $CSPmatch = runCSPmethodAlone($protein, $countBonds, $root);
+                    }
+                    else{
+                        $D = -1;
+                        for($q=4;$q>0;$q--){
+                            $CSPmatchTmp = runCSPmethodAlone($protein, $q, $root);
+                            if($D < 0){
+                                $D = $CSPmatchTmp['divergence'];
+                                $CSPmatch = $CSPmatchTmp;
+                            }
+                            else{
+                                $D = $CSPmatchTmp['divergence'];
+                                if($D < $CSPmatch['divergence']){
+                                    $CSPmatch = $CSPmatchTmp;
+                                }
+                            }
+                        }
+                    }                    
+
                     $csps = $CSPmatch['BONDS'];
                     unset($csps['CSP']);
                     $count = count($csps);

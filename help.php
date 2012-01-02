@@ -35,6 +35,9 @@
                             <td class="list">
                                 <ol>
                                     <li class="spacing">
+                                        <a href="#Usage">MS2DB++ Usage</a>
+                                    </li>
+                                    <li class="spacing">
                                         <a href="#Introduction">Introduction to Combination Rules</a>
                                     </li>
                                     <li class="spacing">
@@ -50,6 +53,83 @@
                                         <a href="#Strategy4">Combination Rule 4</a>
                                     </li>
                                 </ol>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h4><a name="Usage"></a>MS2DB++ Usage</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="justified">
+                                <p>
+                                    The disulfide bond determination process, available under the
+                                    section <i>Find Disulfide Connectivity</i>, is divided into four
+                                    separate steps:
+                                    <ol>
+                                        <li>
+                                            Method Selection and Data Entry
+                                        </li>
+                                        <li>
+                                            Reliability Assignment
+                                        </li>
+                                        <li>
+                                            Combination Strategies
+                                        </li>
+                                        <li>
+                                            Global Connectivity
+                                        </li>
+                                    </ol>
+                                </p>
+                                <p>
+                                    <b>1. Method Selection and Data Entry</b><br></br>
+                                    In this initial stage, the user can:
+                                    <ul>
+                                        <li>select the different S-S bond determination frameworks available</li>
+                                        <li>enter the protein's FASTA sequence</li>
+                                        <li>specify a region where S-S bonds are not expected to occur <i>(optional)</i></li>
+                                        <li>if the MS2DB+ framework is selected, the user will be able to upload the MS/MS files,
+                                            choose the protease used during digestion, choose the number of
+                                            missing cleavage sites, and optionally set the Initial match threshold</li>
+                                        <li>if external frameworks are selected, the user will be able to enter the S-S connectivity information</li>
+                                    </ul>
+                                    Once all the data has been entered, the NEXT buttons should be clicked to move to the next step.
+                                </p>
+                                <p>
+                                    <b>2. Reliability Assignment</b><br></br>
+                                    In this step, the putative bonds determined by each framework selected are listed. Reliability scores
+                                    are provided by each disulfide bond identified. Initially, all reliability scores are set to 1.0
+                                    (maximum value). Optionally, the user is able to tweak (decrease) these scores based on his/her experience.
+                                    Some of the facts to consider while decreasing the reliability scores include:
+                                    <ul>
+                                        <li>technical knowledge of the protein sequence/structure</li>
+                                        <li>disulfide bond determination framework</li>
+                                        <li>analysis of the MS/MS data involved in the bond identification</li>
+                                    </ul>
+                                    Links to the MS/MS file(s) involved in the disulfide linkage identified by the MS2DB+ framework are provided.
+                                    The MS/MS files can be accessed by clicking on the corresponding disulfide bond.
+                                    <br></br>
+                                    The next step (available when the user clicks on NEXT) is to select the combination rules based on the
+                                    Dempster-Shafer theory (DST).
+                                </p>
+                                <p>
+                                    <b>3. Combination Strategies</b><br></br>
+                                    In this step, the user can choose from different combination rules to determine the global disulfide
+                                    connectivity pattern. Each combination rule has its advantages, thus aiding in the user analysis and
+                                    improving the quality of the results. At least one combination rule is required. The user may want to
+                                    choose any or all of them. Please check the subsequent <a href="#Introduction">sections</a> in this 
+                                    page for a more detailed description of each combination rule.
+                                </p>
+                                <p>
+                                    <b>4. Global Connectivity</b><br></br>
+                                    In this final stage, the global (consistent) disulfide connectivity, obtained using each combination
+                                    rule selected in the previous step, are presented in both graphical and text formats. A confidence
+                                    score is also assigned to each disulfide bond found.
+                                    <br></br>
+                                    All results displayed are available for downloads in TXT and XML formats. The intermediary scores
+                                    calculated by the different frameworks and used during the information fusion are also available for
+                                    downloads in XML format at the bottom of the page.
+                                </p>
                             </td>
                         </tr>
                         <tr>

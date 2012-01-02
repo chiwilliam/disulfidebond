@@ -7,7 +7,7 @@
     
     require_once $root."/classes/Common.class.php";
     include 'integration.php';
-    
+
     //account for coefficients
     $methods = array_keys($GlobalBonds);
     $count = count($methods);
