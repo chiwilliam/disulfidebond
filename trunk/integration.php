@@ -582,7 +582,10 @@
             $scores = serializeMFunctionScores($methods);
             unset($methods);
             $_SESSION['mFunctionScores'] = $scores;
-            
+
+            //used to bump up the score values
+            $Sets = BumpScores($Sets);
+
             //merge scores from each method
             //does the intersection (multiplication) operation (matrix)
             $MergeSet = getGlobalMergedSet($Sets);
@@ -608,6 +611,10 @@
             if($strategy['6']){
                 //$bonds['6'] = calculateScore("6",$MergeSet);
             }
+
+            //used to normalize the score after bumping up the scores
+            //using the function BumpScores()
+            $bonds = NormalizeAfterBumpScores($bonds);
             
             return $bonds;
     }
@@ -1100,6 +1107,79 @@
         file_put_contents($filepath, $xml);
 
         return $path;
+    }
+
+    function BumpScores($Sets){
+
+        $newSet = $Sets;
+
+        //check each framework set of results
+        //for each method, get maximum score and then factor
+        //get minimum factor of all methods
+        for($i=0;$i<count($Sets);$i++){
+            //get highest score and sum of scores
+            $maxscore = 0.0;
+            $minfactor = 1000.0;
+            for($j=0;$j<count($Sets[$i]);$j++){
+                $bondscore = ((float)($Sets[$i][$j]['score']));
+                if($bondscore > $maxscore){
+                    $maxscore = $bondscore;
+                }
+            }
+            $factor = 1.0/$maxscore;
+            if($factor < $minfactor){
+                $minfactor = $factor;
+            }            
+        }
+        //if minimum factor exceeds 2, set factor to 2
+        $factor = $minfactor;
+        if($factor > 2.0){
+            $factor = 2.0;
+        }
+        
+        //populate new set with bumped up scores
+        for($i=0;$i<count($Sets);$i++){
+            for($j=0;$j<count($Sets[$i]);$j++){
+                $bondscore = ((float)($Sets[$i][$j]['score']));
+                $bondscore *= $factor;
+                $bondscore = round($bondscore,4,PHP_ROUND_HALF_UP);
+                $newSet[$i][$j]['score'] = ((string)($bondscore));
+            }
+        }
+
+        return $newSet;        
+    }
+
+    function NormalizeAfterBumpScores($bonds){
+
+        $newbonds = array();
+        $newbonds = $bonds;
+
+        //for each combination rule
+        for($i=1;$i<count($bonds);$i++){
+            $keys = array_keys($bonds[$i]);
+            if($keys[count($keys)-1] == "THETA"){
+                unset($keys[count($keys)-1]);
+            }
+            //get maximum score
+            $maxscore = 0.0;
+            for($j=0;$j<count($keys);$j++){
+                $score = ((float)($bonds[$i][$keys[$j]]['score']));
+                if($score > $maxscore){
+                    $maxscore = $score;
+                }
+            }
+            if($maxscore > 1.0){
+                for($j=0;$j<count($keys);$j++){
+                    $score = ((float)($bonds[$i][$keys[$j]]['score']));
+                    $score /= $maxscore;
+                    $score = ((string)(round($score,4,PHP_ROUND_HALF_UP)));
+                    $newbonds[$i][$keys[$j]]['score'] = $score;
+                }
+            }
+        }
+
+        return $newbonds;
     }
 
 ?>

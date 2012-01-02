@@ -43,14 +43,12 @@
                                     in a protein is a crucial problem in contemporary proteomics and structural bioinformatics.
                                 </p>
                                 <p>
-                                    Methods for determining S-S bonds can be broadly grouped into two categories: 
-                                    those that use sequence-level information to predict disulfide bonds, and those based on data 
-                                    from mass spectrometry (MS), crystallography or NMR. Of these two classes of methods, 
-                                    MS-based approaches are especially interesting due to their high accuracy. Furthermore, 
-                                    unlike crystallography or NMR, MS-based disulfide bond determination can be carried out 
-                                    with relatively small quantities of the analytes. Predictive methods based on sequence-level 
-                                    information are known to perform better than MS-based methods when the MS data provides low
-                                    resolution.
+                                    At the state of the art, various methodological frameworks have been proposed for identification of disulfide bonds.
+                                    These include mass spectrometry-based methods, sequence-based predictive approaches, as well as techniques like
+                                    crystallography and NMR. Each of these frameworks has its advantages and disadvantages in terms of applicability,
+                                    throughput, and accuracy. While MS-based methods are highly accurate and increasingly being used, they too have
+                                    limitations. Thus, no single method is guaranteed to work under all conditions. Furthermore, the results from different
+                                    methods may concur or conflict in parts. <b>MS2DB++</b> is designed to address these challenges.
                                 </p>                                
                             </td>
                             <td class="imageatright">
@@ -58,44 +56,51 @@
                                 <img alt="MS2DB++" height="300" src="./images/summary.png" width="464" />
                             </td>
                         </tr>
-                        <!-- For MS2DB+
-                        <tr>
-                            <td colspan="2" class="justified">
-                                <b>MS2DB+</b> is an open-source platform-independent web application that efficiently determines 
-                                the disulfide linkage in proteins based on mass spectrometry data. 
-                                The software can account for multiple ions (a, b, bo, b*, c, x, y, yo, y*, and z) in determining the 
-                                disulfide bonds, yet ensuring that the solution is found in polynomial time.
-                            </td>
-                        </tr>
-                        -->
                         <!-- For MS2DB++ -->
                         <tr>
                             <td colspan="2" class="justified">
-                                <b>MS2DB++</b> is an open-source platform-independent web application that efficiently determines 
-                                the disulfide connectivity in proteins by allowing users to combine a method based on Mass Spectrometry 
-                                data with methods based on machine learning techniques. The combination of different methods is fully 
-                                controlled by the user, enhancing the user experience and improving the final results.                                
+                                <b>MS2DB++</b> is a web application for determining the disulfide connectivity in proteins using an information-fusion
+                                approach based on Dempster-Shafer theory (DST). The software provides different methodological frameworks for determining
+                                S-S bonds and combines the results automatically and rigorously using DST. This fundamentally novel approach allows <b>MS2DB++</b> 
+                                to achieve high sensitivity, specificity and accuracy. It not only outperforms the constituent methods, but also outperforms other 
+                                software in the area, such as MassMatrix, MS2Assign, DISULFIND, and PreCys. <b>MS2DB++</b> also provides an easy to use interface, which
+                                breaks down the disulfide bond determination process into clear, simple steps.
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" class="justified">
                                 <p>
-                                    MS2DB++ uses the framework available in MS2DB+ to determine S-S bonds using Mass Spectrometry data.
-                                    While analyzing tandem MS/MS data, the software can account for multiple ions (a, ao, a*, b, bo, b*, c, x, y, yo, 
-                                    y*, and z) in determining the disulfide bonds, yet ensuring that the solution is found in polynomial time.
-                                    Two other methods based on machine learning techniques to analyze sequence-level information
-                                    are also available in MS2DB++. The first is based on a SVM-classifier and the second method is based on 
-                                    cysteines separation profiles (CSPs).
+                                    The constituent S-S bond determination frameworks encoded as part of <b>MS2DB++</b> include:
+                                    <ul>
+                                        <li>An earlier MS-based method developed by us called <a target="_blank" href="http://haddock2.sfsu.edu/~ms2db/disulfidebond/">MS2DB+</a>.
+                                            <a target="_blank" href="http://haddock2.sfsu.edu/~ms2db/disulfidebond/">MS2DB+</a> identifies,
+                                            in polynomial time, the disulfide linkages in proteins using tandem mass spectrometry data.
+                                            It uses an efficient approximation algorithm which allows the consideration of multiple ion
+                                            types in the analysis of MS/MS data (up to 12 different ion types).
+                                        </li>
+                                        <li>
+                                            A sequence-based predictor using a Support Vector Machine (SVM) classifier.
+                                        </li>
+                                        <li>
+                                            A cysteines separation profiles-based (CSP) search method. This pattern-wise approach seeks to
+                                            match the disulfide connectivity pattern of a protein against a database of CSPs in order to find
+                                            the most resemble pattern. Once the best match is found (lowest divergence between two CSPs), the
+                                            S-S connectivity of the protein is inferred based on the disulfide bonds previously annotated for
+                                            the matched CSP.
+                                        </li>
+                                    </ul>
                                 </p>                                
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" class="justified">
-                                Lastly, MS2DB++ allows the user to enter the bonding pattern found by custom methods, which can be combined 
-                                with the results obtained by the other three methods (MS/MS, SVM, and CSP) to determine a global consistent 
-                                disulfide connectivity. The methods' combination can be performed using four different rules, also 
-                                fully controlled by the user. The different combination rules/options aim to improve the quality and 
-                                accuracy of the results. A through description of each combination rule is presented in the 
+                                <b>MS2DB++</b> also allows users to integrate results from up to two other (arbitrary) external methods. 
+                                Lastly, <b>MS2DB++</b> allows users to enter tandem mass spectrometry data in many different formats (i.e. mzXML,
+                                mzML, mzData or Sequest DTA files). The protein sequence information is entered in the well-established
+                                FASTA format. <b>MS2DB++</b> supports multiple methods of information fusion based on DST. The S-S connectivity
+                                determined using each of these methods is presented to the user in a graphical easy-to-read format. The
+                                results are also made available in TXT and XML formats. A through description of each combination rule
+                                is presented in the
                                 <a target="_blank" href="help.php">help</a> section. The most up-to-date source code is available
                                 <a target="_blank" href="http://code.google.com/p/disulfidebond/source/checkout">here</a>.
                             </td>
