@@ -86,8 +86,8 @@
                                     bonds can be missed for molecules that have multiple S-S bonds or large number of cysteines. Furthermore, the
                                     fragmentation model used in the algorithms for interpreting MS-data can also have limitations causing too few
                                     product ions to be generated/accounted which can lead to errors in bond determination. <b>Thus, at the
-                                        state-of-the-art no single method is guaranteed to work under all conditions. Furthermore, the results from
-                                        different methods may concur or conflict in parts. MS2DB++ is designed to address these challenges.</b>
+                                    state-of-the-art no single method is guaranteed to work under all conditions. Furthermore, the results from
+                                    different methods may concur or conflict in parts. MS2DB++ is designed to address these challenges.</b>
                                 </p>
 
                             </td>
