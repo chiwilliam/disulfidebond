@@ -1047,14 +1047,22 @@
                                 $truebonds[$SS[$w]]['score'] = ((int)(($score/$minmaxMSMS['max'])*100));                       
                             }
 
+                            //patch to fix the issue with the Gabow script. The problem
+                            //is: the external script fails when there are more than 9
+                            //(single digit) vertices
+                            $truebondstmp = array();
+                            $Gabowresults = $Func->sortTruebonds($truebonds);
+                            $truebondstmp = $Gabowresults['graphbonds'];
+                            $bondstmp = $Gabowresults['readybonds'];
+
                             $newgraph = array();
-                            $SS = array_keys($truebonds);
+                            $SS = array_keys($truebondstmp);
                             for($w=0;$w<count($SS);$w++){
 
-                                $cys1 = (string)$truebonds[$SS[$w]]['cys1'];
-                                $cys2 = (string)$truebonds[$SS[$w]]['cys2'];
+                                $cys1 = (string)$truebondstmp[$SS[$w]]['cys1'];
+                                $cys2 = (string)$truebondstmp[$SS[$w]]['cys2'];
 
-                                $counttmp = $truebonds[$SS[$w]]['score']*100;
+                                $counttmp = $truebondstmp[$SS[$w]]['score']*100;
                                 for($z=0;$z<$counttmp;$z++){
                                     $newgraph[$cys1][] = $cys2;
                                     $newgraph[$cys2][] = $cys1;
@@ -1064,12 +1072,17 @@
                             unset($graph);
 
                             //Using Gabow algorithm to solve maximum weighted matching problem
-                            if(count($truebonds) > 0){
+                            if(count($truebondstmp) > 0){
                                 $bonds = $Func->executeGabow($newgraph, $root);
                             }
                             else{
                                 $bonds = array();
                             }
+
+                            unset($truebondstmp);
+
+                            //patch to fix the issue with the Gabow script.
+                            $bonds = $Func->combineTrueBonds($bonds,$bondstmp);
 
                             //Divide score by 100 after Gabow is executed
                             //Scores back to [0, 1] range
@@ -1170,22 +1183,42 @@
                     $minmaxPredictive = $Func->getMinMaxScorePredictive($pbonds);
 
                     unset($newgraph);
+
+                    //patch to fix the issue with the Gabow script. The problem
+                    //is: the external script fails when there are more than 9
+                    //(single digit) vertices
+                    $pbondstmp = array();
+                    $Gabowresults = $Func->sortTruebonds($pbonds);
+                    $pbondstmp = $Gabowresults['graphbonds'];
+                    $bondstmp = $Gabowresults['readybonds'];
+
                     $newgraph = array();
-                    $SS = array_keys($pbonds);
+                    $SS = array_keys($pbondstmp);
                     for($w=0;$w<count($SS);$w++){
 
-                        $cys1 = (string)$pbonds[$SS[$w]]['cys1'];
-                        $cys2 = (string)$pbonds[$SS[$w]]['cys2'];
+                        $cys1 = (string)$pbondstmp[$SS[$w]]['cys1'];
+                        $cys2 = (string)$pbondstmp[$SS[$w]]['cys2'];
 
 
                         //$counttmp = $pbonds[$SS[$w]]['scoreexp'] + $pbonds[$SS[$w]]['similarityexp'];
-                        $counttmp = $pbonds[$SS[$w]]['score']*100 + $pbonds[$SS[$w]]['similarity']*100;
+                        $counttmp = $pbondstmp[$SS[$w]]['score']*100 + $pbondstmp[$SS[$w]]['similarity']*100;
                         for($z=0;$z<$counttmp;$z++){
                             $newgraph[$cys1][] = $cys2;
                             $newgraph[$cys2][] = $cys1;
                         }
                     }
-                    $predictedbonds = $Func->executeGabow($newgraph, $root);
+
+                    if(count($pbondstmp) > 0){
+                        $predictedbonds = $Func->executeGabow($newgraph, $root);
+                    }
+                    else{
+                        $predictedbonds = array();
+                    }
+
+                    unset($pbondstmp);
+                    
+                    //patch to fix the issue with the Gabow script.
+                    $predictedbonds = $Func->combineTrueBonds($predictedbonds,$bondstmp);
                     
                     $tmp = $predictedbonds;
                     unset($predictedbonds);
