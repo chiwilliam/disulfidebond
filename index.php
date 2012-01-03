@@ -37,6 +37,25 @@
                         <tr>
                             <td class="justified">
                                 <p>
+                                    <b>Disulfide (S-S) bonds</b> constitute one of the most important cross-linkages in proteins and have 
+                                    significant influence on the protein structure and function. At the state of the art, various methodological
+                                    frameworks have been proposed for identification of disulfide bonds. These include mass spectrometry-based
+                                    methods, sequence-based predictive approaches, as well as techniques like crystallography and NMR. Each of
+                                    these frameworks has its advantages and disadvantages in terms of applicability, throughput, and accuracy.
+                                </p>
+                                <p>
+                                    For instance, NMR and crystallography require relatively large amounts (10 to 100 mg) of pure protein in a 
+                                    particular solution or crystalline state, can be limited by protein size, and are fundamentally low-throughput.
+                                    Sequence-based predictive models, once developed do not require significant data preparation and can be run in
+                                    high-throughput settings. However, their disadvantage lies in the fact that it may not always be possible to
+                                    obtain an accurate mapping between local or global features and the presence of specific disulfide bonds. For
+                                    sequence-based methods, difficulties can also arise if the test samples have high sequence homology with the
+                                    training set but weaker structural homology.
+                                </p>
+                            </td>
+                            <!--
+                            <td class="justified">
+                                <p>
                                     A <b>disulfide bond (S-S)</b>, also called SS-bond or disulfide bridge, is a single covalent bond formed
                                     from the oxidation of sulfhydryl groups. Disulfide bonds play an important role in understanding protein
                                     folding, evolution, and structural properties. Consequently, determining the disulfide bonding pattern 
@@ -51,9 +70,26 @@
                                     methods may concur or conflict in parts. <b>MS2DB++</b> is designed to address these challenges.
                                 </p>                                
                             </td>
+                            -->
                             <td class="imageatright">
                                 <!--<img alt="" height="300" src="./images/ms2dbp%20picture.jpg" width="464" />-->
                                 <img alt="MS2DB++" height="300" src="./images/summary.png" width="464" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="justified">
+                                <p>
+                                    Finally, mass spectrometry (MS)-based methods can be applied under conditions of either partial reduction or 
+                                    non-reduction of the protein to detect S-S bonds. While MS-based methods are highly accurate and increasingly
+                                    being used, they too have limitations. For instance, ambiguous results can occur under conditions of partial
+                                    reduction if the S-S bonds have similar reduction rates. Under non-reduction conditions on the other hand, S-S
+                                    bonds can be missed for molecules that have multiple S-S bonds or large number of cysteines. Furthermore, the
+                                    fragmentation model used in the algorithms for interpreting MS-data can also have limitations causing too few
+                                    product ions to be generated/accounted which can lead to errors in bond determination. <b>Thus, at the
+                                        state-of-the-art no single method is guaranteed to work under all conditions. Furthermore, the results from
+                                        different methods may concur or conflict in parts. MS2DB++ is designed to address these challenges.</b>
+                                </p>
+
                             </td>
                         </tr>
                         <!-- For MS2DB++ -->
