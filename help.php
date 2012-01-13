@@ -41,16 +41,16 @@
                                         <a href="#Introduction">Introduction to Combination Rules</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy1">Combination Rule 1</a>
+                                        <a href="#Strategy1">Combination Rule 1 (Dempster rule)</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy2">Combination Rule 2</a>
+                                        <a href="#Strategy2">Combination Rule 2 (Campos-Cavalcante rule)</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy3">Combination Rule 3</a>
+                                        <a href="#Strategy3">Combination Rule 3 (Yager rule)</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy4">Combination Rule 4</a>
+                                        <a href="#Strategy4">Combination Rule 4 (Shafer rule)</a>
                                     </li>
                                 </ol>
                             </td>
@@ -175,7 +175,7 @@
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy1"></a>Combination Rule 1</h4>
+                                <h4><a name="Strategy1"></a>Combination Rule 1 (Dempster rule)</h4>
                             </td>
                         </tr>
                         <tr>
@@ -213,7 +213,7 @@
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy2"></a>Combination Rule 2</h4>
+                                <h4><a name="Strategy2"></a>Combination Rule 2 (Campos-Cavalcante rule)</h4>
                             </td>
                         </tr>
                         <tr>
@@ -242,7 +242,7 @@
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy3"></a>Combination Rule 3</h4>
+                                <h4><a name="Strategy3"></a>Combination Rule 3 (Yager rule)</h4>
                             </td>
                         </tr>
                         <tr>
@@ -287,7 +287,7 @@
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy4"></a>Combination Rule 4</h4>
+                                <h4><a name="Strategy4"></a>Combination Rule 4 (Shafer rule)</h4>
                             </td>
                         </tr>
                         <tr>

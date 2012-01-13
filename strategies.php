@@ -64,7 +64,7 @@
                             <table class="strategyselection">
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy1">Combination Rule 1</label>
+                                        <label id="labelstrategy1">Combination Rule 1 (Dempster rule)</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
@@ -94,7 +94,7 @@
 
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy2"><br></br>Combination Rule 2</label>
+                                        <label id="labelstrategy2"><br></br>Combination Rule 2 (Campos-Cavalcante rule)</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
@@ -127,7 +127,7 @@
 
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy3"><br></br>Combination rule 3</label>
+                                        <label id="labelstrategy3"><br></br>Combination rule 3 (Yager rule)</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
@@ -160,7 +160,7 @@
 
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy4"><br></br>Combination Rule 4</label>
+                                        <label id="labelstrategy4"><br></br>Combination Rule 4 (Shafer rule)</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
@@ -263,10 +263,18 @@
 
                                             $scoreinfo = $data[$methodkeys[$j]]['scores'][$keys[$i]]['scoredata'];
                                             //$coef = 1.0;
-                                            $coef = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['weight'],2);
-                                            $coefinfo = $data[$methodkeys[$j]]['scores'][$keys[$i]]['weightdata'];
                                             $inputscore = 'score_'.$keys[$i].'_'.$methodkeys[$j];
                                             $inputcoef = 'coef_'.$keys[$i].'_'.$methodkeys[$j];
+
+                                            if($methodkeys[$j] != 'CUSTOM' && $methodkeys[$j] != 'CUSTOM2'){
+                                                $coef = number_format($data[$methodkeys[$j]]['scores'][$keys[$i]]['weight'],2);
+                                                $coefinfo = $data[$methodkeys[$j]]['scores'][$keys[$i]]['weightdata'];
+                                            }
+                                            else{
+                                                $coef = number_format(((float)($data[$methodkeys[$j]]['scores'][$keys[$i]]['coef'])),2);
+                                                $coefinfo = '';
+                                            }
+
                                             if(strlen($scoreinfo) > 0 && strlen($coefinfo) > 0){
                                                 echo '<td class="methods"><input onmouseover="Tip(\''.$scoreinfo.'\');" onmouseout="UnTip();" id="'.$inputscore.'" name="'.$inputscore.'" class="score" size="6" value="'.$score.'"></input><input onmouseover="Tip(\''.$coefinfo.'\');" onmouseout="UnTip();" id="'.$inputcoef.'" name="'.$inputcoef.'" class="coef" size="6" value="'.$coef.'"></input></td>';
                                             }
