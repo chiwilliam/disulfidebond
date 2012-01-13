@@ -231,7 +231,7 @@
     }
     
     function getUnionScore($scores){
-        
+
         $score = 0;
         $totalscore = 0;
         $penalty = 0;
@@ -870,7 +870,22 @@
                     if($a > 0){
                         $message .= "<br/><br/>";
                     }
+
                     $message .= "COMBINATION STRATEGY ".$keys[$a]."";
+                    switch($keys[$a]){
+                        case "1":
+                            $message .= " (Dempster rule)";
+                            break;
+                        case "2":
+                            $message .= " (Campos-Cavalcante rule)";
+                            break;
+                        case "3":
+                            $message .= " (Yager rule)";
+                            break;
+                        case "4":
+                            $message .= " (Shafer rule)";
+                            break;
+                    }
                     $message .= "</p></span>";
                 
                     //List disulfide bonds found

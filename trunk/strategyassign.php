@@ -55,6 +55,7 @@
     }    
     
     //account for coefficients
+    //applied to all combination rules
     $methods = array_keys($GlobalBonds);
     $count = count($methods);
     for($i=0;$i<$count;$i++){
