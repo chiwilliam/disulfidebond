@@ -483,7 +483,7 @@
                                 <img class="compimg" alt="bondnotfound" src="images/bondnotfound.png"></img>
                             </td>
                             <td class="compbonds">
-                                <img class="compimg" alt="bondnotfound" src="images/bondnotfound.png"></img>
+                                <img class="compimg" alt="bondnotfound" src="images/bondfound.png"></img>
                             </td>
                             <td class="compbonds">
                                 <img class="compimg" alt="bondnotfound" src="images/bondnotfound.png"></img>

@@ -162,10 +162,10 @@
     $transmembranefrom = trim($_POST["transmembranefrom"]);
     $transmembraneto = trim($_POST["transmembraneto"]);
     if(strlen(trim($transmembranefrom)) == 0){
-        $transmembranefrom = 0;        
+        $transmembranefrom = "0";
     }
     if(strlen(trim($transmembraneto)) == 0){
-        $transmembraneto = 0;
+        $transmembraneto = "0";
     }
     $_SESSION['transmembranefrom'] = $transmembranefrom;
     $_SESSION['transmembraneto'] = $transmembraneto;
