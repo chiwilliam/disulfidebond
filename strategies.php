@@ -64,26 +64,26 @@
                             <table class="strategyselection">
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy1">Combination Rule 1 (Dempster rule)</label>
+                                        <label id="labelstrategy1">Dempster rule</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
                                     <td class="checkmark">
-                                        <img style="visibility:hidden;" alt="Combination Rule 1 Selected" src="images/selected.png" id="checkmarkstrategy1"></img>
+                                        <img style="visibility:hidden;" alt="Dempster rule Selected" src="images/selected.png" id="checkmarkstrategy1"></img>
                                     </td>
                                     <td class="strategy">
                                         <a onclick="window.open('help/strategy1.html','','width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')" id="linkformula1" href="#linkformula1" onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
-                                            <img alt="Equation for Rule 1" src="images/strategy1.png"></img>
+                                            <img alt="Equation for Dempster rule" src="images/strategy1.png"></img>
                                         </a>
                                     </td>
                                     <td class="selection">
                                         <a id="linkstrategy1" href="#linkstrategy1">
-                                            <img alt="Select Combination Rule 1" src="images/select.png" id="selectimgstrategy1"
+                                            <img alt="Select Dempster rule" src="images/select.png" id="selectimgstrategy1"
                                             onmouseover="document.getElementById('selectimgstrategy1').src='images/select_on.png';"
                                             onmouseout="document.getElementById('selectimgstrategy1').src='images/select.png';"
                                             onclick="selectStrategy('strategy1');">
                                             </img>
-                                            <img style="display:none;" alt="Remove Combination rule 1" src="images/remove.png" id="removeimgstrategy1"
+                                            <img style="display:none;" alt="Remove Dempster rule" src="images/remove.png" id="removeimgstrategy1"
                                             onmouseover="document.getElementById('removeimgstrategy1').src='images/remove_on.png';"
                                             onmouseout="document.getElementById('removeimgstrategy1').src='images/remove.png';"
                                             onclick="deselectStrategy('strategy1');">
@@ -94,29 +94,29 @@
 
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy2"><br></br>Combination Rule 2 (Campos-Cavalcante rule)</label>
+                                        <label id="labelstrategy2"><br></br>Yager rule</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
                                     <td class="checkmark">
-                                        <img style="visibility:hidden;" alt="Combination Rule 2 Selected" src="images/selected.png" id="checkmarkstrategy2"></img>
+                                        <img style="visibility:hidden;" alt="Yager rule Selected" src="images/selected.png" id="checkmarkstrategy2"></img>
                                     </td>
                                     <td class="strategy">
                                         <a onclick="window.open('help/strategy2.html', '',
                                         'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')"
                                         id="linkformula1" href="#linkformula1"
                                         onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
-                                            <img alt="Equation for rule 2" src="images/strategy2.png"></img>
+                                            <img alt="Equation for Yager rule" src="images/strategy2.png"></img>
                                         </a>
                                     </td>
                                     <td class="selection">
                                         <a id="linkstrategy2" href="#linkstrategy2">
-                                            <img alt="Select Combination Rule 2" src="images/select.png" id="selectimgstrategy2"
+                                            <img alt="Select Yager rule" src="images/select.png" id="selectimgstrategy2"
                                             onmouseover="document.getElementById('selectimgstrategy2').src='images/select_on.png';"
                                             onmouseout="document.getElementById('selectimgstrategy2').src='images/select.png';"
                                             onclick="selectStrategy('strategy2');">
                                             </img>
-                                            <img style="display:none;" alt="Remove Combination Rule 2" src="images/remove.png" id="removeimgstrategy2"
+                                            <img style="display:none;" alt="Remove Yager rule" src="images/remove.png" id="removeimgstrategy2"
                                             onmouseover="document.getElementById('removeimgstrategy2').src='images/remove_on.png';"
                                             onmouseout="document.getElementById('removeimgstrategy2').src='images/remove.png';"
                                             onclick="deselectStrategy('strategy2');">
@@ -127,29 +127,29 @@
 
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy3"><br></br>Combination rule 3 (Yager rule)</label>
+                                        <label id="labelstrategy3"><br></br>Campos-Cavalcante rule</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
                                     <td class="checkmark">
-                                        <img style="visibility:hidden;" alt="Combination Rule 3 Selected" src="images/selected.png" id="checkmarkstrategy3"></img>
+                                        <img style="visibility:hidden;" alt="Campos-Cavalcante rule Selected" src="images/selected.png" id="checkmarkstrategy3"></img>
                                     </td>
                                     <td class="strategy">
                                         <a onclick="window.open('help/strategy3.html', '',
                                         'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')"
                                         id="linkformula1" href="#linkformula1"
                                         onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
-                                            <img alt="Equation for Rule 3" src="images/strategy3.png"></img>
+                                            <img alt="Equation for Campos-Cavalcante rule" src="images/strategy3.png"></img>
                                         </a>
                                     </td>
                                     <td class="selection">
                                         <a id="linkstrategy3" href="#linkstrategy3">
-                                            <img alt="Select Combination Rule 3" src="images/select.png" id="selectimgstrategy3"
+                                            <img alt="Select Campos-Cavalcante rule" src="images/select.png" id="selectimgstrategy3"
                                             onmouseover="document.getElementById('selectimgstrategy3').src='images/select_on.png';"
                                             onmouseout="document.getElementById('selectimgstrategy3').src='images/select.png';"
                                             onclick="selectStrategy('strategy3');">
                                             </img>
-                                            <img style="display:none;" alt="Remove Combination Rule 3" src="images/remove.png" id="removeimgstrategy3"
+                                            <img style="display:none;" alt="Remove Campos-Cavalcante rule" src="images/remove.png" id="removeimgstrategy3"
                                             onmouseover="document.getElementById('removeimgstrategy3').src='images/remove_on.png';"
                                             onmouseout="document.getElementById('removeimgstrategy3').src='images/remove.png';"
                                             onclick="deselectStrategy('strategy3');">
@@ -160,29 +160,29 @@
 
                                 <tr class="strategyselect">
                                     <td class="strategyselectiontitle" colspan="3">
-                                        <label id="labelstrategy4"><br></br>Combination Rule 4 (Shafer rule)</label>
+                                        <label id="labelstrategy4"><br></br>Shafer rule</label>
                                     </td>
                                 </tr>
                                 <tr class="comb">
                                     <td class="checkmark">
-                                        <img style="visibility:hidden;" alt="Combination Rule 4 Selected" src="images/selected.png" id="checkmarkstrategy4"></img>
+                                        <img style="visibility:hidden;" alt="Shafer rule Selected" src="images/selected.png" id="checkmarkstrategy4"></img>
                                     </td>
                                     <td class="strategy">
                                         <a onclick="window.open('help/strategy4.html', '',
                                         'width=640,height=480,scrollbars=yes,resizable=yes,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0')"
                                         id="linkformula1" href="#linkformula1"
                                         onmouseover="Tip('Click on formula to read its description.')" onmouseout="UnTip()">
-                                            <img alt="Equation for Rule 4" src="images/strategy4.png"></img>
+                                            <img alt="Equation for Shafer rule" src="images/strategy4.png"></img>
                                         </a>
                                     </td>
                                     <td class="selection">
                                         <a id="linkstrategy4" href="#linkstrategy4">
-                                            <img alt="Select Combination Rule 4" src="images/select.png" id="selectimgstrategy4"
+                                            <img alt="Select Shafer rule" src="images/select.png" id="selectimgstrategy4"
                                             onmouseover="document.getElementById('selectimgstrategy4').src='images/select_on.png';"
                                             onmouseout="document.getElementById('selectimgstrategy4').src='images/select.png';"
                                             onclick="selectStrategy('strategy4');">
                                             </img>
-                                            <img style="display:none;" alt="Remove Combination Rule 4" src="images/remove.png" id="removeimgstrategy4"
+                                            <img style="display:none;" alt="Remove Shafer rule" src="images/remove.png" id="removeimgstrategy4"
                                             onmouseover="document.getElementById('removeimgstrategy4').src='images/remove_on.png';"
                                             onmouseout="document.getElementById('removeimgstrategy4').src='images/remove.png';"
                                             onclick="deselectStrategy('strategy4');">

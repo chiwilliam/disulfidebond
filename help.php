@@ -41,16 +41,16 @@
                                         <a href="#Introduction">Introduction to Combination Rules</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy1">Combination Rule 1 (Dempster rule)</a>
+                                        <a href="#Strategy1">Dempster rule</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy2">Combination Rule 2 (Campos-Cavalcante rule)</a>
+                                        <a href="#Strategy2">Yager rule</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy3">Combination Rule 3 (Yager rule)</a>
+                                        <a href="#Strategy3">Campos-Cavalcante rule</a>
                                     </li>
                                     <li class="spacing">
-                                        <a href="#Strategy4">Combination Rule 4 (Shafer rule)</a>
+                                        <a href="#Strategy4">Shafer rule</a>
                                     </li>
                                 </ol>
                             </td>
@@ -175,12 +175,12 @@
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy1"></a>Combination Rule 1 (Dempster rule)</h4>
+                                <h4><a name="Strategy1"></a>Dempster rule</h4>
                             </td>
                         </tr>
                         <tr>
                             <td class="justified">
-                                According to the combination rule 1 and considering only two disulfide bond determination
+                                According to the Dempster rule and considering only two disulfide bond determination
                                 methods (for simplicity), the score of a disulfide bond pattern <i>A</i> is:
                                 <ul>
                                     <li>
@@ -199,7 +199,7 @@
                                     </li>
                                 </ul>
                                 <p>
-                                    The formula used to combine disulfide bonds scores according to rule 1 is presented below. 
+                                    The formula used to combine disulfide bonds scores according to the Dempster rule is presented below.
                                     This combination formula is commutative and associative; thus, other disulfide bond determination
                                     methods (and their scores) can be easily added.
                                 </p>
@@ -207,18 +207,18 @@
                         </tr>
                         <tr>
                             <td class="centered">
-                                <img alt="Combination Rule 1" src="images/strategy1.png" />
+                                <img alt="Dempster rule" src="images/strategy1.png" />
                             </td>
                         </tr>
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy2"></a>Combination Rule 2 (Campos-Cavalcante rule)</h4>
+                                <h4><a name="Strategy2"></a>Yager rule</h4>
                             </td>
                         </tr>
                         <tr>
                             <td class="justified">
-                                According to the combination rule 2 and considering only two disulfide bond determination
+                                According to the Yager rule and considering only two disulfide bond determination
                                 methods (for simplicity), the score of a disulfide bond pattern <i>A</i> is:
                                 <ul>
                                     <li>
@@ -228,7 +228,7 @@
                                     </li>
                                 </ul>
                                 <p>
-                                    The formula used to combine disulfide bonds scores according to rule 2 is presented below. 
+                                    The formula used to combine disulfide bonds scores according to the Yager rule is presented below.
                                     This combination formula is also commutative and associative; thus, other disulfide bond determination
                                     methods (and their scores) can be easily added.
                                 </p>
@@ -236,18 +236,18 @@
                         </tr>
                         <tr>
                             <td class="centered">
-                                <img alt="Combination Rule 2" src="images/strategy2.png" />
+                                <img alt="Yager rule" src="images/strategy2.png" />
                             </td>
                         </tr>
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy3"></a>Combination Rule 3 (Yager rule)</h4>
+                                <h4><a name="Strategy3"></a>Campos-Cavalcante rule</h4>
                             </td>
                         </tr>
                         <tr>
                             <td class="justified">
-                                According to the combination rule 3 and considering only two disulfide bond determination
+                                According to the Campos-Cavalcante rule and considering only two disulfide bond determination
                                 methods (for simplicity), the score of a disulfide bond pattern <i>A</i> is:
                                 <ul>
                                     <li>
@@ -281,13 +281,13 @@
                         </tr>
                         <tr>
                             <td class="centered">
-                                <img alt="Combination Rule 3" src="images/strategy3.png" />
+                                <img alt="Campos-Cavalcante rule" src="images/strategy3.png" />
                             </td>
                         </tr>
                         
                         <tr>
                             <td colspan="2">
-                                <h4><a name="Strategy4"></a>Combination Rule 4 (Shafer rule)</h4>
+                                <h4><a name="Strategy4"></a>Shafer rule</h4>
                             </td>
                         </tr>
                         <tr>
@@ -313,7 +313,7 @@
                         </tr>
                         <tr>
                             <td class="centered">
-                                <img alt="Combination Rule 4" src="images/strategy4.png" />
+                                <img alt="Shafer rule" src="images/strategy4.png" />
                             </td>
                         </tr>
                         

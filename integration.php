@@ -871,19 +871,18 @@
                         $message .= "<br/><br/>";
                     }
 
-                    $message .= "COMBINATION STRATEGY ".$keys[$a]."";
                     switch($keys[$a]){
                         case "1":
-                            $message .= " (Dempster rule)";
+                            $message .= "Dempster rule";
                             break;
                         case "2":
-                            $message .= " (Campos-Cavalcante rule)";
+                            $message .= "Yager rule";
                             break;
                         case "3":
-                            $message .= " (Yager rule)";
+                            $message .= "Campos-Cavalcante rule";
                             break;
                         case "4":
-                            $message .= " (Shafer rule)";
+                            $message .= "Shafer rule";
                             break;
                     }
                     $message .= "</p></span>";
