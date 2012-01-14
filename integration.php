@@ -1174,7 +1174,7 @@
         $newbonds = $bonds;
 
         //for each combination rule
-        for($i=1;$i<count($bonds);$i++){
+        for($i=1;$i<=count($bonds);$i++){
             $keys = array_keys($bonds[$i]);
             if($keys[count($keys)-1] == "THETA"){
                 unset($keys[count($keys)-1]);
