@@ -362,3 +362,27 @@ a.notselected{
     color: #FFFFFF;
 	
 }
+
+table.comparison{
+    margin-left: 0px;
+    text-align: center;
+}
+tr.comprows{
+    height:25px;
+}
+td.compheader{
+    font-weight: bold;
+}
+td.compbonds{
+    font-weight: bold;
+}
+img.compimg{
+    width: 20px;
+    height: 20px;
+}
+tr.compdivisor{
+    height:10px;
+}
+p.comptext{
+    text-align: justify;
+}
