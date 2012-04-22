@@ -629,11 +629,14 @@
         $CSPmatch = array();
         $CSPmatch = getCSPMatches2(&$CSPs,&$proteinDB);
         
-        unset($proteinDB);
-        unset($CSPs);
-
         $CSPmatch['divergence'] = $CSPmatch['CSPdelta'];
         $CSPmatch['similarity'] = calculateSimilarity($CSPmatch['CSPdelta']);
+        
+        unset($CSPs);
+        unset($filenameDB);
+        unset($proteinDB);
+        unset($maxProteinLengthDB);
+        unset($countDB);
         
         return $CSPmatch;
     }
@@ -692,6 +695,7 @@
                 unset($tmpcspbonds);
             }
         }
+        unset($possiblebonds);
         
         return $cspbonds;
     }

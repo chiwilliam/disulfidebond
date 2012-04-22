@@ -51,6 +51,7 @@
             $CSP[] = abs($cysteines[$i]-$cysteines[$i-1]);
         }
         
+        unset($cysteines);
         return $CSP;
     }
     
