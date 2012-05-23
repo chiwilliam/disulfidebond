@@ -2,7 +2,7 @@
 
 include 'statistics.php';
 
-$file = "uniprotDB.dat";
+$file = "uniprotDB3.dat";
 $data = file_get_contents($file);
 
 $aData = explode("//", $data);
@@ -19,9 +19,10 @@ foreach ($aData as $row) {
     $length = $length;
     $bonds = trim(substr($row, 0, strpos($row, "--")));
     $aBonds = explode("**", $bonds);
+    $cysteines = getNumberOfCysteines($sequence);
     
     //save protein
-    $proteinID = saveProtein($sequence,$length);
+    $proteinID = saveProtein($sequence,$length,$cysteines);
     
     if($proteinID > 0){
         foreach($aBonds as $bond){

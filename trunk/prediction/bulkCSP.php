@@ -16,56 +16,61 @@ $proteins = getProteins($pid);
 $countProt = count($proteins);
 for($i=0;$i<$countProt;$i++){
     
-    echo 'Processing proteinID '.((string)$proteins[$i][0]).'<br><br>';
+    $numCys = ((int)($proteins[$i][3]));
+    $proteinIDdebug = "";
     
-    //CSP
-    $cspbonds = array();
-    $protein = formatProtein($proteins[$i][1], 0, 0);
-    
-    $D = -1;
-    for($q=2;$q>0;$q--){
-        $CSPmatchTmp = runCSPmethodAlone($protein, $q, $root);
-        if($D < 0){
-            if(count($CSPmatchTmp) > 4){
-                $D = $CSPmatchTmp['divergence'];
-                $CSPmatch = $CSPmatchTmp;
-            }
-        }
-        else{
-            if(count($CSPmatchTmp) > 4){
-                $D = $CSPmatchTmp['divergence'];
-                if($D < $CSPmatch['divergence']){
+    if($numCys <= 41){
+        $cspbonds = array();
+        $protein = formatProtein($proteins[$i][1], 0, 0);
+
+        $D = -1;
+        for($q=2;$q>0;$q--){
+            $CSPmatchTmp = runCSPmethodAlone($protein, $q, $root);
+            if($D < 0){
+                if(count($CSPmatchTmp) > 4){
+                    $D = $CSPmatchTmp['divergence'];
                     $CSPmatch = $CSPmatchTmp;
                 }
             }
+            else{
+                if(count($CSPmatchTmp) > 4){
+                    $D = $CSPmatchTmp['divergence'];
+                    if($D < $CSPmatch['divergence']){
+                        $CSPmatch = $CSPmatchTmp;
+                    }
+                }
+            }
         }
-    }
     
-    if($D >= 0){
-        $csps = $CSPmatch['BONDS'];
-        unset($csps['CSP']);
-        $count = count($csps);
-        for($j=0;$j<$count;$j++){
-            $data = array();
-            $data['bond'] = $csps[$j];
-            $data['cys1'] = substr($csps[$j], 0, strpos($csps[$j], "-"));
-            $data['cys2'] = substr($csps[$j], strpos($csps[$j], "-")+1);
-            $data['score'] = number_format($CSPmatch['similarity'],4);
-            $data['weightD'] = number_format($CSPmatch['divergence'],4);
-            $data['weightCSPs'] = $CSPmatch['matches'];
+        if($D >= 0){
+            $csps = $CSPmatch['BONDS'];
+            unset($csps['CSP']);
+            $count = count($csps);
+            for($j=0;$j<$count;$j++){
+                $data = array();
+                $data['bond'] = $csps[$j];
+                $data['cys1'] = substr($csps[$j], 0, strpos($csps[$j], "-"));
+                $data['cys2'] = substr($csps[$j], strpos($csps[$j], "-")+1);
+                $data['score'] = number_format($CSPmatch['similarity'],4);
+                $data['weightD'] = number_format($CSPmatch['divergence'],4);
+                $data['weightCSPs'] = $CSPmatch['matches'];
 
-            //divide score by number of bonds
-            $cspbonds[$csps[$j]] = $data;
-            unset($data);
+                //divide score by number of bonds
+                $cspbonds[$csps[$j]] = $data;
+                unset($data);
+            }
+        }
+
+        foreach($cspbonds as $bond){        
+            saveBondMethod($proteins[$i][0], $bond['cys1'], $bond['cys2'], $bond['score'], 'CSP');
         }
     }
-    
-    foreach($cspbonds as $bond){        
-        saveBondMethod($proteins[$i][0], $bond['cys1'], $bond['cys2'], $bond['score'], 'CSP');
+    else{
+        $proteinIDdebug .= $proteins[$i][0].", ";
     }
-    
 }
 
-echo 'Done!';
+echo 'Done!<br><br>';
+echo $proteinIDdebug;
 
 ?>

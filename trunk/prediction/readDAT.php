@@ -1,12 +1,15 @@
 <?php
-    ini_set("memory_limit", "1000M");
+    ini_set("memory_limit", "4000M");
     set_time_limit(0);
 
-    $filename = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot.dat";
-    $filename2 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot2.dat";
-    $filename3 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot3.dat";
-    $filename4 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot4.dat";
-    $filename5 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\42.7\\uniprot_sprot5.dat";
+    $version = "42.7";
+    $version = "45.0";
+    $version = "47.0";
+    $filename = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\".$version."\\uniprot_sprot.dat";
+    $filename2 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\".$version."\\uniprot_sprot2.dat";
+    $filename3 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\".$version."\\uniprot_sprot3.dat";
+    $filename4 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\".$version."\\uniprot_sprot4.dat";
+    $filename5 = "C:\\Users\\William\\Desktop\\SFSU\\SVM\\Uniprot\\".$version."\\uniprot_sprot5.dat";
     $filearray = array();
     
     $countSequences = array("1" => 0,"2" => 0,"3" => 0,"4" => 0,"5" => 0);
