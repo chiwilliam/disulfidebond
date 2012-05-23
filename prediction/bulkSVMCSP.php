@@ -22,7 +22,7 @@ for($i=0;$i<$count;$i++){
     
     $bonds = array();
     
-    $bonds = prepareBonds($proteins[$i][3]);
+    $bonds = prepareBonds($proteins[$i][5]);
     
     $bonds = $Func->organizeBonds(array(), array(), 
                                         $bonds['SVMlabel'], $bonds['SVMscore'], 

@@ -67,9 +67,11 @@ for($i=0;$i<$count;$i++){
         
     }    
     
-    foreach($predictedbonds as $bond){        
-        $cysteines = explode("-",$bond);
-        saveBondMethod($proteins[$i][0], $cysteines[0], $cysteines[1], $pbonds[$bond]['score'], 'SVM');
+    if(count($predictedbonds) > 0){
+        foreach($predictedbonds as $bond){        
+            $cysteines = explode("-",$bond);
+            saveBondMethod($proteins[$i][0], $cysteines[0], $cysteines[1], $pbonds[$bond]['score'], 'SVM');
+        }
     }
 }
 

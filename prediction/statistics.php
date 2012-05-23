@@ -11,13 +11,13 @@ function DBconnect(){
     
 }
 
-function saveProtein($sequence,$length){
+function saveProtein($sequence,$length,$cysteines){
     
     $proteinID = 0;
     
     $db = DBconnect();
     
-    $uQuery = 'insert into protein (sequence,length) VALUES ("'.$sequence.'",'.$length.')';
+    $uQuery = 'insert into protein (sequence,length,cysteines) VALUES ("'.$sequence.'",'.$length.','.$cysteines.')';
     $db->query($uQuery);
     
     if(strlen(trim($db->error)) == 0){
@@ -50,6 +50,15 @@ function saveBondMethod($proteinID,$cys1,$cys2,$score, $method){
     
 }
 
+function savePossibleBonds($proteinID,$possiblebonds){
+    
+    $db = DBconnect();
+    
+    $uQuery = 'update protein set possiblebonds = '.$possiblebonds.' where proteinid = '.$proteinID;
+    $db->query($uQuery);
+    
+}
+
 function getProteins($pid){
     
     if(!isset($pid)){
@@ -59,7 +68,7 @@ function getProteins($pid){
     $proteins = array();
     $db = DBconnect();
     
-    $sQuery = 'select * from protein where proteinid > '.((string)($pid)).' order by proteinid';
+    $sQuery = 'select * from protein where cysteines < 60 and proteinid > '.((string)($pid)).' order by proteinid';
     $result = $db->query($sQuery);
     
     while($row = $result->fetch_row()){
@@ -124,6 +133,28 @@ function prepareBonds($bonds){
     }
     
     return $newBonds;
+}
+
+function getNumberOfCysteines($FASTA){
+    
+    $num = 0;    
+    $num = substr_count($FASTA, "C");    
+    return $num;
+}
+
+function getPossibleBonds($cysteines){
+    
+    $result = 0;    
+    $result = factorial($cysteines)/(factorial(2)*factorial(($cysteines-2)));    
+    return $result;
+}
+
+function factorial($num){
+    $tmp = 1;
+    while($num > 1){
+        $tmp *= $num--;
+    }
+    return $tmp;
 }
 
 ?>
