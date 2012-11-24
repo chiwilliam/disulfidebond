@@ -175,7 +175,7 @@
     if($zipFile["type"] == ""){
         $extension = strtoupper(substr(strrchr($zipFile["name"],"."),1));
         $extension = strtoupper($extension);
-        if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA"){
+        if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA" || $extension == "XML"){
             $zipFile["type"] = "application/octet-stream";
         }
     }
@@ -1142,7 +1142,7 @@
         }
         
         //SVM
-        if($SVM != "" && strlen($message) == 0){
+        if($SVM != "" && (strlen($message) == 0 || $message == "No disulfide bonds were found.")){
             if(strlen($_POST["fastaProtein"]) == 0){
                 $message .= "Error ".$errors["noprotein"]["code"].
                             ": ".$errors["noprotein"]["message"]."<br />";
@@ -1236,7 +1236,7 @@
             $predictedbonds = array();
         }
 
-        if($CUSTOM != "" && strlen($message) == 0){
+        if($CUSTOM != "" && (strlen($message) == 0 || $message == "No disulfide bonds were found.")){
             if(strlen($_POST["fastaProtein"]) == 0){
                 $message .= "Error ".$errors["noprotein"]["code"].
                             ": ".$errors["noprotein"]["message"]."<br />";
@@ -1305,7 +1305,7 @@
             $custombonds = array();
         }
         
-        if($CUSTOM2 != "" && strlen($message) == 0){
+        if($CUSTOM2 != "" && (strlen($message) == 0 || $message == "No disulfide bonds were found.")){
             if(strlen($_POST["fastaProtein"]) == 0){
                 $message .= "Error ".$errors["noprotein"]["code"].
                             ": ".$errors["noprotein"]["message"]."<br />";
@@ -1374,7 +1374,7 @@
             $custom2bonds = array();
         }
         
-        if($CSP != "" && strlen($message) == 0){
+        if($CSP != "" && (strlen($message) == 0 || $message == "No disulfide bonds were found.")){
             if(strlen($_POST["fastaProtein"]) == 0){
                 $message .= "Error ".$errors["noprotein"]["code"].
                             ": ".$errors["noprotein"]["message"]."<br />";
@@ -1411,6 +1411,10 @@
                     $protein = formatProtein($fastaProtein, $transmembranefrom, $transmembraneto);
 
                     if($countBonds > 0){
+                        //due to CSP performance issues, set countBonds maximum to 4
+                        if($countBonds > 4){
+                            $countBonds = 4;
+                        }
                         $CSPmatch = runCSPmethodAlone($protein, $countBonds, $root);
                     }
                     else{
@@ -1455,7 +1459,7 @@
             $csps = array();
         }
         
-        if(strlen($message) == 0){
+        if(strlen($message) == 0 || $message == "No disulfide bonds were found."){
             
             $countBonds = 0;
             if($MSMS != ""){
@@ -1539,6 +1543,9 @@
                 
                 //create graphs
                 $message = getResults($GlobalSScomb,$root,$fastaProtein);                                     
+            }
+            else{
+                $message = "No disulfide bonds were found.";
             }
         }
         else{
