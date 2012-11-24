@@ -866,7 +866,7 @@ class Commonclass {
             
             $extension = strtoupper(substr(strrchr($name,"."),1));
             
-            if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA"){
+            if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA" || $extension == "XML"){
                 
                 $data = file_get_contents($tmp_name);
 
@@ -976,7 +976,7 @@ class Commonclass {
                         $filename = zip_entry_name($zip_entry);
                         $extension = strtoupper(substr(strrchr($filename,"."),1));
 
-                        if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA"){
+                        if($extension == "MZXML" || $extension == "MZML" || $extension == "MZDATA" || $extension == "XML"){
 
                             //load MZXML data
                             $data = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
