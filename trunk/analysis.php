@@ -7,6 +7,7 @@
         <link href="styles/style.css" rel="stylesheet" type="text/css" />        
     </head>
     <body>
+        <?php include_once("analyticstracking.php") ?>
         <script type="text/javascript" src="js/wz_jsgraphics.js"></script>
         <script type="text/javascript" src="js/functions.js"></script>        
         <script type="text/javascript" src="js/wz_tooltip.js"></script>
