@@ -257,7 +257,7 @@
                     }
 
                     //sort Peptides by number of cysteines
-                    $Func->sortByCysteines(&$disulfideBondedPeptides);
+                    $Func->sortByCysteines($disulfideBondedPeptides);
 
                     //expected amino acid mass
                     //$me = 111.17;
@@ -293,7 +293,7 @@
                         }
 
                         //sort PML by mass
-                        $Func->sortByMass(&$PML);
+                        $Func->sortByMass($PML);
 
                         //check mass boundaries
                         $minPrecursor = $Func->getMinPrecursorMass($PML);
@@ -327,7 +327,7 @@
                         //$DMSsize = count($DMS);
 
                         //sort PML by mass
-                        //$Func->sortByMass(&$DMS);
+                        //$Func->sortByMass($DMS);
 
                         //$DMSsize = count($DMS);
 
@@ -561,7 +561,7 @@
                                         //$FMS = $CMClass->formFMS($peptides, $cysteines);
 
                                         //sort FMS by mass
-                                        //ksort(&$FMS);
+                                        //ksort($FMS);
 
                                         //Second Stage Matching. Forms FMS and Confirmed Matches (CMs)
                                         $FMSpolynomial = $CMClass->FMSPolynomial($TML, $peptides, $cysteines, $CMthreshold, $alliontypes, $delta);
@@ -847,7 +847,7 @@
                                         if($regression[$j]['gama'] == $gama){
                                             unset($regression[$j]);
                                             $total--;
-                                            sort(&$regression);
+                                            sort($regression);
                                         }
                                         else{
                                             $j++;
@@ -858,7 +858,7 @@
                             }
                             */
 
-                            //sort(&$FMSsize);
+                            //sort($FMSsize);
 
                             //fix when array numberBonds has missing keys
                             $tmpBonds = $numberBonds;
@@ -1157,11 +1157,11 @@
                     $regionto = 0;
 
                     if(count($bonds) == 0){
-                        $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time, $regionfrom, $regionto);
+                        $pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, $time, $regionfrom, $regionto);
                     }
                     else{
-                        $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root, &$time, $regionfrom, $regionto);
-                        //$pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, &$time);
+                        $pbonds = getBondsByPredictiveTechniques($bonds, $fastaProtein, $root, $time, $regionfrom, $regionto);
+                        //$pbonds = getBondsByPredictiveTechniques(array(), $fastaProtein, $root, $time);
                     }
 
                 }
