@@ -19,7 +19,7 @@ for($i=0;$i<$count;$i++){
     $time = array();
     $time["start"] = microtime(true);
     
-    $pbonds = getBondsByPredictiveTechniques(array(), $proteins[$i][1], $root, &$time, 0, 0);
+    $pbonds = getBondsByPredictiveTechniques(array(), $proteins[$i][1], $root, $time, 0, 0);
     
     if(count($pbonds) > 0){
         
